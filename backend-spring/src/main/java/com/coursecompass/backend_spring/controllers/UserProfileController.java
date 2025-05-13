@@ -44,7 +44,7 @@ public class UserProfileController {
         ));
 
         user.setCompletedCourses(List.of(
-                new CompletedCourse("CS1101S", "A", 4, 3)
+                new CompletedCourse("CS1101S", "Programming Methodology", 4, 3)
         ));
 
         return user;

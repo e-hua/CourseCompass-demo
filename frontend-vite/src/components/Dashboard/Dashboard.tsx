@@ -67,6 +67,23 @@ const CourseCompassDashboard: React.FC = () => {
           ))}
         </CardContent>
       </Card>
+
+      <Card className="p-4">
+        <Typography variant="h5" fontWeight="bold">
+          Your Rating on courses
+        </Typography>
+        <CardContent>
+          {userProfile.completedCourses.map((course: any, index: number) => (
+            <div key={index} className="mt-4">
+              <ul className="list-disc list-inside">
+                <li key={index}>{course.code}</li>
+                <p>Difficulty Rating: {course.difficultyRating}</p>
+                <p>Workload Rating: {course.workloadRating}</p>
+              </ul>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
     </div>
   );
 };
