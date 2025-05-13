@@ -34,7 +34,7 @@ import StarIcon from "@mui/icons-material/Star";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 
-import { useThemeContext } from "../contexts/ThemeContext";
+import { useColorScheme } from "@mui/material/styles";
 
 const drawerWidth = 240;
 
@@ -110,7 +110,8 @@ const Drawer = styled(MuiDrawer, {
 export default function CourseCompassSidebar() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const { toggleTheme, isDarkMode } = useThemeContext();
+
+  const { mode, setMode } = useColorScheme();
 
   const handleDrawerToggle = () => {
     setOpen(!open);
@@ -130,6 +131,7 @@ export default function CourseCompassSidebar() {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
+
       <AppBar position="fixed" open={open}>
         <Toolbar>
           <IconButton color="inherit" onClick={handleDrawerToggle} edge="start">
@@ -140,6 +142,7 @@ export default function CourseCompassSidebar() {
           </Typography>
         </Toolbar>
       </AppBar>
+
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerToggle}>
@@ -150,6 +153,7 @@ export default function CourseCompassSidebar() {
             )}
           </IconButton>
         </DrawerHeader>
+
         <Divider />
         <List>
           {menuItems.map((item) => (
@@ -183,11 +187,13 @@ export default function CourseCompassSidebar() {
           <ListItemButton
             sx={{ justifyContent: open ? "initial" : "center", px: 2.5 }}
           >
-            <IconButton onClick={toggleTheme}>
-              {isDarkMode ? <DarkModeIcon /> : <LightModeIcon />}
+            <IconButton
+              onClick={() => setMode(mode === "dark" ? "light" : "dark")}
+            >
+              {mode === "dark" ? <DarkModeIcon /> : <LightModeIcon />}
             </IconButton>
             <ListItemText
-              primary={isDarkMode ? "Dark Mode" : "Light Mode"}
+              primary={mode === "dark" ? "Dark Mode" : "Light Mode"}
               sx={{ opacity: open ? 1 : 0, ml: open ? 1 : 0 }}
             />
           </ListItemButton>
