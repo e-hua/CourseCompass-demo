@@ -1,21 +1,15 @@
 import Dashboard from "./components/Dashboard/Dashboard";
-import Sidebar from "./components/Sidebar/Sidebar";
-
-import { useColorScheme } from "@mui/material/styles";
+import { ThemeProvider } from "@/components/Theme/theme-provider";
+import Layout from "@/components/Sidebar/layout";
 
 function App() {
-  const { mode } = useColorScheme();
-  if (!mode) {
-    return null;
-    // This was to prevent the hydration mismatch error.
-  } else {
-    return (
-      <>
-        <Sidebar />
+  return (
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <Layout>
         <Dashboard />
-      </>
-    );
-  }
+      </Layout>
+    </ThemeProvider>
+  );
 }
 
 export default App;

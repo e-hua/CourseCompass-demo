@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, CardContent, Typography } from "@mui/material";
+import { Card, CardContent } from "@/components/ui/card";
+
+import "@/index.css";
 
 const CourseCompassDashboard: React.FC = () => {
   const [userProfile, setUserProfile] = useState<any>(null);
@@ -36,26 +38,20 @@ const CourseCompassDashboard: React.FC = () => {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-6">
-      <Card className="p-4">
-        <Typography variant="h4" fontWeight="bold">
-          Welcome, {userProfile.name}!
-        </Typography>
-        <Typography>
+    <div className="p-6  mx-auto space-y-10">
+      <Card className="w-180 p-4">
+        <h4 className="text-xl font-bold">Welcome, {userProfile.name}!</h4>
+        <h6 className="text-xl">
           {userProfile.major} | GPA: {userProfile.gpa}
-        </Typography>
+        </h6>
       </Card>
 
-      <Card className="p-4">
-        <Typography variant="h5" fontWeight="bold">
-          Your Roadmap
-        </Typography>
+      <Card className="w-180 p-4">
+        <h5 className="text-xl font-bold">Your Roadmap</h5>
         <CardContent>
           {userProfile.roadmap.map((semester: any, index: number) => (
             <div key={index} className="mt-4">
-              <Typography variant="h6" fontWeight="medium">
-                {semester.semester}
-              </Typography>
+              <h6 className="text-xl font-medium">{semester.semester}</h6>
               <ul className="list-disc list-inside">
                 {semester.courses.map((course: any, idx: number) => (
                   <li key={idx}>
@@ -68,10 +64,8 @@ const CourseCompassDashboard: React.FC = () => {
         </CardContent>
       </Card>
 
-      <Card className="p-4">
-        <Typography variant="h5" fontWeight="bold">
-          Your Rating on courses
-        </Typography>
+      <Card className="w-180 p-6">
+        <h5 className="text-xl font-bold">Your Ratings for Courses</h5>
         <CardContent>
           {userProfile.completedCourses.map((course: any, index: number) => (
             <div key={index} className="mt-4">

@@ -9,5 +9,44 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      (() => {
+        const classList = document.documentElement.classList;
+        const style = document.documentElement.style;
+        // Returns `MediaQueryList` instance. It will have `matches`
+        // property if `prefers-color-scheme` is set to 'dark'
+        const dark = window.matchMedia("(prefers-color-scheme: dark)");
+
+        const update = () => {
+          if (
+            localStorage.theme === "dark" ||
+            (!localStorage.theme && dark.matches)
+          ) {
+            classList.add("dark");
+            classList.remove("light");
+            style.colorScheme = "dark";
+          } else {
+            classList.add("light");
+            classList.remove("dark");
+            style.colorScheme = "light";
+          }
+        };
+        update();
+
+        // Re-applied theme class if `prefers-color-scheme` media query is changing.
+        // Modern browser `MediaQueryList` extends `EventTarget`
+        if (dark instanceof EventTarget) {
+          dark.addEventListener("change", () => {
+            update();
+          });
+        } /* Fallback for old browser */ else {
+          dark.addListener(() => {
+            update();
+          });
+        }
+        // Re-applied theme class if `localStorage` is being updated.
+        window.addEventListener("storage", update);
+      })();
+    </script>
   </body>
 </html>
