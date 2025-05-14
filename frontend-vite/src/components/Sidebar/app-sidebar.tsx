@@ -24,7 +24,7 @@ const items = [
   },
   {
     title: "Search Courses",
-    url: "#",
+    url: "/search",
     icon: <Search fontSize="medium" />,
   },
   {
@@ -34,7 +34,7 @@ const items = [
   },
   {
     title: "My Bookmarks",
-    url: "#",
+    url: "/bookmark",
     icon: <Bookmark fontSize="medium" />,
   },
   {
