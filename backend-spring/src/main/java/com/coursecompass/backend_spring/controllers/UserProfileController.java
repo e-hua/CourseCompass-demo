@@ -14,9 +14,9 @@ public class UserProfileController {
     @GetMapping("/user-profile")
     public UserProfile getUserProfile() {
         UserProfile user = new UserProfile();
-        user.setName("Chen Guanhua");
+        user.setName("John Doe");
         user.setMajor("Computer Science");
-        user.setGpa(5.0);
+        user.setGpa(4.5);
         user.setInterests(List.of("Software Engineering", "Machine Learning"));
 
         user.setRoadmap(List.of(

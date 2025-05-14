@@ -12,12 +12,12 @@ import {
 const items = [
   {
     title: "Profile",
-    url: "#",
+    url: "http://localhost:5173/profile",
     icon: <Person fontSize="medium" />,
   },
   {
     title: "Dashboard",
-    url: "#",
+    url: "http://localhost:5173",
     icon: <Home fontSize="medium" />,
   },
   {
