@@ -9,15 +9,17 @@ import {
   Settings,
 } from "@mui/icons-material";
 
+import { useLocation } from "react-router-dom";
+
 const items = [
   {
     title: "Profile",
-    url: "http://localhost:5173/profile",
+    url: "/profile",
     icon: <Person fontSize="medium" />,
   },
   {
     title: "Dashboard",
-    url: "http://localhost:5173",
+    url: "/",
     icon: <Home fontSize="medium" />,
   },
   {
@@ -68,6 +70,9 @@ import { ModeToggle } from "@/components/Theme/mode-toggle";
 // Menu items.
 
 export function AppSidebar() {
+  const location = useLocation();
+  const currentPath = location.pathname;
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -77,7 +82,10 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={item.url === currentPath}
+                  >
                     <a href={item.url}>
                       <div className="flex items-center gap-2 w-8 h-8">
                         {item.icon}

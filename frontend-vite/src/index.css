@@ -42,6 +42,9 @@
 }
 
 :root {
+  /* Some great color to my taste */
+  --vite-purple: #646cff;
+
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -65,8 +68,9 @@
   --chart-1: oklch(0.646 0.222 41.116);
   */
 
-  /* Sapphire */
-  --chart-1: 221.2 83.2% 53.3%;
+  /* Vite-purple */
+  --chart-1: 235 100% 66%;
+
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
@@ -104,8 +108,8 @@
   --chart-1: oklch(0.488 0.243 264.376);
   */
 
-  /* Sapphire */
-  --chart-1: 221.2 83.2% 53.3%;
+  /* Vite-purple */
+  --chart-1: 235 100% 66%;
 
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -128,4 +132,15 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.sidebar-menu-button--active {
+  background-color: var(--vite-purple);
+  color: #ffffff;
+  font-weight: 600;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.sidebar-menu-button--active:hover {
+  background-color: #1d4ed8;
 }
