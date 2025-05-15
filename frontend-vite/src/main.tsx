@@ -7,6 +7,7 @@ import GPAChartPage from "@/pages/GPAChartPage.tsx";
 import SearchPage from "@/pages/SearchPage.tsx";
 import BookmarkPage from "@/pages/BookMarkPage.tsx";
 import { ThemeProvider } from "@/components/Theme/theme-provider";
+import RatingsPage from "@/pages/RatingsPage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -17,6 +18,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/profile" element={<GPAChartPage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/bookmark" element={<BookmarkPage />} />
+          <Route path="/ratings" element={<RatingsPage />} />
         </Routes>
       </Router>
     </ThemeProvider>

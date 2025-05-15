@@ -7,7 +7,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <SidebarProvider defaultOpen={true}>
       <AppSidebar />
       <SidebarTrigger className="p-0" />
-      {children}
+
+      <div className="flex-1 flex flex-col">{children}</div>
     </SidebarProvider>
   );
 }

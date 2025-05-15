@@ -5,7 +5,7 @@ function BookmarkPage() {
   return (
     <Layout>
       <SearchBar />
-      <div className="flex-1 flex justify-center items-center">
+      <div className="flex flex-col items-center mt-4">
         <h5 className="text-xl font-bold text-center">
           Please Choose among the courses you bookmarked!
         </h5>

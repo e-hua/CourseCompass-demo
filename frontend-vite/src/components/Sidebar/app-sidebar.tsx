@@ -44,7 +44,7 @@ const items = [
   },
   {
     title: "Rate My Course",
-    url: "#",
+    url: "/ratings",
     icon: <Star fontSize="medium" />,
   },
   {
