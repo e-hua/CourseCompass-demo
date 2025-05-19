@@ -19,7 +19,7 @@ class UserRepositoryTest {
 
 
     @Test
-    void testSaveAndFindUser() {
+    public void testSaveAndFindUser() {
         User john = new User();
         john.setUserName("John");
         john.setEmail("john@doe.com");
@@ -31,11 +31,10 @@ class UserRepositoryTest {
 
         assertTrue(maybeJohn.isPresent());
         assertEquals("John", maybeJohn.get().getUserName());
-        assertEquals("John", maybeJohn.get().getUserName());
     }
 
     @Test
-    void testFindUserById() {
+    public void testFindUserById() {
         User john = new User();
         john.setUserName("John");
         john.setEmail("john@doe.com");
@@ -48,7 +47,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    void testDeleteUser() {
+    public void testDeleteUser() {
         User john = new User();
         john.setUserName("John");
         john.setEmail("john@doe.com");
