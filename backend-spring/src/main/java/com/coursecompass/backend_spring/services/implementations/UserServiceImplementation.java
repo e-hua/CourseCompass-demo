@@ -37,6 +37,10 @@ public class UserServiceImplementation implements UserService {
     public User updateUser(Long id, User updatedUser) {
         return userRepository.findById(id)
                 .map(existingUser -> {
+                    existingUser.setCourseRatings(updatedUser.getCourseRatings());
+                    existingUser.setCreatedAt(existingUser.getCreatedAt());
+                    existingUser.setUpdatedAt(updatedUser.getUpdatedAt());
+                    existingUser.setTakenCourses(updatedUser.getTakenCourses());
                     existingUser.setUserName(updatedUser.getUserName());
                     existingUser.setGPA(updatedUser.getGPA());
                     existingUser.setCurrentSemesterIndex(updatedUser.getCurrentSemesterIndex());
