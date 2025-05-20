@@ -19,22 +19,22 @@ public class CourseRatingServiceImplementation implements CourseRatingService {
     }
 
     @Override
-    public CourseRating createRating(CourseRating rating) {
+    public CourseRating createCourseRating(CourseRating rating) {
         return ratingRepository.save(rating);
     }
 
     @Override
-    public Optional<CourseRating> readRatingById(Long id) {
+    public Optional<CourseRating> readCourseRatingById(Long id) {
         return ratingRepository.findById(id);
     }
 
     @Override
-    public List<CourseRating> readAllRatings() {
+    public List<CourseRating> readAllCourseRatings() {
         return ratingRepository.findAll();
     }
 
     @Override
-    public CourseRating updateRating(Long id, CourseRating updatedRating) {
+    public CourseRating updateCourseRating(Long id, CourseRating updatedRating) {
         return ratingRepository.findById(id)
                 .map(existingRating -> {
                     existingRating.setUpdatedAt(updatedRating.getUpdatedAt());
@@ -50,7 +50,7 @@ public class CourseRatingServiceImplementation implements CourseRatingService {
     }
 
     @Override
-    public void deleteRating(Long id) {
+    public void deleteCourseRating(Long id) {
         ratingRepository.deleteById(id);
     }
 }
