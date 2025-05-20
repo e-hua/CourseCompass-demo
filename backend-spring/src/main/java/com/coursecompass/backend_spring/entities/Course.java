@@ -4,11 +4,14 @@ import jakarta.persistence.*;
 import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Entity
 @Table(name="Courses")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Course {
     @Id
     // E.g. "CS1231S"
@@ -21,4 +24,5 @@ public class Course {
     @JsonIgnore
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CourseRating> ratings;
+
 }
