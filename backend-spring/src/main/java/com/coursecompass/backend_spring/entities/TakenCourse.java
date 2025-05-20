@@ -1,5 +1,7 @@
 package com.coursecompass.backend_spring.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jdk.jfr.Timestamp;
 import lombok.*;
@@ -18,9 +20,11 @@ public class TakenCourse {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")
+    @JsonIgnore
     private Course course;
 }

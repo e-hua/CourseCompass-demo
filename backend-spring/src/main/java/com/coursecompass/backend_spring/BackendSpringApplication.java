@@ -1,9 +1,14 @@
 package com.coursecompass.backend_spring;
 
 import com.coursecompass.backend_spring.entities.Course;
+import com.coursecompass.backend_spring.entities.CourseRating;
+import com.coursecompass.backend_spring.entities.TakenCourse;
 import com.coursecompass.backend_spring.entities.User;
+import com.coursecompass.backend_spring.repositories.CourseRatingRepository;
 import com.coursecompass.backend_spring.repositories.CourseRepository;
+import com.coursecompass.backend_spring.repositories.TakenCourseRepository;
 import com.coursecompass.backend_spring.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,23 +19,39 @@ import java.util.List;
 
 @SpringBootApplication
 public class BackendSpringApplication {
-	// Add this in a @Configuration or @SpringBootApplication class
 
 	@Bean
-	CommandLineRunner runner(UserRepository userRepo, CourseRepository courseRepo) {
+	CommandLineRunner runner(UserRepository userRepo, CourseRepository courseRepo, TakenCourseRepository takenCourseRepo) {
 		return args -> {
-			Course cs1101s = new Course("CS1101S", 4.0, 4.5, 4.2, new ArrayList<>());
-			courseRepo.save(cs1101s);
 
-			User user = new User();
-			user.setUserName("guanhua");
-			user.setEmail("guanhua@example.com");
-			user.setCurrentSemesterIndex(2);
-			user.setGPA(4.8);
-			user.setBookmarkedCourseIds(List.of("CS1101S"));
-			user.setPlannedCourseIds(List.of("CS1231S"));
+			User john = new User();
+			john.setUserName("John");
+			john.setEmail("john@doe.com");
+			john.setGPA(5.0);
+			john.setCurrentSemesterIndex(2);
+			john.setBookmarkedCourseIds(List.of("CS1101S"));
+			john.setPlannedCourseIds(List.of("CS2103T"));
+			userRepo.deleteAll();
+			userRepo.save(john);
 
-			userRepo.save(user);
+
+			Course CS1101S = new Course();
+			CS1101S.setId("CS1101S");
+			CS1101S.setAverageDifficulty(4.5);
+			CS1101S.setAverageWorkload(5.0);
+			CS1101S.setAverageEnjoyability(5.0);
+			courseRepo.deleteAll();
+			courseRepo.save(CS1101S);
+
+			TakenCourse takenCS1101S = new TakenCourse();
+			takenCS1101S.setCourse(CS1101S);
+
+			takenCS1101S.setSemesterIndex(2);
+			takenCS1101S.setLetterGrade("A+");
+			takenCS1101S.setUnits(4);
+			takenCS1101S.setUser(john);
+			takenCourseRepo.deleteAll();
+			takenCourseRepo.save(takenCS1101S);
 		};
 	}
 

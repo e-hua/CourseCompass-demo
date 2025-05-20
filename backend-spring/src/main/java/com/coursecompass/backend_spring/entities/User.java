@@ -1,8 +1,8 @@
 package com.coursecompass.backend_spring.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -39,11 +39,11 @@ public class User {
     @ElementCollection
     private List<String> plannedCourseIds;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<TakenCourse> takenCourses;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<CourseRating> courseRatings;
 }
