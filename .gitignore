@@ -4,3 +4,5 @@
 # JetBrains IDEs
 .idea/
 
+# Propertites
+backend-spring/src/main/resources/application.properties
