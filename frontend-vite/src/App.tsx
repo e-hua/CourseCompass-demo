@@ -1,10 +1,10 @@
-import Dashboard from "./components/Dashboard/Dashboard";
 import Layout from "@/components/Sidebar/layout";
+import UserProfile from "@/components/my-components/UserProfile";
 
 function App() {
   return (
     <Layout>
-      <Dashboard />
+      <UserProfile />
     </Layout>
   );
 }

@@ -40,10 +40,8 @@ public class User {
     private List<String> plannedCourseIds;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private List<TakenCourse> takenCourses;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private List<CourseRating> courseRatings;
 }

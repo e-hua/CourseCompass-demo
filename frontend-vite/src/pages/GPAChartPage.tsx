@@ -39,7 +39,7 @@ export default function GPAChartPage() {
     /*
      */
     <Layout>
-      <div className="p-6  mx-auto space-y-10 w-300">
+      <div className="p-6  mx-8 space-y-10">
         <Card>
           <CardHeader>
             <CardTitle>GPA Chart - Linear</CardTitle>
