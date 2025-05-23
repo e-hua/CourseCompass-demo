@@ -49,17 +49,12 @@ export default function UserProfile() {
       });
   }, []);
 
-  if (!user) {
+  if (!user || loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        Failed to fetch the first user
+        {" "}
+        Loading.....{" "}
       </div>
-    );
-  }
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen"> Loading </div>
     );
   }
 
