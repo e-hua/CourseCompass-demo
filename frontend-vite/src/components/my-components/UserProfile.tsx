@@ -38,7 +38,7 @@ export default function UserProfile() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/users")
+      .get("https://coursecompass-demo.onrender.com/api/users")
       .then((profiles) => {
         setLoading(false);
         setUser(profiles.data[0]);
