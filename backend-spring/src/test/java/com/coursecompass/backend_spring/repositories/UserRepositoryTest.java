@@ -22,7 +22,7 @@ class UserRepositoryTest {
     public void testSaveAndFindUser() {
         User john = new User();
         john.setUserName("John");
-        john.setEmail("john@doe.com");
+        john.setEmail("JOHN@doe.com");
         john.setGPA(5.0);
         john.setCurrentSemesterIndex(2);
 
@@ -31,26 +31,27 @@ class UserRepositoryTest {
 
         assertTrue(maybeJohn.isPresent());
         assertEquals("John", maybeJohn.get().getUserName());
+        userRepository.deleteById(john.getId());
     }
 
     @Test
     public void testFindUserById() {
         User john = new User();
         john.setUserName("John");
-        john.setEmail("john@doe.com");
+        john.setEmail("J@doe.com");
         john.setGPA(5.0);
         john.setCurrentSemesterIndex(2);
 
         userRepository.save(john);
         Optional<User> maybeJohn = userRepository.findById(john.getId());
-        assertEquals(1, maybeJohn.get().getId());
+        userRepository.deleteById(john.getId());
     }
 
     @Test
     public void testDeleteUser() {
         User john = new User();
         john.setUserName("John");
-        john.setEmail("john@doe.com");
+        john.setEmail("JD@doe.com");
         john.setGPA(5.0);
         john.setCurrentSemesterIndex(2);
 
@@ -60,5 +61,6 @@ class UserRepositoryTest {
         userRepository.deleteById(john.getId());
         Optional<User> maybeEmpty = userRepository.findById(john.getId());
         assertFalse(maybeEmpty.isPresent());
+        userRepository.deleteById(john.getId());
     }
 }

@@ -26,9 +26,10 @@ public class TakenCourseRepositoryTest {
     public void testSaveAndFindTakenCourse() {
         User john = new User();
         john.setUserName("John");
-        john.setEmail("john@doe.com");
+        john.setEmail("johnny@doe.com");
         john.setGPA(5.0);
         john.setCurrentSemesterIndex(2);
+        userRepository.delete(john);
         userRepository.save(john);
 
         Course CS1101S = new Course();
@@ -45,6 +46,7 @@ public class TakenCourseRepositoryTest {
         takenCS1101S.setLetterGrade("A+");
         takenCS1101S.setUnits(4);
         takenCS1101S.setUser(john);
+        takenCourseRepository.delete(takenCS1101S);
         takenCourseRepository.save(takenCS1101S);
 
         Optional<TakenCourse> maybeTakenCS1101S = takenCourseRepository.findById(takenCS1101S.getId());
@@ -52,5 +54,7 @@ public class TakenCourseRepositoryTest {
         assertTrue(maybeTakenCS1101S.isPresent());
         assertEquals("CS1101S", maybeTakenCS1101S.get().getCourse().getId());
         assertEquals("A+", maybeTakenCS1101S.get().getLetterGrade());
+
+
     }
 }

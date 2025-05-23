@@ -35,5 +35,6 @@ public class CourseRepositoryTest {
 
         assertTrue(maybeCS1101S.isPresent());
         assertEquals("CS1101S", maybeCS1101S.get().getId());
+        courseRepository.deleteById(CS1101S.getId());
     }
 }

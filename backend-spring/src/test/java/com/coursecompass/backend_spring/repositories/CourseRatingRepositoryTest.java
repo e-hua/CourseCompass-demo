@@ -27,7 +27,7 @@ public class CourseRatingRepositoryTest {
     public void testSaveAndFindCourseRating() {
         User john = new User();
         john.setUserName("John");
-        john.setEmail("john@doe.com");
+        john.setEmail("John@doe.com");
         john.setGPA(5.0);
         john.setCurrentSemesterIndex(2);
         userRepository.save(john);
@@ -50,5 +50,6 @@ public class CourseRatingRepositoryTest {
         assertTrue(maybeRatingFromJohn.isPresent());
         assertEquals(john, maybeRatingFromJohn.get().getUser());
         assertEquals(CS1101S, maybeRatingFromJohn.get().getCourse());
+
     }
 }
