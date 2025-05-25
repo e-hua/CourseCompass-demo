@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import ProgressCard from "@/components/my-components/ProgressCard";
 import ProfileCard from "@/components/my-components/ProfileCard";
-
+import CourseRatingCard from "@/components/my-components/CourseRatingCard";
 export interface TakenCourse {
   id: number;
   semesterIndex: number;
@@ -61,10 +61,11 @@ export default function Dashboard() {
   }
 
   return (
-    <div className=" mx-8 p-6 space-y-10">
+    <div className="mx-8 p-6 space-y-10">
       <div className="p-6">
-      <ProgressCard />
       <ProfileCard user={user} />
+      <ProgressCard />
+      <CourseRatingCard user={user} />
       </div>  
     </div>
   );

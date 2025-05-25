@@ -1,8 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { User } from "@/components/my-components/Dashboard";
+interface UserProfileCardProps {
+  user: User;
+}
 
-export default function UserProfileCard({user}: {user : User}) {
+export default function UserProfileCard({user}: UserProfileCardProps) {
  return (<Card className="p-6">
   <CardHeader>
     <CardTitle className="text-xl">Welcome back!</CardTitle>
@@ -23,6 +26,10 @@ export default function UserProfileCard({user}: {user : User}) {
           <div>
             <strong>Created:</strong>{" "}
             {new Date(user.createdAt).toLocaleDateString()}
+          </div>
+          <div>
+            <strong>Updated:</strong>{" "}
+            {new Date(user.updatedAt).toLocaleDateString()}
           </div>
     </div>
   </CardContent>
