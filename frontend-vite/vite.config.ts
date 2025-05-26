@@ -14,7 +14,8 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://coursecompass-demo.onrender.com",
+        // target: "https://coursecompass-demo.onrender.com",
+        target: "http://localhost:8080",
         changeOrigin: true,
         secure: false,
       },
