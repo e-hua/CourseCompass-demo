@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import GoogleLogin from "./GoogleLogin";
 
 export interface TakenCourse {
   id: number;
@@ -61,7 +60,6 @@ export default function UserProfile() {
 
   return (
     <div className=" mx-8 p-6 space-y-10">
-      <GoogleLogin />
       <Card className="p-6">
         <CardHeader>
           <CardTitle className="text-2xl">Welcome, {user.userName}</CardTitle>

@@ -61,11 +61,13 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { ModeToggle } from "@/components/Theme/mode-toggle";
+import GoogleLogin from "@/components/my-components/GoogleLogin";
 
 // Menu items.
 
@@ -75,6 +77,10 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
+      <SidebarHeader>
+        <GoogleLogin />
+      </SidebarHeader>
+
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Sidebar</SidebarGroupLabel>
