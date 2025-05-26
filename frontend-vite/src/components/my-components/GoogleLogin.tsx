@@ -11,6 +11,14 @@ export default function GoogleLogin() {
     avatar: string;
   } | null>(null);
 
+  function storeUserInfo(userInfo: {
+    name: string;
+    email: string;
+    avatar: string;
+  }) {
+    localStorage.setItem("user", JSON.stringify(userInfo));
+  }
+
   function handleToken(idToken: string) {
     const jwtPayload = JSON.parse(atob(idToken.split(".")[1]));
     const userInfo = {
@@ -20,9 +28,16 @@ export default function GoogleLogin() {
     };
 
     setUser(userInfo);
+    storeUserInfo(userInfo);
   }
 
   useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+
     // Check if the URL has a hash fragment
     const hash = window.location.hash;
     if (hash) {
