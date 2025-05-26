@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { User, LogIn, LogOut } from "lucide-react";
 
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
 const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI;
@@ -79,16 +81,44 @@ export default function GoogleLogin() {
     window.location.href = oauthUrl;
   }
 
+  function handleLogout() {
+    setUser(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("google_nonce");
+    window.location.href = "/";
+  }
+
   return (
     <div>
       {!user && (
-        <Button onClick={() => handleLogin()}>Login with Google</Button>
+        <div>
+          <Avatar className="w-20 h-20">
+            <AvatarFallback>
+              <User size={50} className="text-gray-500" />
+            </AvatarFallback>
+          </Avatar>
+          <Button
+            onClick={() => handleLogin()}
+            className="flex items-center justify-center"
+          >
+            Login <LogIn size={20} className="ml-2" />
+          </Button>
+        </div>
       )}
       {user && (
         <div>
-          <h2>Welcome, {user.name}!</h2>
-          <p>Email: {user.email}</p>
-          <img src={user.avatar} alt="User Avatar" />
+          <Avatar className="w-20 h-20">
+            <AvatarImage src={user.avatar || ""} />
+            <AvatarFallback>
+              <User size={50} className="text-gray-500" />
+            </AvatarFallback>
+          </Avatar>
+          <Button
+            onClick={() => handleLogout()}
+            className="flex items-center justify-center"
+          >
+            Logout <LogOut size={20} className="ml-2" />
+          </Button>
         </div>
       )}
     </div>
