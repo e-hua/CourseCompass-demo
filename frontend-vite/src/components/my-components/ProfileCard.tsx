@@ -1,21 +1,6 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { User } from "@/components/my-components/Dashboard";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
-interface UserProfileCardProps {
-  user: User;
-}
+/*
 
-export default function UserProfileCard({user}: UserProfileCardProps) {
-
-  const {userName, email, currentSemesterIndex, createdAt, updatedAt} : User = user;
   
-  const [editing, setEditing] = useState(false);
-  const [name, setName] = useState(userName);
-  const [emailAddress, setEmailAddress] = useState(email);
-  const [semesterIndex, setSemesterIndex] = useState(currentSemesterIndex);
-
  return (<Card className="p-6" onSubmit ={(e) => {
     e.preventDefault();
     setEditing(!editing);
@@ -53,4 +38,48 @@ export default function UserProfileCard({user}: UserProfileCardProps) {
     </Button>
   </CardContent>
 </Card> )
+}
+*/
+
+import { useState } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import UserAvatarBadge from "./UserAvatarBadge.tsx";
+import UserProfileFields from "./ProfileFields.tsx";
+import type { User } from "./Dashboard";
+interface UserProfileCardProps {
+  user: User;
+}
+
+export default function ProfileCard({user}: UserProfileCardProps) {
+
+  const {userName, email, currentSemesterIndex, createdAt, updatedAt} : User = user;
+  const [editing, setEditing] = useState(false);
+  const [name, setName] = useState(userName);
+  const [emailAddress, setEmailAddress] = useState(email);
+  const [semesterIndex] = useState(currentSemesterIndex);
+
+  return (
+    <Card className="p-6">
+      <CardHeader>
+        <CardTitle className="text-xl">Welcome back!</CardTitle>
+      </CardHeader>
+      <CardContent className="flex space-x-6 items-start">
+        <UserAvatarBadge name={name} />
+        <UserProfileFields
+          editing={editing}
+          name={name}
+          email={emailAddress}
+          semesterIndex={semesterIndex}
+          createdAt={createdAt}
+          updatedAt={updatedAt}
+          onNameChange={setName}
+          onEmailChange={setEmailAddress}
+        />
+        <Button onClick={() => setEditing((e) => !e)} className="ml-auto">
+          {editing ? "Save" : "Edit"}
+        </Button>
+      </CardContent>
+    </Card>
+  );
 }
