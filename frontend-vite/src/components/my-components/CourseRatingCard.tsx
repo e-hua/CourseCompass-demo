@@ -1,12 +1,11 @@
-import { TrendingUp } from "lucide-react";
-import { Label, Pie, PieChart, Sector } from "recharts";
+import { Pie, PieChart, Sector } from "recharts";
 import type { PieSectorDataItem } from "recharts/types/polar/Pie";
+import type { User } from "@/components/my-components/Dashboard";
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -19,10 +18,9 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-const chartData = [
-    { comment: "Rated Courses", number: 400, fill: "var(--color-rated)" },
-    { comment: "Waiting for Rating", number: 300, fill: "var(--color-notRated)" },
-]
+interface UserProfileCardProps {
+  user: User;
+}
 
 const chartConfig = {
   comments: {
@@ -38,22 +36,22 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-interface UserProfileCardProps {
-  user: {
-    userName: string;
-    email: string;
-    createdAt: string;
-    updatedAt: string;
-    currentSemesterIndex: number;
-  };
-}
+
 
 export default function Component({user}: UserProfileCardProps) {
+
+  const ratedCourses = user.courseRatings.length;
+  const notRatedCourses = user.takenCourses.length - ratedCourses;
+  const chartData = [
+    { comment: "Rated Courses", number: ratedCourses, fill: "var(--color-rated)" },
+    { comment: "Waiting for Rating", number: notRatedCourses, fill: "var(--color-notRated)" },
+]
+
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart - Course Rating</CardTitle>
-        <CardDescription></CardDescription>
+        <CardTitle>Pie Chart - Course Rating Condition</CardTitle>
+        <CardDescription>Rate more courses to help us develop! </CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -82,11 +80,6 @@ export default function Component({user}: UserProfileCardProps) {
           </PieChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-      </CardFooter>
     </Card>
   )
 }

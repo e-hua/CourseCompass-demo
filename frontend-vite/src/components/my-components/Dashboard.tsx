@@ -55,18 +55,16 @@ export default function Dashboard() {
     return (
       <div className="flex items-center justify-center h-screen">
         {" "}
-        Loading.....{" "}
+        Loading...{" "}
       </div>
     );
   }
 
   return (
-    <div className="mx-8 p-6 space-y-10">
-      <div className="p-6">
+      <div className="p-6 mx-8 space-y-10">
       <ProfileCard user={user} />
-      <ProgressCard />
+      <ProgressCard user={user} />
       <CourseRatingCard user={user} />
-      </div>  
-    </div>
+      </div>
   );
 }

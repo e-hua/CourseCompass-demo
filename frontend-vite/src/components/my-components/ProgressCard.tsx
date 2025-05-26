@@ -1,10 +1,20 @@
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { User } from "@/components/my-components/Dashboard";
 
-const degreeProgress = 25; // Example progress value, should be fetched from API afterwards
-const semesterProgress = 100; // Example progress value, should be fetched from API afterwards
+interface ProgressCardProps {
+  user: User;
+}
 
-export default function DegreeProgressCard() {
+export default function DegreeProgressCard({user}: ProgressCardProps) {
+
+  const { currentSemesterIndex, takenCourses } : User = user;
+  const degreeProgress = takenCourses.reduce((acc, course) => {
+    const units = course.units || 0;  
+    return acc + course.letterGrade !== "F" ? units : 0;
+  }, 0) * 100 / 160;
+  
+  const semesterProgress = currentSemesterIndex * 100 / 8;
   return (
     <Card className="m-10 p-6 mx-auto space-y-5  w-200 h-50">
       <CardHeader>
