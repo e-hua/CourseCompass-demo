@@ -29,6 +29,24 @@ export default function GoogleLogin() {
       avatar: jwtPayload.picture,
     };
 
+    fetch("http://localhost:8080/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ idToken }),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Backend verification failed");
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Authenticated user:", data);
+      })
+      .catch((err) => {
+        console.error("Login failed:", err);
+      });
+
     setUser(userInfo);
     storeUserInfo(userInfo);
   }
