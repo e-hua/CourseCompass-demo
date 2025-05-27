@@ -5,6 +5,6 @@
 .idea/
 
 # Propertites
-#backend-spring/src/main/resources/application.properties
+backend-spring/src/main/resources/application.properties
 
 .env
