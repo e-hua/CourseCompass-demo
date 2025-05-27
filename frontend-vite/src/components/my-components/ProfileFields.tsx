@@ -1,5 +1,7 @@
+import axios from "axios";
 interface ProfileFieldsProps {
   editing: boolean;
+  userId: number;
   name: string;
   email: string;
   semesterIndex: number;
@@ -11,6 +13,7 @@ interface ProfileFieldsProps {
 
 export default function UserProfileFields({
   editing,
+  userId,
   name,
   email,
   semesterIndex,
@@ -19,6 +22,9 @@ export default function UserProfileFields({
   onNameChange,
   onEmailChange,
 }: ProfileFieldsProps) {
+
+  
+
   return (
     <div className="space-y-2">
       {editing ? (
@@ -48,6 +54,7 @@ export default function UserProfileFields({
       <div>
         <strong>Updated:</strong> {new Date().toLocaleDateString()}
       </div>
+
     </div>
   );
 }
