@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { type User } from "@/components/my-components/UserProfile";
+import { type User } from "@/components/my-components/Dashboard";
 
 const UserContext = createContext<{
   userProfile: User | null;
