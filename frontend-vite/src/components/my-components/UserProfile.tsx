@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useUserProfile } from "../my-contexts/UserProfileContext";
+import UserProfileCard from "./UserProfileCard";
 
 export interface TakenCourse {
   id: number;
@@ -33,55 +33,25 @@ export interface User {
 }
 
 export default function UserProfile() {
+  const { userProfile, setUserProfile } = useUserProfile();
   const [loading, setLoading] = useState<boolean>(true);
-  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    axios
-      .get("https://coursecompass-demo.onrender.com/api/users")
-      .then((profiles) => {
-        setLoading(false);
-        setUser(profiles.data[0]);
-      })
-      .catch((error) => {
-        console.error("No valid profile to fetch", error);
-        setLoading(false);
-      });
+    const profile = localStorage.getItem("userProfile");
+    if (profile) {
+      const userProfile = JSON.parse(profile);
+      setUserProfile(userProfile);
+    }
+    setLoading(false);
   }, []);
 
-  if (!user || loading) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        {" "}
-        Loading.....{" "}
+        Loading...
       </div>
     );
   }
 
-  return (
-    <div className=" mx-8 p-6 space-y-10">
-      <Card className="p-6">
-        <CardHeader>
-          <CardTitle className="text-2xl">Welcome, {user.userName}</CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-2 gap-4 text-sm">
-          <div>
-            <strong>Email:</strong> {user.email}
-          </div>
-          <div>
-            <strong>GPA:</strong> {user.gpa.toFixed(2)}
-          </div>
-          <div>
-            <strong>Semester:</strong> Y
-            {Math.floor((user.currentSemesterIndex + 1) / 2)}S
-            {user.currentSemesterIndex % 2 == 0 ? 2 : 1}
-          </div>
-          <div>
-            <strong>Created:</strong>{" "}
-            {new Date(user.createdAt).toLocaleDateString()}
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
+  return <UserProfileCard userProfile={userProfile} />;
 }
