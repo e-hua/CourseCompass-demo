@@ -18,7 +18,7 @@ export default function GoogleLogin() {
     email: string;
     avatar: string;
   }) {
-    localStorage.setItem("user", JSON.stringify(userInfo));
+    localStorage.setItem("userAuthInfo", JSON.stringify(userInfo));
   }
 
   function handleToken(idToken: string) {
@@ -42,6 +42,7 @@ export default function GoogleLogin() {
       })
       .then((data) => {
         console.log("Authenticated user:", data);
+        localStorage.setItem("userProfile", JSON.stringify(data));
       })
       .catch((err) => {
         console.error("Login failed:", err);
@@ -52,7 +53,7 @@ export default function GoogleLogin() {
   }
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = localStorage.getItem("userAuthInfo");
 
     if (storedUser) {
       setUser(JSON.parse(storedUser));
@@ -78,6 +79,9 @@ export default function GoogleLogin() {
 
         // Clean up nonce after successful verification
         localStorage.removeItem("google_nonce");
+
+        //Cleanup the url for security reason
+        window.history.replaceState(null, "", window.location.pathname);
       }
     }
   }, []);
@@ -101,8 +105,9 @@ export default function GoogleLogin() {
 
   function handleLogout() {
     setUser(null);
-    localStorage.removeItem("user");
+    localStorage.removeItem("userAuthInfo");
     localStorage.removeItem("google_nonce");
+    localStorage.removeItem("userProfile");
     window.location.href = "/";
   }
 
