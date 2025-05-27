@@ -1,24 +1,26 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User, LogIn, LogOut } from "lucide-react";
+import { User as UserIcon, LogIn, LogOut } from "lucide-react";
+import { useUserProfile } from "@/components/my-contexts/UserProfileContext";
 
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
 const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI;
 
 export default function GoogleLogin() {
-  const [user, setUser] = useState<{
+  const [userAuthInfo, setUserAuthInfo] = useState<{
     name: string;
     email: string;
     avatar: string;
   } | null>(null);
+  const { setUserProfile } = useUserProfile();
 
-  function storeUserInfo(userInfo: {
+  function storeUserAuthInfo(userAuthInfo: {
     name: string;
     email: string;
     avatar: string;
   }) {
-    localStorage.setItem("userAuthInfo", JSON.stringify(userInfo));
+    localStorage.setItem("userAuthInfo", JSON.stringify(userAuthInfo));
   }
 
   function handleToken(idToken: string) {
@@ -42,21 +44,22 @@ export default function GoogleLogin() {
       })
       .then((data) => {
         console.log("Authenticated user:", data);
-        localStorage.setItem("userProfile", JSON.stringify(data));
+        setUserProfile(data);
+        // localStorage.setItem("userProfile", JSON.stringify(data));
       })
       .catch((err) => {
         console.error("Login failed:", err);
       });
 
-    setUser(userInfo);
-    storeUserInfo(userInfo);
+    setUserAuthInfo(userInfo);
+    storeUserAuthInfo(userInfo);
   }
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("userAuthInfo");
+    const storedUserAuthInfo = localStorage.getItem("userAuthInfo");
 
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    if (storedUserAuthInfo) {
+      setUserAuthInfo(JSON.parse(storedUserAuthInfo));
     }
 
     // Check if the URL has a hash fragment
@@ -104,20 +107,20 @@ export default function GoogleLogin() {
   }
 
   function handleLogout() {
-    setUser(null);
+    setUserAuthInfo(null);
     localStorage.removeItem("userAuthInfo");
     localStorage.removeItem("google_nonce");
-    localStorage.removeItem("userProfile");
+    setUserProfile(null);
     window.location.href = "/";
   }
 
   return (
     <div>
-      {!user && (
+      {!userAuthInfo && (
         <div>
           <Avatar className="w-20 h-20">
             <AvatarFallback>
-              <User size={50} className="text-gray-500" />
+              <UserIcon size={50} className="text-gray-500" />
             </AvatarFallback>
           </Avatar>
           <Button
@@ -128,12 +131,12 @@ export default function GoogleLogin() {
           </Button>
         </div>
       )}
-      {user && (
+      {userAuthInfo && (
         <div>
           <Avatar className="w-20 h-20">
-            <AvatarImage src={user.avatar || ""} />
+            <AvatarImage src={userAuthInfo.avatar || ""} />
             <AvatarFallback>
-              <User size={50} className="text-gray-500" />
+              <UserIcon size={50} className="text-gray-500" />
             </AvatarFallback>
           </Avatar>
           <Button
