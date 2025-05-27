@@ -1,24 +1,21 @@
-import axios from "axios";
 interface ProfileFieldsProps {
   editing: boolean;
-  userId: number;
   name: string;
   email: string;
   semesterIndex: number;
   createdAt: string;
-  updatedAt: string;
+  //updatedAt: string;
   onNameChange: (val: string) => void;
   onEmailChange: (val: string) => void;
 }
 
 export default function UserProfileFields({
   editing,
-  userId,
   name,
   email,
   semesterIndex,
   createdAt,
-  updatedAt,
+  //updatedAt,
   onNameChange,
   onEmailChange,
 }: ProfileFieldsProps) {

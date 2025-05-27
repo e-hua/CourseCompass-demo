@@ -11,7 +11,7 @@ interface UserProfileCardProps {
 
 export default function ProfileCard({user}: UserProfileCardProps) {
 
-  const {id, userName, email, currentSemesterIndex, createdAt, updatedAt} : User = user;
+  const {userName, email, currentSemesterIndex, createdAt} : User = user;
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(userName);
   const [emailAddress, setEmailAddress] = useState(email);
@@ -23,7 +23,8 @@ export default function ProfileCard({user}: UserProfileCardProps) {
         email: email,
        };
       
-      const response = await axios.put("http://localhost:8080/api/users/${id}", updatedUser);
+      const response = await axios.put("http://localhost:8080/api/users/${user.id}", updatedUser);
+      console.log("Updated user:", response.data);
     } catch (error) {
       console.error("Error updating user profile:", error);
     }
@@ -38,12 +39,11 @@ export default function ProfileCard({user}: UserProfileCardProps) {
         <UserAvatarBadge name={name} />
         <UserProfileFields
           editing={editing}
-          userId={id}
           name={name}
           email={emailAddress}
           semesterIndex={semesterIndex}
           createdAt={createdAt}
-          updatedAt={updatedAt}
+          //updatedAt={updatedAt}
           onNameChange={setName}
           onEmailChange={setEmailAddress}
         />
