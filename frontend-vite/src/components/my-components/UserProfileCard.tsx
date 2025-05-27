@@ -1,4 +1,4 @@
-import { type User } from "@/components/my-components/UserProfile";
+import { type User } from "@/components/my-components/Dashboard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function UserProfileCard({
