@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
 import ProgressCard from "@/components/my-components/ProgressCard";
 import ProfileCard from "@/components/my-components/ProfileCard";
@@ -49,7 +48,6 @@ export interface User {
 
 export default function Dashboard() {
   const [loading, setLoading] = useState<boolean>(true);
-  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     axios
@@ -65,7 +63,7 @@ export default function Dashboard() {
       });
   }, []);
 
-  if (!user || loading) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
         {" "}

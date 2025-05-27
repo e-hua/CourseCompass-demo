@@ -8,19 +8,22 @@ import SearchPage from "@/pages/SearchPage.tsx";
 import BookmarkPage from "@/pages/BookMarkPage.tsx";
 import { ThemeProvider } from "@/components/Theme/theme-provider";
 import RatingsPage from "@/pages/RatingsPage.tsx";
+import { UserProvider } from "./components/my-contexts/UserProfileContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <Router>
-        <Routes>
-          <Route path="/" element={<App />} />
-          <Route path="/profile" element={<GPAChartPage />} />
-          <Route path="/search" element={<SearchPage />} />
-          <Route path="/bookmark" element={<BookmarkPage />} />
-          <Route path="/ratings" element={<RatingsPage />} />
-        </Routes>
-      </Router>
-    </ThemeProvider>
+    <UserProvider>
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <Router>
+          <Routes>
+            <Route path="/" element={<App />} />
+            <Route path="/profile" element={<GPAChartPage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/bookmark" element={<BookmarkPage />} />
+            <Route path="/ratings" element={<RatingsPage />} />
+          </Routes>
+        </Router>
+      </ThemeProvider>
+    </UserProvider>
   </StrictMode>
 );
