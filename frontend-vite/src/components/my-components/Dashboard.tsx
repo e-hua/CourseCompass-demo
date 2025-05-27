@@ -1,8 +1,7 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
-import ProgressCard from "@/components/my-components/ProgressCard";
-import ProfileCard from "@/components/my-components/ProfileCard";
-import CourseRatingCard from "@/components/my-components/CourseRatingCard";
+import { useUserProfile } from "../my-contexts/UserProfileContext";
+import UserProfileCard from "./UserProfileCard";
+
 export interface TakenCourse {
   id: number;
   semesterIndex: number;
@@ -31,54 +30,28 @@ export interface User {
   plannedCourseIds: string[];
   takenCourses: TakenCourse[];
   courseRatings: CourseRating[];
-
-  //major: string;
-  //minor: string;
-  //profilePictureUrl: string;
-  //bio: string;
-  //socialLinks: string[];
-  //preferences;
-  //: {
-  //  theme: string;    
-  //  notificationsEnabled: boolean;
-  //};
-  //settings: { 
-  //}
-
 }
 
-export default function Dashboard() {
+export default function UserProfile() {
+  const { userProfile, setUserProfile } = useUserProfile();
   const [loading, setLoading] = useState<boolean>(true);
-  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    axios
-      //.get("https://coursecompass-demo.onrender.com/api/users")
-      .get("http://localhost:8080/api/users")
-      .then((profiles) => {
-        setLoading(false);
-        setUser(profiles.data[0]);
-      })
-      .catch((error) => {
-        console.error("No valid profile to fetch", error);
-        setLoading(false);
-      });
+    const profile = localStorage.getItem("userProfile");
+    if (profile) {
+      const userProfile = JSON.parse(profile);
+      setUserProfile(userProfile);
+    }
+    setLoading(false);
   }, []);
 
-  if (!user || loading) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        {" "}
-        Loading...{" "}
+        Loading...
       </div>
     );
   }
 
-  return (
-      <div className="p-6 mx-8 space-y-10">
-      <ProfileCard user={user} />
-      <ProgressCard user={user} />
-      <CourseRatingCard user={user} />
-      </div>
-  );
+  return <UserProfileCard userProfile={userProfile} />;
 }
