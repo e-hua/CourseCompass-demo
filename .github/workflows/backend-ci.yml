@@ -7,13 +7,14 @@ on:
   pull_request:
     paths:
       - 'backend-spring/**'
+  workflow_dispatch:
 
 jobs:
   boot-check:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Chcekout repo
+      - name: Checkout repo
         uses: actions/checkout@v3
 
       - name: Setup JDK
@@ -27,4 +28,4 @@ jobs:
 
       - name: Run the application
         working-directory: ./backend-spring
-        run: ./mvnw spring-boot:run
+        run: ./mvnw verify --batch-mode
