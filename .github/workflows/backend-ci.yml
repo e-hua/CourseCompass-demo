@@ -1,0 +1,31 @@
+name: backend-spring CI
+
+on:
+  push:
+    paths:
+      - 'backend-spring/**'
+  pull_request:
+    paths:
+      - 'backend-spring/**'
+  workflow_dispatch:
+
+jobs:
+  boot-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Change the execute permission of file
+        run: chmod +x ./backend-spring/mvnw
+
+      - name: Run the application
+        working-directory: ./backend-spring
+        run: ./mvnw verify --batch-mode
