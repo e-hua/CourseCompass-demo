@@ -19,17 +19,11 @@ export default function UserProfileFields({
   onNameChange,
   onEmailChange,
 }: ProfileFieldsProps) {
-
-  
-
   return (
     <div className="space-y-2">
       {editing ? (
         <>
-          <input
-            value={name}
-            onChange={(e) => onNameChange(e.target.value)}
-          />
+          <input value={name} onChange={(e) => onNameChange(e.target.value)} />
           <input
             value={email}
             onChange={(e) => onEmailChange(e.target.value)}
@@ -37,8 +31,8 @@ export default function UserProfileFields({
         </>
       ) : (
         <>
-          <div className="text-lg font-semibold">{name}</div>
-          <div className="text-sm text-muted-foreground">{email}</div>
+          <div className="text-lg font-semibold">UserName: {name}</div>
+          <div className="text-sm text-muted-foreground">Email: {email}</div>
         </>
       )}
       <div>
@@ -51,7 +45,6 @@ export default function UserProfileFields({
       <div>
         <strong>Updated:</strong> {new Date().toLocaleDateString()}
       </div>
-
     </div>
   );
 }

@@ -31,7 +31,8 @@ export default function GoogleLogin() {
       avatar: jwtPayload.picture,
     };
 
-    fetch("https://coursecompass-demo.onrender.com/api/auth/login", {
+    fetch("http://localhost:8080/api/auth/login", {
+      //fetch("https://coursecompass-demo.onrender.com/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -118,31 +119,25 @@ export default function GoogleLogin() {
     <div>
       {!userAuthInfo && (
         <div>
-          <Avatar className="w-20 h-20">
+          <Avatar className="w-15 h-15">
             <AvatarFallback>
               <UserIcon size={50} className="text-gray-500" />
             </AvatarFallback>
           </Avatar>
-          <Button
-            onClick={() => handleLogin()}
-            className="flex items-center justify-center"
-          >
+          <Button onClick={() => handleLogin()} className="">
             Login <LogIn size={20} className="ml-2" />
           </Button>
         </div>
       )}
       {userAuthInfo && (
         <div>
-          <Avatar className="w-20 h-20">
+          <Avatar className="w-15 h-15">
             <AvatarImage src={userAuthInfo.avatar || ""} />
             <AvatarFallback>
               <UserIcon size={50} className="text-gray-500" />
             </AvatarFallback>
           </Avatar>
-          <Button
-            onClick={() => handleLogout()}
-            className="flex items-center justify-center"
-          >
+          <Button onClick={() => handleLogout()} className="">
             Logout <LogOut size={20} className="ml-2" />
           </Button>
         </div>

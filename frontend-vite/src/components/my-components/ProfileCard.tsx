@@ -1,56 +1,62 @@
 import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import UserAvatarBadge from "./UserAvatarBadge.tsx";
 import UserProfileFields from "./ProfileFields.tsx";
-import type { User } from "./Dashboard";
-import axios from "axios"; 
-interface UserProfileCardProps {
-  user: User;
-}
+import { useUserProfile } from "../my-contexts/UserProfileContext.tsx";
 
-export default function ProfileCard({user}: UserProfileCardProps) {
-
-  const {userName, email, currentSemesterIndex, createdAt} : User = user;
+export default function ProfileCard() {
+  const { userProfile } = useUserProfile();
   const [editing, setEditing] = useState(false);
-  const [name, setName] = useState(userName);
-  const [emailAddress, setEmailAddress] = useState(email);
-  const [semesterIndex] = useState(currentSemesterIndex);
-  const handleSave = async () => {
-    try {
-      const updatedUser = {
-        userName: name,
-        email: email,
-       };
-      
-      const response = await axios.put("http://localhost:8080/api/users/${user.id}", updatedUser);
-      console.log("Updated user:", response.data);
-    } catch (error) {
-      console.error("Error updating user profile:", error);
-    }
-  };
-
-  return (
-    <Card className="p-6">
-      <CardHeader>
-        <CardTitle className="text-xl">Welcome back!</CardTitle>
-      </CardHeader>
-      <CardContent className="flex space-x-6 items-start">
-        <UserAvatarBadge name={name} />
-        <UserProfileFields
-          editing={editing}
-          name={name}
-          email={emailAddress}
-          semesterIndex={semesterIndex}
-          createdAt={createdAt}
-          //updatedAt={updatedAt}
-          onNameChange={setName}
-          onEmailChange={setEmailAddress}
-        />
-        <Button onClick={() => {setEditing((e) => !e);handleSave}} className="ml-auto">
-          {editing ? "Save" : "Edit"}
-        </Button>
-      </CardContent>
-    </Card>
+  const [name, setName] = useState(
+    userProfile === null ? undefined : userProfile.userName
   );
+  const [emailAddress, setEmailAddress] = useState(
+    userProfile == null ? undefined : userProfile.email
+  );
+  const [semesterIndex] = useState(
+    userProfile === null
+      ? 1
+      : userProfile.currentSemesterIndex === null
+      ? 1
+      : userProfile.currentSemesterIndex
+  );
+
+  if (!userProfile) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Card className="p-6">
+          <CardHeader>
+            <CardTitle className="text-xl">You’re not logged in</CardTitle>
+          </CardHeader>
+          <CardContent className="text-sm">
+            Please log in to view your dashboard.
+          </CardContent>
+        </Card>
+      </div>
+    );
+  } else {
+    const { createdAt } = userProfile;
+
+    return (
+      <Card className="p-6">
+        <CardHeader>
+          <CardTitle className="text-xl">Welcome back !</CardTitle>
+        </CardHeader>
+        <CardContent className="flex space-x-6 items-start">
+          <UserProfileFields
+            editing={editing}
+            name={name === undefined ? "To be updated" : name}
+            email={emailAddress === undefined ? "To be updated" : emailAddress}
+            semesterIndex={semesterIndex}
+            createdAt={createdAt}
+            onNameChange={setName}
+            onEmailChange={setEmailAddress}
+          />
+          <Button onClick={() => setEditing((e) => !e)} className="ml-auto">
+            {editing ? "Save" : "Edit"}
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
 }
