@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useUserProfile } from "../my-contexts/UserProfileContext";
 import UserProfileCard from "./UserProfileCard";
-
 export interface TakenCourse {
   id: number;
   semesterIndex: number;
