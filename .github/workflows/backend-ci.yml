@@ -10,22 +10,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  boot-check:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Setup JDK
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      - name: Change the execute permission of file
-        run: chmod +x ./backend-spring/mvnw
+      - name: Build Docker image
+        run: docker build -t coursecompass-backend -f backend-spring/Dockerfile backend-spring
 
-      - name: Run the application
-        working-directory: ./backend-spring
-        run: ./mvnw verify --batch-mode
+      - name: Run container
+        run: docker run -d -p 8080:8080 --name coursecompass-backend coursecompass-backend
