@@ -21,8 +21,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Build Docker image
-        run: docker build -t coursecompass-backend .
+        run: docker build -t coursecompass-backend -f backend-spring/Dockerfile backend-spring
 
       - name: Run container
-        run: |
-          docker run -d -p 8080:8080 --name coursecompass-backend coursecompass-backend
+        run: docker run -d -p 8080:8080 --name coursecompass-backend coursecompass-backend
