@@ -10,7 +10,12 @@ export default function ProgressCard() {
     ? 1
     : userProfile.currentSemesterIndex;
 
-  const takenCourses = !userProfile ? [] : userProfile.takenCourses;
+  const takenCourses = !userProfile
+    ? []
+    : !userProfile.takenCourses
+    ? []
+    : userProfile.takenCourses;
+
   const degreeProgress =
     (takenCourses.reduce((acc, course) => {
       const units = course.units || 0;

@@ -1,40 +1,23 @@
-interface ProfileFieldsProps {
-  editing: boolean;
-  name: string;
-  email: string;
-  semesterIndex: number;
-  createdAt: string;
-  //updatedAt: string;
-  onNameChange: (val: string) => void;
-  onEmailChange: (val: string) => void;
-}
+import { useUserProfile } from "../my-contexts/UserProfileContext";
 
-export default function UserProfileFields({
-  editing,
-  name,
-  email,
-  semesterIndex,
-  createdAt,
-  //updatedAt,
-  onNameChange,
-  onEmailChange,
-}: ProfileFieldsProps) {
+export default function UserProfileFields() {
+  const { userProfile } = useUserProfile();
+  const name = !userProfile ? undefined : userProfile.userName;
+  const email = !userProfile ? undefined : userProfile.email;
+  const semesterIndex = !userProfile
+    ? 1
+    : userProfile.currentSemesterIndex === null
+    ? 1
+    : userProfile.currentSemesterIndex;
+  const createdAt = !userProfile ? new Date() : userProfile.createdAt;
+  const updatedAt = !userProfile ? new Date() : userProfile.updatedAt;
+
   return (
     <div className="space-y-2">
-      {editing ? (
-        <>
-          <input value={name} onChange={(e) => onNameChange(e.target.value)} />
-          <input
-            value={email}
-            onChange={(e) => onEmailChange(e.target.value)}
-          />
-        </>
-      ) : (
-        <>
-          <div className="text-lg font-semibold">UserName: {name}</div>
-          <div className="text-sm text-muted-foreground">Email: {email}</div>
-        </>
-      )}
+      <>
+        <div className="text-lg font-semibold">UserName: {name}</div>
+        <div className="text-sm text-muted-foreground">Email: {email}</div>
+      </>
       <div>
         <strong>Semester:</strong> Y{Math.floor((semesterIndex + 1) / 2)}S
         {semesterIndex % 2 === 0 ? 2 : 1}
@@ -43,7 +26,7 @@ export default function UserProfileFields({
         <strong>Created:</strong> {new Date(createdAt).toLocaleDateString()}
       </div>
       <div>
-        <strong>Updated:</strong> {new Date().toLocaleDateString()}
+        <strong>Updated:</strong> {new Date(updatedAt).toLocaleDateString()}
       </div>
     </div>
   );

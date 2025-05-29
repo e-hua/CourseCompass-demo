@@ -24,6 +24,7 @@ export default function GoogleLogin() {
   }
 
   function handleToken(idToken: string) {
+    localStorage.setItem("id_token", idToken);
     const jwtPayload = JSON.parse(atob(idToken.split(".")[1]));
     const userInfo = {
       name: jwtPayload.name,
@@ -32,7 +33,7 @@ export default function GoogleLogin() {
     };
 
     fetch("http://localhost:8080/api/auth/login", {
-      //fetch("https://coursecompass-demo.onrender.com/api/auth/login", {
+      // fetch("https://coursecompass-demo.onrender.com/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -111,6 +112,7 @@ export default function GoogleLogin() {
     setUserAuthInfo(null);
     localStorage.removeItem("userAuthInfo");
     localStorage.removeItem("google_nonce");
+    localStorage.removeItem("id_token");
     setUserProfile(null);
     window.location.href = "/";
   }

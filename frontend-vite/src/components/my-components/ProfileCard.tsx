@@ -7,19 +7,6 @@ import { useUserProfile } from "../my-contexts/UserProfileContext.tsx";
 export default function ProfileCard() {
   const { userProfile } = useUserProfile();
   const [editing, setEditing] = useState(false);
-  const [name, setName] = useState(
-    userProfile === null ? undefined : userProfile.userName
-  );
-  const [emailAddress, setEmailAddress] = useState(
-    userProfile == null ? undefined : userProfile.email
-  );
-  const [semesterIndex] = useState(
-    userProfile === null
-      ? 1
-      : userProfile.currentSemesterIndex === null
-      ? 1
-      : userProfile.currentSemesterIndex
-  );
 
   if (!userProfile) {
     return (
@@ -35,23 +22,13 @@ export default function ProfileCard() {
       </div>
     );
   } else {
-    const { createdAt } = userProfile;
-
     return (
       <Card className="p-6">
         <CardHeader>
           <CardTitle className="text-xl">Welcome back !</CardTitle>
         </CardHeader>
         <CardContent className="flex space-x-6 items-start">
-          <UserProfileFields
-            editing={editing}
-            name={name === undefined ? "To be updated" : name}
-            email={emailAddress === undefined ? "To be updated" : emailAddress}
-            semesterIndex={semesterIndex}
-            createdAt={createdAt}
-            onNameChange={setName}
-            onEmailChange={setEmailAddress}
-          />
+          <UserProfileFields />
           <Button onClick={() => setEditing((e) => !e)} className="ml-auto">
             {editing ? "Save" : "Edit"}
           </Button>
