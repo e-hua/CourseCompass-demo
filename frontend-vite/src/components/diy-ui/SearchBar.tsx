@@ -7,10 +7,19 @@ import {
   CommandEmpty,
 } from "@/components/ui/command";
 import { X } from "lucide-react";
+import CourseInfoCard from "@/components/my-components/CourseInfoCard";
+import { courseMap } from "@/data/CourseMap";
 
-const SearchBar: React.FC = () => {
-  const [query, setQuery] = useState("");
-  const options = [
+export type Course = {
+  moduleCode: string;
+  title: string;
+  credits: number;
+  prerequisites: string[];
+  semesterOffered: string;
+  description: string;
+};
+
+const options = [
     "CP2106",
     "CS2103T",
     "CS2101",
@@ -21,11 +30,23 @@ const SearchBar: React.FC = () => {
     "CS3233",
   ];
 
+const SearchBar: React.FC = () => {
+  const [query, setQuery] = useState("");
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+
   const filteredOptions = options.filter((option) =>
     option.toLowerCase().includes(query.toLowerCase())
   );
 
-  const clearSearch = () => setQuery("");
+  const clearSearch = () => {setQuery(""); setSelectedCourse(null);};
+
+  const handleSelect = (option: string) => {
+    setQuery(option);
+    const course = courseMap[option];
+    if (course) {
+    setSelectedCourse(course);
+    }
+  };
 
   return (
     <div className="w-80 relative">
@@ -48,7 +69,7 @@ const SearchBar: React.FC = () => {
           <CommandList className="absolute z-50 mt-9.25 w-full max-h-60 overflow-auto rounded-md shadow-lg">
             {filteredOptions.length ? (
               filteredOptions.map((option, index) => (
-                <CommandItem key={index} onSelect={() => setQuery(option)}>
+                <CommandItem key={index} onSelect={() => handleSelect(option)}>
                   {option}
                 </CommandItem>
               ))
@@ -57,6 +78,10 @@ const SearchBar: React.FC = () => {
             )}
           </CommandList>
         )}
+
+        {selectedCourse && (
+        <CourseInfoCard course={selectedCourse}/>
+      )}
       </Command>
     </div>
   );
