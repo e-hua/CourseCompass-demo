@@ -59,13 +59,15 @@ public class UserController {
 
             User user = optionalUser.get();
             user.setUserName(payload.getOrDefault("userName", user.getUserName()));
-            System.out.println(user);
+            user.setCurrentSemesterIndex(
+                    Integer.parseInt(payload.getOrDefault("currentSemesterIndex", user.getUserName()))
+            );
             userService.updateUser(user.getId(), user);
 
             return ResponseEntity.ok(user);
         } catch (Exception e) {
             System.out.println(e);
-            return ResponseEntity.badRequest().body(Map.of("error", "Invalid token"));
+            return ResponseEntity.badRequest().body(Map.of("error", "Backend is busy, please try again later"));
         }
     }
 }

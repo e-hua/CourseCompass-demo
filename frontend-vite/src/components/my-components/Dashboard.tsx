@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useUserProfile } from "../my-contexts/UserProfileContext";
 import ProfileCard from "./ProfileCard";
 import ProgressCard from "./ProgressCard";
-import { UserNameUpdateForm } from "./UserNameUpdateForm";
 
 export interface TakenCourse {
   id: number;
@@ -59,7 +58,6 @@ export default function UserProfile() {
     <div className=" mx-8 p-6 space-y-10">
       <ProfileCard />
       <ProgressCard />
-      <UserNameUpdateForm />
     </div>
   );
 }

@@ -78,7 +78,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader>
+      <SidebarHeader className="space-x-3">
         <GoogleLogin />
       </SidebarHeader>
 
