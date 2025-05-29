@@ -24,6 +24,7 @@ export default function GoogleLogin() {
   }
 
   function handleToken(idToken: string) {
+    localStorage.setItem("id_token", idToken);
     const jwtPayload = JSON.parse(atob(idToken.split(".")[1]));
     const userInfo = {
       name: jwtPayload.name,
@@ -31,7 +32,7 @@ export default function GoogleLogin() {
       avatar: jwtPayload.picture,
     };
 
-    fetch("https://coursecompass-demo.onrender.com/api/auth/login", {
+    fetch("/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -110,6 +111,7 @@ export default function GoogleLogin() {
     setUserAuthInfo(null);
     localStorage.removeItem("userAuthInfo");
     localStorage.removeItem("google_nonce");
+    localStorage.removeItem("id_token");
     setUserProfile(null);
     window.location.href = "/";
   }
@@ -117,33 +119,27 @@ export default function GoogleLogin() {
   return (
     <div>
       {!userAuthInfo && (
-        <div>
-          <Avatar className="w-20 h-20">
+        <div className="flex items-center space-x-3">
+          <Avatar className="w-10 h-10">
             <AvatarFallback>
-              <UserIcon size={50} className="text-gray-500" />
+              <UserIcon size={24} className="text-gray-500" />
             </AvatarFallback>
           </Avatar>
-          <Button
-            onClick={() => handleLogin()}
-            className="flex items-center justify-center"
-          >
-            Login <LogIn size={20} className="ml-2" />
+          <Button onClick={() => handleLogin()} className="">
+            Login <LogIn size={16} />
           </Button>
         </div>
       )}
       {userAuthInfo && (
-        <div>
-          <Avatar className="w-20 h-20">
+        <div className="flex items-center space-x-3">
+          <Avatar className="w-10 h-10">
             <AvatarImage src={userAuthInfo.avatar || ""} />
             <AvatarFallback>
-              <UserIcon size={50} className="text-gray-500" />
+              <UserIcon size={24} className="text-gray-500" />
             </AvatarFallback>
           </Avatar>
-          <Button
-            onClick={() => handleLogout()}
-            className="flex items-center justify-center"
-          >
-            Logout <LogOut size={20} className="ml-2" />
+          <Button onClick={() => handleLogout()} className="">
+            Logout <LogOut size={16} />
           </Button>
         </div>
       )}

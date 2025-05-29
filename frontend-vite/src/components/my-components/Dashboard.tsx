@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useUserProfile } from "../my-contexts/UserProfileContext";
-import UserProfileCard from "./UserProfileCard";
+import ProfileCard from "./ProfileCard";
+import ProgressCard from "./ProgressCard";
+
 export interface TakenCourse {
   id: number;
   semesterIndex: number;
@@ -32,7 +34,7 @@ export interface User {
 }
 
 export default function UserProfile() {
-  const { userProfile, setUserProfile } = useUserProfile();
+  const { setUserProfile } = useUserProfile();
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -52,5 +54,10 @@ export default function UserProfile() {
     );
   }
 
-  return <UserProfileCard userProfile={userProfile} />;
+  return (
+    <div className=" mx-8 p-6 space-y-10">
+      <ProfileCard />
+      <ProgressCard />
+    </div>
+  );
 }

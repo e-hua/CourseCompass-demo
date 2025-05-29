@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -30,11 +31,17 @@ public class AuthController {
       String email = (String) claims.get("email");
       String name = (String) claims.get("name");
 
-      User user = userRepository.findByEmail(email)
-              .orElseGet(User::new);
+      Optional<User> maybeUser = userRepository.findByEmail(email);
 
-      user.setUserName(name);
-      user.setEmail(email);
+      User user = maybeUser.orElseGet(
+              () -> {
+                User newUser = new User();
+                newUser.setEmail(email);
+                newUser.setUserName(name);
+                return newUser;
+              }
+      );
+
       userRepository.save(user);
 
       return ResponseEntity.ok(user);

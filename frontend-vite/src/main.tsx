@@ -6,15 +6,17 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import GPAChartPage from "@/pages/GPAChartPage.tsx";
 import SearchPage from "@/pages/SearchPage.tsx";
 import BookmarkPage from "@/pages/BookMarkPage.tsx";
-import { ThemeProvider } from "@/components/Theme/theme-provider";
+import { ThemeProvider } from "@/components/ui/theme-provider.tsx";
 import RatingsPage from "@/pages/RatingsPage.tsx";
 import { UserProvider } from "./components/my-contexts/UserProfileContext.tsx";
+import { Toaster } from "sonner";
 import AcademicPlanPage from "@/pages/AcademicPlanPage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <UserProvider>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme" >
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <Toaster richColors position="top-center" />
         <Router>
           <Routes>
             <Route path="/" element={<App />} />
