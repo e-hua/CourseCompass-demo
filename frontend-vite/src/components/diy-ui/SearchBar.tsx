@@ -7,7 +7,6 @@ import {
   CommandEmpty,
 } from "@/components/ui/command";
 import { X } from "lucide-react";
-import CourseInfoCard from "@/components/my-components/CourseInfoCard";
 import { courseMap } from "@/data/CourseMap";
 
 export type Course = {
@@ -30,27 +29,30 @@ const options = [
     "CS3233",
   ];
 
-const SearchBar: React.FC = () => {
+interface SearchBarProps {
+  onSelectCourse: (course: Course | null) => void;
+}
+
+export default function SearchBar({onSelectCourse}: SearchBarProps) {
   const [query, setQuery] = useState("");
-  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 
   const filteredOptions = options.filter((option) =>
     option.toLowerCase().includes(query.toLowerCase())
   );
 
-  const clearSearch = () => {setQuery(""); setSelectedCourse(null);};
+  const clearSearch = () => {setQuery(""); onSelectCourse(null);};
 
   const handleSelect = (option: string) => {
     setQuery(option);
     const course = courseMap[option];
     if (course) {
-    setSelectedCourse(course);
+    onSelectCourse(course);
     }
   };
 
   return (
-    <div className="w-80 relative">
-      <Command className="w-full">
+    <div className="w-100 p-1 relative">
+      <Command className="w-full bg-white dark:bg-slate-800 border rounded shadow">
         <CommandInput
           placeholder="Search..."
           value={query}
@@ -59,7 +61,7 @@ const SearchBar: React.FC = () => {
         {query && (
           <button
             onClick={clearSearch}
-            className="absolute right-2 top-2"
+            className="absolute left-90 bottom-2.5 bg-transparent hover:bg-gray-200 dark:hover:bg-slate-700 rounded-full p-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
             aria-label="Clear search"
           >
             <X className="w-4 h-4" />
@@ -78,13 +80,8 @@ const SearchBar: React.FC = () => {
             )}
           </CommandList>
         )}
-
-        {selectedCourse && (
-        <CourseInfoCard course={selectedCourse}/>
-      )}
       </Command>
     </div>
   );
 };
 
-export default SearchBar;
