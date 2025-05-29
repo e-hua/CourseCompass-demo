@@ -1,6 +1,6 @@
 import { Brightness3, Brightness7 } from "@mui/icons-material";
 import { Button } from "@/components/ui/button";
-import { useTheme } from "@/components/Theme/theme-provider";
+import { useTheme } from "@/components/ui/theme-provider";
 
 export function ModeToggle() {
   const { theme, setTheme } = useTheme();

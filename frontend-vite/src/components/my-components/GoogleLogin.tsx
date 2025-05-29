@@ -120,27 +120,27 @@ export default function GoogleLogin() {
   return (
     <div>
       {!userAuthInfo && (
-        <div>
-          <Avatar className="w-15 h-15">
+        <div className="flex items-center space-x-3">
+          <Avatar className="w-10 h-10">
             <AvatarFallback>
-              <UserIcon size={50} className="text-gray-500" />
+              <UserIcon size={24} className="text-gray-500" />
             </AvatarFallback>
           </Avatar>
           <Button onClick={() => handleLogin()} className="">
-            Login <LogIn size={20} className="ml-2" />
+            Login <LogIn size={16} />
           </Button>
         </div>
       )}
       {userAuthInfo && (
-        <div>
-          <Avatar className="w-15 h-15">
+        <div className="flex items-center space-x-3">
+          <Avatar className="w-10 h-10">
             <AvatarImage src={userAuthInfo.avatar || ""} />
             <AvatarFallback>
-              <UserIcon size={50} className="text-gray-500" />
+              <UserIcon size={24} className="text-gray-500" />
             </AvatarFallback>
           </Avatar>
           <Button onClick={() => handleLogout()} className="">
-            Logout <LogOut size={20} className="ml-2" />
+            Logout <LogOut size={16} />
           </Button>
         </div>
       )}

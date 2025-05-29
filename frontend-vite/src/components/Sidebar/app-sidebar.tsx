@@ -62,6 +62,7 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
+  SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -81,30 +82,32 @@ export function AppSidebar() {
         <GoogleLogin />
       </SidebarHeader>
 
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Sidebar</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={item.url === currentPath}
-                  >
-                    <a href={item.url}>
-                      <div className="flex items-center gap-2 w-8 h-8">
-                        {item.icon}
-                      </div>
-                      <span className="text-sm">{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
+      <SidebarInset>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Sidebar</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {items.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={item.url === currentPath}
+                    >
+                      <a href={item.url}>
+                        <div className="flex items-center gap-2 w-8 h-8">
+                          {item.icon}
+                        </div>
+                        <span className="text-sm">{item.title}</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+      </SidebarInset>
       <SidebarFooter className="h-15 flex gap-2 px-3">
         <div className="flex items-center gap-2">
           <ModeToggle />
