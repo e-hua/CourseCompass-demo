@@ -54,17 +54,20 @@ export default function UserProfileCard() {
 
     setIsSaving(true);
     try {
-      const res = await fetch("/api/user/update", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("id_token")}`,
-        },
-        body: JSON.stringify({
-          userName: name,
-          currentSemesterIndex: parseInt(semester),
-        }),
-      });
+      const res = await fetch(
+        "https://coursecompass-demo.onrender.com/api/user/update",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("id_token")}`,
+          },
+          body: JSON.stringify({
+            userName: name,
+            currentSemesterIndex: parseInt(semester),
+          }),
+        }
+      );
 
       if (!res.ok) {
         const err = await res.json();
