@@ -29,7 +29,7 @@ const items = [
   },
   {
     title: "My Academic Plan",
-    url: "#",
+    url: "/plan",
     icon: <School fontSize="medium" />,
   },
   {

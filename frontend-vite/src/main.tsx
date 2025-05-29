@@ -10,6 +10,7 @@ import { ThemeProvider } from "@/components/ui/theme-provider.tsx";
 import RatingsPage from "@/pages/RatingsPage.tsx";
 import { UserProvider } from "./components/my-contexts/UserProfileContext.tsx";
 import { Toaster } from "sonner";
+import AcademicPlanPage from "@/pages/AcademicPlanPage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -21,6 +22,7 @@ createRoot(document.getElementById("root")!).render(
             <Route path="/" element={<App />} />
             <Route path="/profile" element={<GPAChartPage />} />
             <Route path="/search" element={<SearchPage />} />
+            <Route path="/plan" element={<AcademicPlanPage />} />
             <Route path="/bookmark" element={<BookmarkPage />} />
             <Route path="/ratings" element={<RatingsPage />} />
           </Routes>
