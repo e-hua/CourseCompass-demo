@@ -9,6 +9,7 @@ function BookmarkPage() {
   
     const handleCourseSelect = (course: Course | null) => {
       setSelectedCourse(course);
+      selectedCourse && alert(`You selected: ${selectedCourse.moduleCode}`);
     };
   return (
     <Layout>
