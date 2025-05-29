@@ -32,7 +32,7 @@ export default function GoogleLogin() {
       avatar: jwtPayload.picture,
     };
 
-    fetch("/api/auth/login", {
+    fetch("https://coursecompass-demo.onrender.com/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
