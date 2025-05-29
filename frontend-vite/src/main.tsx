@@ -9,11 +9,13 @@ import BookmarkPage from "@/pages/BookMarkPage.tsx";
 import { ThemeProvider } from "@/components/Theme/theme-provider";
 import RatingsPage from "@/pages/RatingsPage.tsx";
 import { UserProvider } from "./components/my-contexts/UserProfileContext.tsx";
+import { Toaster } from "sonner";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <UserProvider>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <Toaster richColors position="top-center" />
         <Router>
           <Routes>
             <Route path="/" element={<App />} />
