@@ -1,6 +1,6 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import UserProfileFields from "./ProfileFields.tsx";
-import { useUserProfile } from "../my-contexts/UserProfileContext.tsx";
+import { useUserProfile } from "../my-hooks/UserProfileContext.tsx";
 
 export default function ProfileCard() {
   const { userProfile } = useUserProfile();

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useUserProfile } from "../my-contexts/UserProfileContext";
+import { useUserProfile } from "../my-hooks/UserProfileContext";
 import ProfileCard from "./ProfileCard";
 import ProgressCard from "./ProgressCard";
 

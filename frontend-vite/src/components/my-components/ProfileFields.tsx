@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useUserProfile } from "../my-contexts/UserProfileContext";
+import { useUserProfile } from "../my-hooks/UserProfileContext";
 import { Input } from "@/components/ui/input";
 import {
   Select,
