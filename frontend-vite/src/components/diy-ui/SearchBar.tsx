@@ -62,7 +62,7 @@ export default function ModuleSearchBar({ onSelectCourse }: SearchBarProps) {
 
   return (
     <div className="w-100 p-1 relative">
-      <Command className="w-full bg-white dark:bg-slate-800 border rounded shadow">
+      <Command className="w-full border rounded shadow">
         <CommandInput
           placeholder="Search..."
           value={query}
