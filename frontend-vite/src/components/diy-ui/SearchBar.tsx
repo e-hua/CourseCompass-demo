@@ -54,12 +54,6 @@ export default function ModuleSearchBar({ onSelectCourse }: SearchBarProps) {
         };
         onSelectCourse(course);
       });
-
-    /*
-    if (course) {
-      onSelectCourse(course);
-    }
-  */
   };
 
   return (
