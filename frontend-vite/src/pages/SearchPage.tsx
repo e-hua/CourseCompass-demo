@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/sheet";
 import { useState } from "react";
 import type { Course } from "@/components/diy-ui/SearchBar";
-import { Bookmark } from "@mui/icons-material";
-import { Button } from "@mui/material";
+import { Button } from "@/components/ui/button";
+import { Bookmark } from "lucide-react";
 
 function SearchPage() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
@@ -28,15 +28,7 @@ function SearchPage() {
         {selectedCourse && (
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetContent side="right" className="w-[1500px]">
-              <Button
-                endIcon={<Bookmark />}
-                variant="contained"
-                className="mb-4"
-                color="inherit"
-              >
-                Bookmark Course
-              </Button>
-              <div className="p-6">
+              <div className="max-w-4xl mx-auto p-4 space-y-6">
                 <SheetHeader>
                   <SheetTitle>{selectedCourse.moduleCode}</SheetTitle>
                   <SheetDescription>{selectedCourse.title}</SheetDescription>
@@ -49,10 +41,17 @@ function SearchPage() {
                     <strong>Semester:</strong> {selectedCourse.semesterOffered}
                   </p>
                   <p>
-                    <strong>Description:</strong> {selectedCourse.description}
+                    <strong>Description:</strong>
+                    <div className="text-sm text-muted-foreground">
+                      {selectedCourse.description}
+                    </div>
                   </p>
                 </div>
               </div>
+              <Button className="mb-4 flex items-center gap-2">
+                <Bookmark className="w-4 h-4" />
+                Bookmark Module
+              </Button>
             </SheetContent>
           </Sheet>
         )}
