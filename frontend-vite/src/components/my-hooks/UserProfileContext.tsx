@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { type User } from "@/components/my-components/Dashboard";
+import { toast } from "sonner";
 
 const UserContext = createContext<{
   userProfile: User | null;
@@ -36,6 +37,10 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     if (!isBookmark) {
       const updatedBookmarks = [...userProfile.bookmarkedCourseIds, moduleCode];
       setUserProfile({ ...userProfile, bookmarkedCourseIds: updatedBookmarks });
+
+      toast.success("Bookmarked", {
+        description: moduleCode + " has been added to your bookmarks.",
+      });
     } else {
       const updatedBookmarks = [
         ...userProfile.bookmarkedCourseIds.filter(
@@ -43,6 +48,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         ),
       ];
       setUserProfile({ ...userProfile, bookmarkedCourseIds: updatedBookmarks });
+      toast.success("Bookmark removed", {
+        description: moduleCode + " has been removed from your bookmarks.",
+      });
     }
   };
 

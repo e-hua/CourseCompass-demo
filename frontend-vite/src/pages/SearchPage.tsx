@@ -10,7 +10,6 @@ import {
 import { useState } from "react";
 import type { Course } from "@/components/diy-ui/SearchBar";
 import { Button } from "@/components/ui/button";
-import { Bookmark, BookmarkCheck } from "lucide-react";
 import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
 
 function SearchPage() {
