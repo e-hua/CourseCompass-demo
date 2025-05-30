@@ -1,7 +1,15 @@
 import { Card } from "@/components/ui/card";
 import { type CourseInfo } from "@/pages/BookMarkPage";
+import { Button } from "@/components/ui/button";
+import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
 
 export default function BookmarkCard(courseInfo: CourseInfo) {
+  const { userProfile, toggleBookmark } = useUserProfile();
+
+  const isBookmarked = userProfile?.bookmarkedCourseIds.includes(
+    courseInfo?.moduleCode ?? "a"
+  );
+
   return (
     <Card className="p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
       <div className="text-sm text-muted-foreground">
@@ -14,6 +22,12 @@ export default function BookmarkCard(courseInfo: CourseInfo) {
       <div className="text-xs text-muted-foreground mt-2">
         {courseInfo.moduleCredit} MCs
       </div>
+      <Button
+        onClick={() => toggleBookmark(courseInfo.moduleCode)}
+        className="flex gap-2 items-center"
+      >
+        {isBookmarked ? "★ Bookmarked" : "☆ Bookmark"}
+      </Button>
     </Card>
   );
 }
