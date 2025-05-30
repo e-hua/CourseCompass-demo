@@ -10,7 +10,8 @@ import {
 import { useState } from "react";
 import type { Course } from "@/components/diy-ui/SearchBar";
 import { Button } from "@/components/ui/button";
-import { Bookmark } from "lucide-react";
+import { Bookmark, BookmarkCheck } from "lucide-react";
+import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
 
 function SearchPage() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
@@ -20,6 +21,11 @@ function SearchPage() {
     setSelectedCourse(course);
     setOpen(true);
   };
+
+  const { userProfile, toggleBookmark } = useUserProfile();
+  const isBookmarked = userProfile?.bookmarkedCourseIds.includes(
+    selectedCourse?.moduleCode ?? "a"
+  );
 
   return (
     <Layout>
@@ -40,17 +46,19 @@ function SearchPage() {
                   <p>
                     <strong>Semester:</strong> {selectedCourse.semesterOffered}
                   </p>
-                  <p>
+                  <div>
                     <strong>Description:</strong>
                     <div className="text-sm text-muted-foreground">
                       {selectedCourse.description}
                     </div>
-                  </p>
+                  </div>
                 </div>
               </div>
-              <Button className="mb-4 flex items-center gap-2">
-                <Bookmark className="w-4 h-4" />
-                Bookmark Module
+              <Button
+                onClick={() => toggleBookmark(selectedCourse.moduleCode)}
+                className="flex gap-2 items-center"
+              >
+                {isBookmarked ? "★ Bookmarked" : "☆ Bookmark"}
               </Button>
             </SheetContent>
           </Sheet>
