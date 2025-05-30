@@ -21,6 +21,10 @@ interface SearchBarProps {
   onSelectCourse: (course: Course | null) => void;
 }
 
+type SemesterData = {
+  semester: string;
+};
+
 export default function ModuleSearchBar({ onSelectCourse }: SearchBarProps) {
   const options = useModuleList() ?? [];
 
@@ -48,7 +52,7 @@ export default function ModuleSearchBar({ onSelectCourse }: SearchBarProps) {
           title: data.title,
           credits: parseInt(data.moduleCredit),
           semesterOffered: data.semesterData
-            .map((s) => "Sem " + s.semester)
+            .map((s: SemesterData) => "Sem " + s.semester)
             .join(", "),
           description: data.description,
         };
