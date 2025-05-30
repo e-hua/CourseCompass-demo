@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Command,
   CommandInput,
@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/command";
 import { X } from "lucide-react";
 import { courseMap } from "@/data/CourseMap";
+import useModuleList from "../my-hooks/UseModuleList";
 
 export type Course = {
   moduleCode: string;
@@ -18,35 +19,29 @@ export type Course = {
   description: string;
 };
 
-const options = [
-    "CP2106",
-    "CS2103T",
-    "CS2101",
-    "MA2108S",
-    "CS2102",
-    "CS2106",
-    "CS2109S",
-    "CS3233",
-  ];
-
 interface SearchBarProps {
   onSelectCourse: (course: Course | null) => void;
 }
 
-export default function SearchBar({onSelectCourse}: SearchBarProps) {
+export default function ModuleSearchBar({ onSelectCourse }: SearchBarProps) {
+  const options = useModuleList() ?? [];
+
   const [query, setQuery] = useState("");
 
   const filteredOptions = options.filter((option) =>
-    option.toLowerCase().includes(query.toLowerCase())
+    option.moduleCode.toLowerCase().includes(query.toLowerCase())
   );
 
-  const clearSearch = () => {setQuery(""); onSelectCourse(null);};
+  const clearSearch = () => {
+    setQuery("");
+    onSelectCourse(null);
+  };
 
-  const handleSelect = (option: string) => {
-    setQuery(option);
-    const course = courseMap[option];
+  const handleSelect = (moduleCode: string) => {
+    setQuery(moduleCode);
+    const course = courseMap[moduleCode];
     if (course) {
-    onSelectCourse(course);
+      onSelectCourse(course);
     }
   };
 
@@ -67,12 +62,15 @@ export default function SearchBar({onSelectCourse}: SearchBarProps) {
             <X className="w-4 h-4" />
           </button>
         )}
-        {query.length > 0 && (
+        {query.length > 1 && (
           <CommandList className="absolute z-50 mt-9.25 w-full max-h-60 overflow-auto rounded-md shadow-lg">
             {filteredOptions.length ? (
               filteredOptions.map((option, index) => (
-                <CommandItem key={index} onSelect={() => handleSelect(option)}>
-                  {option}
+                <CommandItem
+                  key={index}
+                  onSelect={() => handleSelect(option.moduleCode)}
+                >
+                  {option.moduleCode + " " + option.title}
                 </CommandItem>
               ))
             ) : (
@@ -83,5 +81,4 @@ export default function SearchBar({onSelectCourse}: SearchBarProps) {
       </Command>
     </div>
   );
-};
-
+}

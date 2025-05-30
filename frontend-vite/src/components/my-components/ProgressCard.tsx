@@ -24,7 +24,7 @@ export default function ProgressCard() {
       100) /
     160;
 
-  const semesterProgress = (currentSemesterIndex * 100) / 8;
+  const semesterProgress = ((currentSemesterIndex - 1) * 100) / 8;
   return (
     <Card className="m-10 p-6 mx-auto space-y-5  w-200 h-50">
       <CardHeader>
