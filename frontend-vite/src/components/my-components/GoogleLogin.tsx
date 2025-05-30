@@ -33,6 +33,7 @@ export default function GoogleLogin() {
     };
 
     fetch("https://coursecompass-demo.onrender.com/api/auth/login", {
+      // fetch("/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
