@@ -8,7 +8,7 @@ import SearchPage from "@/pages/SearchPage.tsx";
 import BookmarkPage from "@/pages/BookMarkPage.tsx";
 import { ThemeProvider } from "@/components/ui/theme-provider.tsx";
 import RatingsPage from "@/pages/RatingsPage.tsx";
-import { UserProvider } from "./components/my-contexts/UserProfileContext.tsx";
+import { UserProvider } from "./components/my-hooks/UserProfileContext.tsx";
 import { Toaster } from "sonner";
 import AcademicPlanPage from "@/pages/AcademicPlanPage.tsx";
 

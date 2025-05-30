@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User as UserIcon, LogIn, LogOut } from "lucide-react";
-import { useUserProfile } from "@/components/my-contexts/UserProfileContext";
+import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
 
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
 const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI;
