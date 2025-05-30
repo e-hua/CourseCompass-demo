@@ -27,7 +27,7 @@ function SearchPage() {
         <SearchBar onSelectCourse={handleCourseSelect} />
         {selectedCourse && (
           <Sheet open={open} onOpenChange={setOpen}>
-            <SheetContent side="right" className="w-[1000px]">
+            <SheetContent side="right" className="w-[1500px]">
               <Button
                 endIcon={<Bookmark />}
                 variant="contained"
@@ -47,10 +47,6 @@ function SearchPage() {
                   </p>
                   <p>
                     <strong>Semester:</strong> {selectedCourse.semesterOffered}
-                  </p>
-                  <p>
-                    <strong>Prerequisites:</strong>{" "}
-                    {selectedCourse.prerequisites.join(", ")}
                   </p>
                   <p>
                     <strong>Description:</strong> {selectedCourse.description}

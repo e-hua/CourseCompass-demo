@@ -7,14 +7,12 @@ import {
   CommandEmpty,
 } from "@/components/ui/command";
 import { X } from "lucide-react";
-import { courseMap } from "@/data/CourseMap";
 import useModuleList from "../my-hooks/UseModuleList";
 
 export type Course = {
   moduleCode: string;
   title: string;
   credits: number;
-  prerequisites: string[];
   semesterOffered: string;
   description: string;
 };
@@ -39,10 +37,29 @@ export default function ModuleSearchBar({ onSelectCourse }: SearchBarProps) {
 
   const handleSelect = (moduleCode: string) => {
     setQuery(moduleCode);
-    const course = courseMap[moduleCode];
+    console.log(moduleCode);
+    fetch(
+      "https://api.nusmods.com/v2/2024-2025/modules/" + moduleCode + ".json"
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        const course: Course = {
+          moduleCode: data.moduleCode,
+          title: data.title,
+          credits: parseInt(data.moduleCredit),
+          semesterOffered: data.semesterData
+            .map((s) => "Sem " + s.semester)
+            .join(", "),
+          description: data.description,
+        };
+        onSelectCourse(course);
+      });
+
+    /*
     if (course) {
       onSelectCourse(course);
     }
+  */
   };
 
   return (
