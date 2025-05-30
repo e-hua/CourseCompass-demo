@@ -13,7 +13,7 @@ export default function GoogleLogin() {
     email: string;
     avatar: string;
   } | null>(null);
-  const { setUserProfile } = useUserProfile();
+  const { userProfile, setUserProfile } = useUserProfile();
 
   function storeUserAuthInfo(userAuthInfo: {
     name: string;
@@ -108,12 +108,41 @@ export default function GoogleLogin() {
     window.location.href = oauthUrl;
   }
 
-  function handleLogout() {
+  async function handleLogout() {
+    try {
+      const idToken = localStorage.getItem("id_token");
+      if (!idToken) throw new Error("No token found");
+
+      const res = await // fetch("/api/user/update", {
+      fetch("https://coursecompass-demo.onrender.com/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({
+          userName: userProfile?.userName,
+          currentSemesterIndex: userProfile?.currentSemesterIndex ?? 1,
+          bookmarkedCourseIds: userProfile?.bookmarkedCourseIds ?? [],
+        }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        console.warn(
+          "Lazy update failed on logout:",
+          err.error || "Unknown error"
+        );
+      }
+    } catch (e) {
+      console.warn("Lazy update error during logout:", e);
+    }
+
     setUserAuthInfo(null);
+    setUserProfile(null);
     localStorage.removeItem("userAuthInfo");
     localStorage.removeItem("google_nonce");
     localStorage.removeItem("id_token");
-    setUserProfile(null);
     window.location.href = "/";
   }
 
