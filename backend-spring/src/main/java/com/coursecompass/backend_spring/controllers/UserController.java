@@ -4,6 +4,8 @@ import com.coursecompass.backend_spring.GoogleTokenVerifier;
 import com.coursecompass.backend_spring.entities.User;
 import com.coursecompass.backend_spring.repositories.UserRepository;
 import com.coursecompass.backend_spring.services.UserService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +41,7 @@ public class UserController {
 
     @PostMapping("/update")
     public ResponseEntity<?> updateProfile(
-            @RequestBody Map<String, String> payload,
+            @RequestBody Map<String, Object> payload,
             @RequestHeader("Authorization") String authorizationHeader) {
 
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
@@ -58,10 +60,26 @@ public class UserController {
             }
 
             User user = optionalUser.get();
-            user.setUserName(payload.getOrDefault("userName", user.getUserName()));
-            user.setCurrentSemesterIndex(
-                    Integer.parseInt(payload.getOrDefault("currentSemesterIndex", user.getUserName()))
-            );
+            user.setUserName((String)payload.getOrDefault("userName", user.getUserName()));
+
+            Object semesterObj = payload.get("currentSemesterIndex");
+            if (semesterObj != null) {
+                int semester = Integer.parseInt(semesterObj.toString());
+                user.setCurrentSemesterIndex(semester);
+            }
+
+            if (payload.containsKey("bookmarkedCourseIds")) {
+                Object rawBookmarked = payload.get("bookmarkedCourseIds");
+
+                ObjectMapper objectMapper = new ObjectMapper();
+                List<String> bookmarks = objectMapper.convertValue(
+                        rawBookmarked,
+                        new TypeReference<List<String>>() {}
+                );
+
+                user.setBookmarkedCourseIds(bookmarks);
+            }
+
             userService.updateUser(user.getId(), user);
 
             return ResponseEntity.ok(user);
