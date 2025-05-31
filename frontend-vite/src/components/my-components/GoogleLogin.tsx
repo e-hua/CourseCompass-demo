@@ -97,13 +97,19 @@ export default function GoogleLogin() {
 
     // Reset the url
     const oauthUrl =
-      `https://accounts.google.com/o/oauth2/v2/auth?` +
-      `client_id=${CLIENT_ID}&` +
-      `redirect_uri=${REDIRECT_URI}&` +
-      `response_type=id_token&` +
-      `scope=openid profile email&` +
-      `state=state_parameter_passthrough_value&` +
-      `nonce=${nonce}`;
+      "https://accounts.google.com/o/oauth2/v2/auth?" +
+      "client_id=" +
+      CLIENT_ID +
+      "&" +
+      "redirect_uri=" +
+      REDIRECT_URI +
+      "&" +
+      "response_type=id_token" +
+      "&" +
+      "scope=openid profile email&" +
+      "state=state_parameter_passthrough_value&" +
+      "nonce=" +
+      nonce;
 
     window.location.href = oauthUrl;
   }
@@ -114,7 +120,7 @@ export default function GoogleLogin() {
       if (!idToken) throw new Error("No token found");
 
       const res = await // fetch("/api/user/update", {
-      fetch("https://coursecompass-demo.onrender.com/api/auth/login", {
+      fetch("https://coursecompass-demo.onrender.com/api/user/update", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
