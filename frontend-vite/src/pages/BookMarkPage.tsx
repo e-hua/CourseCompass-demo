@@ -17,7 +17,11 @@ export default function BookmarkPage() {
   const [modules, setModules] = useState<CourseInfo[]>([]);
 
   useEffect(() => {
-    if (!bookmarked.length) return;
+    if (!bookmarked.length) {
+      // This was to trigger the re-rendering of react.
+      setModules([]);
+      return;
+    }
 
     Promise.all(
       bookmarked.map((courseId) =>
