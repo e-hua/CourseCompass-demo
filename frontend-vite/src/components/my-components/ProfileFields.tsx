@@ -55,8 +55,8 @@ export default function UserProfileCard() {
     setIsSaving(true);
     try {
       const res = await fetch(
-        "https://coursecompass-demo.onrender.com/api/user/update",
-        // "/api/user/update",
+        // "https://coursecompass-demo.onrender.com/api/user/update",
+        "/api/user/update",
         {
           method: "POST",
           headers: {
