@@ -4,9 +4,9 @@ import { useTakenCourses } from "@/components/my-hooks/UseTakenCourses";
 import { Skeleton } from "@/components/ui/skeleton";
 
 function SearchPage() {
-  const { courses, loading, error } = useTakenCourses();
+  const { data: courses, isLoading, error } = useTakenCourses();
 
-  if (loading)
+  if (isLoading)
     return (
       <Layout>
         <div className="p-4">
@@ -19,12 +19,12 @@ function SearchPage() {
         </div>
       </Layout>
     );
-  if (error) return <p>Error: {error}</p>;
+  if (error) return <p>Error message: {error.message}</p>;
 
   return (
     <Layout>
       <div>
-        {courses.map((course) => (
+        {courses?.map((course) => (
           <RatingCard key={course.id} courseName={course.courseCode} />
         ))}
       </div>
