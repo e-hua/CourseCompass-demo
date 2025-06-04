@@ -32,8 +32,8 @@ export default function GoogleLogin() {
       avatar: jwtPayload.picture,
     };
 
-    fetch("https://coursecompass-demo.onrender.com/api/auth/login", {
-      // fetch("/api/auth/login", {
+    //fetch("https://coursecompass-demo.onrender.com/api/auth/login", {
+    fetch("/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -119,8 +119,9 @@ export default function GoogleLogin() {
       const idToken = localStorage.getItem("id_token");
       if (!idToken) throw new Error("No token found");
 
-      const res = await // fetch("/api/user/update", {
-      fetch("https://coursecompass-demo.onrender.com/api/user/update", {
+      const res = await fetch("/api/user/update", {
+        //fetch("https://coursecompass-demo.onrender.com/api/auth/login", {
+
         method: "POST",
         headers: {
           "Content-Type": "application/json",

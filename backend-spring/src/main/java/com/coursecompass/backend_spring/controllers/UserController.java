@@ -6,15 +6,10 @@ import com.coursecompass.backend_spring.repositories.UserRepository;
 import com.coursecompass.backend_spring.services.UserService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
+import com.coursecompass.backend_spring.dto.TakenCourseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -88,4 +83,35 @@ public class UserController {
             return ResponseEntity.badRequest().body(Map.of("error", "Backend is busy, please try again later"));
         }
     }
+
+    @GetMapping("/taken-courses")
+    public ResponseEntity<?> getTakenCourses(@RequestHeader("Authorization") String authorizationHeader) {
+
+       System.out.println("Authorization header: " + authorizationHeader);
+
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
+        }
+
+        String idToken = authorizationHeader.substring(7); // Strip "Bearer "
+
+        try {
+            System.out.println("Token: " + idToken);
+            Map<String, Object> claims = googleTokenVerifier.verify(idToken);
+            String email = (String) claims.get("email");
+            System.out.println(" Email from token: " + claims.get("email"));
+            Optional<User> optionalUser = userRepository.findByEmail(email);
+
+            if (optionalUser.isEmpty()) {
+                return ResponseEntity.status(404).body(Map.of("error", "User not found"));
+            }
+
+            User user = optionalUser.get();
+            List<TakenCourseDTO> unrated = userService.getTakenCourses(user);
+            return ResponseEntity.ok(unrated);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Failed to verify token"));
+        }
+    }
+
 }
