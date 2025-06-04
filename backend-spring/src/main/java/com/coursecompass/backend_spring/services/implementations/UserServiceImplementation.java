@@ -1,8 +1,10 @@
 package com.coursecompass.backend_spring.services.implementations;
 
 import com.coursecompass.backend_spring.entities.*;
+import com.coursecompass.backend_spring.repositories.TakenCourseRepository;
 import com.coursecompass.backend_spring.repositories.UserRepository;
 import com.coursecompass.backend_spring.services.UserService;
+import com.coursecompass.backend_spring.dto.TakenCourseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +14,12 @@ import java.util.Optional;
 @Service
 public class UserServiceImplementation implements UserService {
     private final UserRepository userRepository;
+    private final TakenCourseRepository takenCourseRepository;
 
     @Autowired
-    public UserServiceImplementation(UserRepository userRepository) {
+    public UserServiceImplementation(UserRepository userRepository, TakenCourseRepository takenCourseRepository) {
         this.userRepository = userRepository;
+        this.takenCourseRepository = takenCourseRepository;
     }
 
     @Override
@@ -55,5 +59,20 @@ public class UserServiceImplementation implements UserService {
     @Override
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public List<TakenCourseDTO> getTakenCourses(User user){
+        List<TakenCourse> courseList = takenCourseRepository.findByUser(user);
+
+        return courseList.stream()
+                .map(tc -> new TakenCourseDTO(
+                        tc.getId(),
+                        tc.getSemesterIndex(),
+                        tc.getLetterGrade(),
+                        tc.getUnits(),
+                        tc.getCourse().getId()
+                ))
+                .toList();
     }
 }

@@ -10,7 +10,7 @@ export default function ProfileCard() {
       <div className="flex items-center justify-center h-screen">
         <Card className="p-6">
           <CardHeader>
-            <CardTitle className="text-xl">You’re not logged in</CardTitle>
+            <CardTitle className="text-xl">You're not logged in</CardTitle>
           </CardHeader>
           <CardContent className="text-sm">
             Please log in to view your dashboard.
