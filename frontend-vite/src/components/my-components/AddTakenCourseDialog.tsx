@@ -14,9 +14,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addTakenCourse } from "@/apis/api";
 import { useUserProfile } from "../my-hooks/UserProfileContext";
+import { toast } from "sonner";
 
 interface AddTakenCourseDialogProps {
   courseCode: string;
@@ -29,6 +30,8 @@ export function AddTakenCourseDialog({
   const [semesterIndex, setSemesterIndex] = useState<string>("");
   const [letterGrade, setLetterGrade] = useState<string>("");
 
+  const queryClient = useQueryClient();
+
   const mutation = useMutation({
     mutationFn: () =>
       addTakenCourse({
@@ -36,6 +39,14 @@ export function AddTakenCourseDialog({
         semesterIndex: Number(semesterIndex),
         letterGrade,
       }),
+    onSuccess: () => {
+      toast.success(`Successfully added ${courseCode}!`);
+
+      queryClient.invalidateQueries({ queryKey: ["takenCourses"] });
+    },
+    onError: () => {
+      toast.error("Failed to add taken course");
+    },
   });
 
   return (

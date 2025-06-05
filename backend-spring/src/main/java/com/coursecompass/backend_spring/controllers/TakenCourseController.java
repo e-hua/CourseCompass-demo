@@ -95,6 +95,13 @@ public class TakenCourseController {
                         return courseRepository.save(newCourse);
                     });
 
+            Optional<TakenCourse> existing = takenCourseRepository
+                    .findByUserAndCourse(user, course);
+
+            if (existing.isPresent()) {
+                return ResponseEntity.status(409).body(Map.of("error", "Course already taken"));
+            }
+
             TakenCourse takenCourse = new TakenCourse();
             takenCourse.setUser(user);
             takenCourse.setCourse(course);
