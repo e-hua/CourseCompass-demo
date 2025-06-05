@@ -121,7 +121,6 @@ export default function GoogleLogin() {
 
       const res = await fetch("/api/user/update", {
         //fetch("https://coursecompass-demo.onrender.com/api/auth/login", {
-
         method: "POST",
         headers: {
           "Content-Type": "application/json",
