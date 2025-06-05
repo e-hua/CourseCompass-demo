@@ -13,6 +13,9 @@ import { Button } from "@/components/ui/button";
 import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
 import { AddTakenCourseDialog } from "@/components/my-components/AddTakenCourseDialog";
 import { useTakenCourses } from "@/components/my-hooks/UseTakenCourses";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteTakenCourse } from "@/apis/api";
+import { toast } from "sonner";
 
 function SearchPage() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
@@ -29,6 +32,18 @@ function SearchPage() {
   );
 
   const { data: takenCourses } = useTakenCourses();
+
+  const queryClient = useQueryClient();
+  const handleDelete = useMutation({
+    mutationFn: (id: number) => deleteTakenCourse(id),
+    onSuccess: () => {
+      toast.success("Course deleted from Taken Courses!");
+      queryClient.invalidateQueries({ queryKey: ["takenCourses"] });
+    },
+    onError: () => {
+      toast.error("Failed to delete the course from Taken Courses");
+    },
+  });
 
   return (
     <Layout>
@@ -66,7 +81,18 @@ function SearchPage() {
               {takenCourses?.some(
                 (tc) => tc.courseCode === selectedCourse.moduleCode
               ) ? (
-                <Button variant={"destructive"} />
+                <Button
+                  variant={"destructive"}
+                  onClick={() =>
+                    handleDelete.mutate(
+                      takenCourses.filter(
+                        (tc) => tc.courseCode === selectedCourse.moduleCode
+                      )[0].id
+                    )
+                  }
+                >
+                  Remove {selectedCourse.moduleCode} from taken Courses
+                </Button>
               ) : (
                 <AddTakenCourseDialog courseCode={selectedCourse.moduleCode} />
               )}

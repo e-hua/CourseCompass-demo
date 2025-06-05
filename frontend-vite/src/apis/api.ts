@@ -49,3 +49,17 @@ export async function addTakenCourse(
   if (!res.ok) throw new Error("Failed to add taken course");
   return;
 }
+
+export async function deleteTakenCourse(id: number): Promise<void> {
+  const token = localStorage.getItem("id_token");
+  if (!token) throw new Error("Missing ID token");
+
+  const res = await fetch(API_URL + "takencourses/" + id, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) throw new Error("Failed to delete taken course");
+}

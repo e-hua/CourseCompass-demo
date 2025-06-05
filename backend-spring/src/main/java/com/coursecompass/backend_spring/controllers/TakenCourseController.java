@@ -116,4 +116,38 @@ public class TakenCourseController {
             return ResponseEntity.badRequest().body(Map.of("error", "Failed to add taken course"));
         }
     }
+
+    @DeleteMapping("/{takenCourseId}")
+    public ResponseEntity<?> deleteTakenCourse(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable Long takenCourseId
+    ) {
+
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
+        }
+
+        String idToken = authorizationHeader.substring(7);
+        try {
+            Map<String, Object> claims = googleTokenVerifier.verify(idToken);
+            String email = (String) claims.get("email");
+
+            Optional<User> optionalUser = userRepository.findByEmail(email);
+            if (optionalUser.isEmpty()) {
+                return ResponseEntity.status(404).body(Map.of("error", "User not found"));
+            }
+
+            Optional<TakenCourse> optionalTakenCourse = takenCourseRepository.findById(takenCourseId);
+            if (optionalTakenCourse.isEmpty()) {
+                return ResponseEntity.status(404).body(Map.of("error", "Taken course not found"));
+            }
+
+            TakenCourse takenCourse = optionalTakenCourse.get();
+            takenCourseRepository.delete(takenCourse);
+
+            return ResponseEntity.ok(Map.of("success", true));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Failed to delete taken course"));
+        }
+    }
 }
