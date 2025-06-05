@@ -15,48 +15,52 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addTakenCourse } from "@/apis/TakenCourseAPI";
+import { updateTakenCourse, type TakenCourse } from "@/apis/TakenCourseAPI";
 import { useUserProfile } from "../my-hooks/UserProfileContext";
 import { toast } from "sonner";
 
-interface AddTakenCourseDialogProps {
-  courseCode: string;
-}
-
-export function AddTakenCourseDialog({
-  courseCode,
-}: AddTakenCourseDialogProps) {
+export function UpdateTakenCourseDialog({
+  takenCourse,
+}: {
+  takenCourse: TakenCourse;
+}) {
   const { userProfile } = useUserProfile();
-  const [semesterIndex, setSemesterIndex] = useState<string>("");
-  const [letterGrade, setLetterGrade] = useState<string>("");
+  const [semesterIndex, setSemesterIndex] = useState<string>(
+    takenCourse.semesterIndex.toString()
+  );
+  const [letterGrade, setLetterGrade] = useState<string>(
+    takenCourse.letterGrade
+  );
 
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: () =>
-      addTakenCourse({
-        courseCode,
+      updateTakenCourse({
+        id: takenCourse.id,
         semesterIndex: Number(semesterIndex),
-        letterGrade,
+        letterGrade: letterGrade,
+        units: takenCourse.units,
+        courseCode: takenCourse.courseCode,
       }),
     onSuccess: () => {
-      toast.success(`Successfully added ${courseCode}!`);
+      toast.success("Successfully updated " + takenCourse.courseCode + " !");
 
       queryClient.invalidateQueries({ queryKey: ["takenCourses"] });
     },
     onError: () => {
-      toast.error("Failed to add taken course");
+      toast.error("Failed to update taken course");
     },
   });
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Add</Button>
+        <Button>Update {takenCourse.courseCode}</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add {courseCode}</DialogTitle>
+          <DialogTitle>Update {takenCourse.courseCode}</DialogTitle>
         </DialogHeader>
 
         <Select onValueChange={setSemesterIndex} value={semesterIndex}>
@@ -109,7 +113,7 @@ export function AddTakenCourseDialog({
           onClick={() => mutation.mutate()}
           disabled={!semesterIndex || !letterGrade || mutation.isPending}
         >
-          {mutation.isPending ? "Submitting..." : "Submit"}
+          {mutation.isPending ? "Updating..." : "Update"}
         </Button>
       </DialogContent>
     </Dialog>

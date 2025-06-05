@@ -150,4 +150,48 @@ public class TakenCourseController {
             return ResponseEntity.badRequest().body(Map.of("error", "Failed to delete taken course"));
         }
     }
+
+    @PutMapping("/{takenCourseId}")
+    public ResponseEntity<?> updateTakenCourse(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable Long takenCourseId,
+            @RequestBody TakenCourseDTO dto
+    ) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
+        }
+
+        String idToken = authorizationHeader.substring(7);
+        try {
+            Map<String, Object> claims = googleTokenVerifier.verify(idToken);
+            String email = (String) claims.get("email");
+
+            Optional<User> optionalUser = userRepository.findByEmail(email);
+            if (optionalUser.isEmpty()) {
+                return ResponseEntity.status(404).body(Map.of("error", "User not found"));
+            }
+
+            Optional<TakenCourse> optionalTakenCourse = takenCourseRepository.findById(takenCourseId);
+            if (optionalTakenCourse.isEmpty()) {
+                return ResponseEntity.status(404).body(Map.of("error", "Taken course not found"));
+            }
+
+            TakenCourse takenCourse = optionalTakenCourse.get();
+
+            // Prevent illegal access from a different user
+            if (!takenCourse.getUser().getId().equals(optionalUser.get().getId())) {
+                return ResponseEntity.status(403).body(Map.of("error", "Forbidden"));
+            }
+
+            takenCourse.setSemesterIndex(dto.getSemesterIndex());
+            takenCourse.setLetterGrade(dto.getLetterGrade());
+            takenCourse.setUnits(dto.getUnits());
+
+            takenCourseRepository.save(takenCourse);
+            return ResponseEntity.ok(Map.of("success", true));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Failed to update taken course"));
+        }
+    }
+
 }

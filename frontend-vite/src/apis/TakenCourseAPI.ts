@@ -63,3 +63,21 @@ export async function deleteTakenCourse(id: number): Promise<void> {
 
   if (!res.ok) throw new Error("Failed to delete taken course");
 }
+
+export async function updateTakenCourse(
+  takenCourse: TakenCourse
+): Promise<void> {
+  const token = localStorage.getItem("id_token");
+  if (!token) throw new Error("Missing ID token");
+
+  const res = await fetch(API_URL + "takencourses/" + takenCourse.id, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(takenCourse),
+  });
+
+  if (!res.ok) throw new Error("Failed to update taken course");
+}

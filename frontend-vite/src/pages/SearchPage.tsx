@@ -14,8 +14,9 @@ import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
 import { AddTakenCourseDialog } from "@/components/my-components/AddTakenCourseDialog";
 import { useTakenCourses } from "@/components/my-hooks/UseTakenCourses";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteTakenCourse } from "@/apis/api";
+import { deleteTakenCourse } from "@/apis/TakenCourseAPI";
 import { toast } from "sonner";
+import { UpdateTakenCourseDialog } from "@/components/my-components/UpdateTakenCourseDialog";
 
 function SearchPage() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
@@ -81,18 +82,27 @@ function SearchPage() {
               {takenCourses?.some(
                 (tc) => tc.courseCode === selectedCourse.moduleCode
               ) ? (
-                <Button
-                  variant={"destructive"}
-                  onClick={() =>
-                    handleDelete.mutate(
+                <div className="flex flex-col gap-2 mt-2 justify-center">
+                  <Button
+                    variant={"destructive"}
+                    onClick={() =>
+                      handleDelete.mutate(
+                        takenCourses.filter(
+                          (tc) => tc.courseCode === selectedCourse.moduleCode
+                        )[0].id
+                      )
+                    }
+                  >
+                    Remove {selectedCourse.moduleCode} from Taken Courses
+                  </Button>
+                  <UpdateTakenCourseDialog
+                    takenCourse={
                       takenCourses.filter(
                         (tc) => tc.courseCode === selectedCourse.moduleCode
-                      )[0].id
-                    )
-                  }
-                >
-                  Remove {selectedCourse.moduleCode} from taken Courses
-                </Button>
+                      )[0]
+                    }
+                  />
+                </div>
               ) : (
                 <AddTakenCourseDialog courseCode={selectedCourse.moduleCode} />
               )}
