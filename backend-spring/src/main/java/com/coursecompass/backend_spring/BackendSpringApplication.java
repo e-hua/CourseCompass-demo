@@ -30,7 +30,7 @@ public class BackendSpringApplication {
 
 			User john = new User();
 			john.setUserName("Hua");
-			john.setEmail("eclipsehua@gmail.com");
+			john.setEmail("mayahoo20060530@gmail.com");
 			john.setGPA(5.0);
 			john.setCurrentSemesterIndex(2);
 			john.setBookmarkedCourseIds(List.of("CS1101S"));
