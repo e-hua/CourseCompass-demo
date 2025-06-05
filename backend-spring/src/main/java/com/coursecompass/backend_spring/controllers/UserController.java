@@ -1,7 +1,11 @@
 package com.coursecompass.backend_spring.controllers;
 
 import com.coursecompass.backend_spring.GoogleTokenVerifier;
+import com.coursecompass.backend_spring.entities.Course;
+import com.coursecompass.backend_spring.entities.TakenCourse;
 import com.coursecompass.backend_spring.entities.User;
+import com.coursecompass.backend_spring.repositories.CourseRepository;
+import com.coursecompass.backend_spring.repositories.TakenCourseRepository;
 import com.coursecompass.backend_spring.repositories.UserRepository;
 import com.coursecompass.backend_spring.services.UserService;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -23,7 +27,10 @@ public class UserController {
     private final UserService userService;
 
     @Autowired
-    public UserController(GoogleTokenVerifier googleTokenVerifier, UserRepository userRepository, UserService userService) {
+    public UserController(
+            GoogleTokenVerifier googleTokenVerifier,
+            UserRepository userRepository,
+            UserService userService) {
         this.googleTokenVerifier = googleTokenVerifier;
         this.userRepository = userRepository;
       this.userService = userService;
@@ -81,36 +88,6 @@ public class UserController {
         } catch (Exception e) {
             System.out.println(e);
             return ResponseEntity.badRequest().body(Map.of("error", "Backend is busy, please try again later"));
-        }
-    }
-
-    @GetMapping("/taken-courses")
-    public ResponseEntity<?> getTakenCourses(@RequestHeader("Authorization") String authorizationHeader) {
-
-       System.out.println("Authorization header: " + authorizationHeader);
-
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
-        }
-
-        String idToken = authorizationHeader.substring(7); // Strip "Bearer "
-
-        try {
-            System.out.println("Token: " + idToken);
-            Map<String, Object> claims = googleTokenVerifier.verify(idToken);
-            String email = (String) claims.get("email");
-            System.out.println(" Email from token: " + claims.get("email"));
-            Optional<User> optionalUser = userRepository.findByEmail(email);
-
-            if (optionalUser.isEmpty()) {
-                return ResponseEntity.status(404).body(Map.of("error", "User not found"));
-            }
-
-            User user = optionalUser.get();
-            List<TakenCourseDTO> unrated = userService.getTakenCourses(user);
-            return ResponseEntity.ok(unrated);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Failed to verify token"));
         }
     }
 

@@ -11,6 +11,8 @@ import { useState } from "react";
 import type { Course } from "@/components/diy-ui/SearchBar";
 import { Button } from "@/components/ui/button";
 import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
+import { AddTakenCourseDialog } from "@/components/my-components/AddTakenCourseDialog";
+import { useTakenCourses } from "@/components/my-hooks/UseTakenCourses";
 
 function SearchPage() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
@@ -25,6 +27,8 @@ function SearchPage() {
   const isBookmarked = userProfile?.bookmarkedCourseIds.includes(
     selectedCourse?.moduleCode ?? "a"
   );
+
+  const { data: takenCourses } = useTakenCourses();
 
   return (
     <Layout>
@@ -59,6 +63,13 @@ function SearchPage() {
               >
                 {isBookmarked ? "★ Bookmarked" : "☆ Bookmark"}
               </Button>
+              {takenCourses?.some(
+                (tc) => tc.courseCode === selectedCourse.moduleCode
+              ) ? (
+                <Button variant={"destructive"} />
+              ) : (
+                <AddTakenCourseDialog courseCode={selectedCourse.moduleCode} />
+              )}
             </SheetContent>
           </Sheet>
         )}

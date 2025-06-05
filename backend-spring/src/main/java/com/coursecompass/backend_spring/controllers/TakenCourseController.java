@@ -1,46 +1,112 @@
 package com.coursecompass.backend_spring.controllers;
 
+import com.coursecompass.backend_spring.GoogleTokenVerifier;
+import com.coursecompass.backend_spring.dto.TakenCourseDTO;
+import com.coursecompass.backend_spring.entities.Course;
 import com.coursecompass.backend_spring.entities.TakenCourse;
-import com.coursecompass.backend_spring.services.TakenCourseService;
+import com.coursecompass.backend_spring.entities.User;
+import com.coursecompass.backend_spring.repositories.CourseRepository;
+import com.coursecompass.backend_spring.repositories.TakenCourseRepository;
+import com.coursecompass.backend_spring.repositories.UserRepository;
+import com.coursecompass.backend_spring.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/takencourses")
 public class TakenCourseController {
 
-    private final TakenCourseService takenCourseService;
+    private final GoogleTokenVerifier googleTokenVerifier;
+    private final UserRepository userRepository;
+    private final UserService userService;
+    private final CourseRepository courseRepository;
+    private final TakenCourseRepository takenCourseRepository;
 
     @Autowired
-    public TakenCourseController(TakenCourseService takenCourseService) {
-        this.takenCourseService = takenCourseService;
-    }
-
-    @PostMapping
-    public TakenCourse createTakenCourse(@RequestBody TakenCourse takenCourse) {
-        return takenCourseService.createTakenCourse(takenCourse);
-    }
-
-    @PutMapping("/{id}")
-    public TakenCourse updateTakenCourse(@PathVariable Long id, @RequestBody TakenCourse takenCourse) {
-        return takenCourseService.updateTakenCourse(id, takenCourse);
+    public TakenCourseController(
+            GoogleTokenVerifier googleTokenVerifier,
+            UserRepository userRepository,
+            UserService userService,
+            CourseRepository courseRepository,
+            TakenCourseRepository takenCourseRepository) {
+        this.googleTokenVerifier = googleTokenVerifier;
+        this.userRepository = userRepository;
+        this.userService = userService;
+        this.courseRepository = courseRepository;
+        this.takenCourseRepository = takenCourseRepository;
     }
 
     @GetMapping
-    public List<TakenCourse> readAllTakenCourses() {
-        return takenCourseService.readAllTakenCourses();
+    public ResponseEntity<?> getTakenCourses(@RequestHeader("Authorization") String authorizationHeader) {
+
+
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
+        }
+
+        String idToken = authorizationHeader.substring(7); // Strip "Bearer "
+
+        try {
+            Map<String, Object> claims = googleTokenVerifier.verify(idToken);
+            String email = (String) claims.get("email");
+            Optional<User> optionalUser = userRepository.findByEmail(email);
+
+            if (optionalUser.isEmpty()) {
+                return ResponseEntity.status(404).body(Map.of("error", "User not found"));
+            }
+
+            User user = optionalUser.get();
+            List<TakenCourseDTO> unrated = userService.getTakenCourses(user);
+            return ResponseEntity.ok(unrated);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Failed to verify token"));
+        }
     }
 
-    @GetMapping("/{id}")
-    public TakenCourse readTakenCourseById(@PathVariable Long id) {
-        return takenCourseService.readTakenCourseById(id)
-                .orElseThrow(() -> new RuntimeException("Cannot find taken course with ID " + id));
-    }
+    @PostMapping
+    public ResponseEntity<?> addTakenCourse(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody TakenCourseDTO dto
+    ) {
 
-    @DeleteMapping("/{id}")
-    public void deleteTakenCourse(@PathVariable Long id) {
-        takenCourseService.deleteTakenCourse(id);
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
+        }
+
+        String idToken = authorizationHeader.substring(7);
+        try {
+            Map<String, Object> claims = googleTokenVerifier.verify(idToken);
+            String email = (String) claims.get("email");
+            Optional<User> optionalUser = userRepository.findByEmail(email);
+            if (optionalUser.isEmpty()) {
+                return ResponseEntity.status(404).body(Map.of("error", "User not found"));
+            }
+
+            User user = optionalUser.get();
+            Course course = courseRepository.findByid(dto.getCourseCode())
+                    .orElseGet(() -> {
+                        Course newCourse = new Course();
+                        newCourse.setId(dto.getCourseCode());
+                        return courseRepository.save(newCourse);
+                    });
+
+            TakenCourse takenCourse = new TakenCourse();
+            takenCourse.setUser(user);
+            takenCourse.setCourse(course);
+            takenCourse.setSemesterIndex(dto.getSemesterIndex());
+            takenCourse.setLetterGrade(dto.getLetterGrade());
+            takenCourse.setUnits(dto.getUnits());
+
+            takenCourseRepository.save(takenCourse);
+
+            return ResponseEntity.ok(Map.of("success", true));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Failed to add taken course"));
+        }
     }
 }
