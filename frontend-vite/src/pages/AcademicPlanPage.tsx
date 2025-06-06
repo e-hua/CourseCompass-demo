@@ -27,8 +27,8 @@ export default function AcademicPlanPage() {
     const semCourseCount = new Map<number, number>();
 
     const computedNodes: Node[] = courses.map((course) => {
-      const SEMESTER_WIDTH = 30;
-      const SEMESTER_HEIGHT = 60;
+      const SEMESTER_WIDTH = 300;
+      const SEMESTER_HEIGHT = 200;
       const index = course.semesterIndex;
       const count = semCourseCount.get(index) || 0;
       semCourseCount.set(index, count + 1);
@@ -36,12 +36,18 @@ export default function AcademicPlanPage() {
       return {
         id: course.courseCode,
         position: {
-          x: 200 + count * SEMESTER_WIDTH,
-          y: 100 + index * SEMESTER_HEIGHT,
+          x: 50 + count * SEMESTER_WIDTH,
+          y: 50 + index * SEMESTER_HEIGHT,
         },
         data: {
           label: <div className="text-xs text-black">{course.courseCode}</div>,
         },
+        type: "default",
+        draggable: true,
+        parentId: `${index}`,
+        extent: "parent",
+        width: 200,
+        height: 50,
       };
     });
 
@@ -78,11 +84,11 @@ export default function AcademicPlanPage() {
   if (isLoading) {
     return (
       <Layout>
-        <div className="flex flex-col space-y-3">
-          <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+        <div className="items-center justify-center p-8">
+          <Skeleton className="m-10 p-6 mx-auto space-y-5 w-200 h-100 rounded-xl" />
           <div className="space-y-2">
-            <Skeleton className="h-4 w-[250px]" />
-            <Skeleton className="h-4 w-[200px]" />
+            <Skeleton className="h-4 w-200" />
+            <Skeleton className="h-4 w-100" />
           </div>
         </div>
       </Layout>
