@@ -21,10 +21,12 @@ import { toast } from "sonner";
 
 interface AddTakenCourseDialogProps {
   courseCode: string;
+  units: number;
 }
 
 export function AddTakenCourseDialog({
   courseCode,
+  units,
 }: AddTakenCourseDialogProps) {
   const { userProfile } = useUserProfile();
   const [semesterIndex, setSemesterIndex] = useState<string>("");
@@ -38,6 +40,7 @@ export function AddTakenCourseDialog({
         courseCode,
         semesterIndex: Number(semesterIndex),
         letterGrade,
+        units: units,
       }),
     onSuccess: () => {
       toast.success(`Successfully added ${courseCode}!`);
