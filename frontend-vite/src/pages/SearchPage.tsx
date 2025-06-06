@@ -11,6 +11,12 @@ import { useState } from "react";
 import type { Course } from "@/components/diy-ui/SearchBar";
 import { Button } from "@/components/ui/button";
 import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
+import { AddTakenCourseDialog } from "@/components/my-components/AddTakenCourseDialog";
+import { useTakenCourses } from "@/components/my-hooks/UseTakenCourses";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteTakenCourse } from "@/apis/TakenCourseAPI";
+import { toast } from "sonner";
+import { UpdateTakenCourseDialog } from "@/components/my-components/UpdateTakenCourseDialog";
 
 function SearchPage() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
@@ -25,6 +31,20 @@ function SearchPage() {
   const isBookmarked = userProfile?.bookmarkedCourseIds.includes(
     selectedCourse?.moduleCode ?? "a"
   );
+
+  const { data: takenCourses } = useTakenCourses();
+
+  const queryClient = useQueryClient();
+  const handleDelete = useMutation({
+    mutationFn: (id: number) => deleteTakenCourse(id),
+    onSuccess: () => {
+      toast.success("Course deleted from Taken Courses!");
+      queryClient.invalidateQueries({ queryKey: ["takenCourses"] });
+    },
+    onError: () => {
+      toast.error("Failed to delete the course from Taken Courses");
+    },
+  });
 
   return (
     <Layout>
@@ -59,6 +79,33 @@ function SearchPage() {
               >
                 {isBookmarked ? "★ Bookmarked" : "☆ Bookmark"}
               </Button>
+              {takenCourses?.some(
+                (tc) => tc.courseCode === selectedCourse.moduleCode
+              ) ? (
+                <div className="flex flex-col gap-2 mt-2 justify-center">
+                  <Button
+                    variant={"destructive"}
+                    onClick={() =>
+                      handleDelete.mutate(
+                        takenCourses.filter(
+                          (tc) => tc.courseCode === selectedCourse.moduleCode
+                        )[0].id
+                      )
+                    }
+                  >
+                    Remove {selectedCourse.moduleCode} from Taken Courses
+                  </Button>
+                  <UpdateTakenCourseDialog
+                    takenCourse={
+                      takenCourses.filter(
+                        (tc) => tc.courseCode === selectedCourse.moduleCode
+                      )[0]
+                    }
+                  />
+                </div>
+              ) : (
+                <AddTakenCourseDialog courseCode={selectedCourse.moduleCode} />
+              )}
             </SheetContent>
           </Sheet>
         )}

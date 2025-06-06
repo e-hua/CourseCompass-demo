@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { z } from "zod";
+import { updateUserProfile } from "@/apis/UserAPI";
 
 const nameSchema = z
   .string()
@@ -51,25 +52,17 @@ export default function UserProfileCard() {
       });
       return;
     }
-
     setIsSaving(true);
     try {
-      const res = await fetch(
-        // "https://coursecompass-demo.onrender.com/api/user/update",
-        "/api/user/update",
+      // Imported from @/apis/UserAPI.ts
+      const res = await updateUserProfile(
         {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("id_token")}`,
-          },
-          body: JSON.stringify({
-            userName: name,
-            currentSemesterIndex: parseInt(semester),
-          }),
-        }
+          userName: name,
+          currentSemesterIndex: parseInt(semester),
+          bookmarkedCourseIds: userProfile?.bookmarkedCourseIds ?? [],
+        },
+        localStorage.getItem("id_token") ?? ""
       );
-
       if (!res.ok) {
         const err = await res.json();
         toast.error("Update failed", {
@@ -80,7 +73,7 @@ export default function UserProfileCard() {
 
       const updated = await res.json();
       setUserProfile(updated);
-      toast.success("Profile updated");
+      toast.success("Profile updated !");
       setIsEditing(false);
     } catch (err) {
       toast.error("Network error", { description: String(err) });
