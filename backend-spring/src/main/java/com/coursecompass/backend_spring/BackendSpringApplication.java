@@ -22,11 +22,15 @@ public class BackendSpringApplication {
 
 	@Bean
 	CommandLineRunner runner(UserRepository userRepo, CourseRepository courseRepo, TakenCourseRepository takenCourseRepo) {
+
+		System.out.println(" Current users in DB after save:");
+		userRepo.findAll().forEach(u -> System.out.println(u.getEmail()));
+
 		return args -> {
 
 			User john = new User();
-			john.setUserName("John");
-			john.setEmail("john@doe.com");
+			john.setUserName("Hua");
+			john.setEmail("eclipsehua@gmail.com");
 			john.setGPA(5.0);
 			john.setCurrentSemesterIndex(2);
 			john.setBookmarkedCourseIds(List.of("CS1101S"));

@@ -12,12 +12,16 @@ export interface CourseInfo {
 
 export default function BookmarkPage() {
   const { userProfile } = useUserProfile();
-  const bookmarked = userProfile?.bookmarkedCourseIds ?? [];
 
   const [modules, setModules] = useState<CourseInfo[]>([]);
 
   useEffect(() => {
-    if (!bookmarked.length) return;
+    const bookmarked = userProfile?.bookmarkedCourseIds ?? [];
+    if (!bookmarked.length) {
+      // This was to trigger the re-rendering of react.
+      setModules([]);
+      return;
+    }
 
     Promise.all(
       bookmarked.map((courseId) =>
@@ -33,7 +37,7 @@ export default function BookmarkPage() {
           }))
       )
     ).then((mods) => setModules(mods));
-  }, [bookmarked]);
+  }, [userProfile?.bookmarkedCourseIds]);
 
   return (
     <Layout>

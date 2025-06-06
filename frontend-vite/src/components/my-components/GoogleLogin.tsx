@@ -3,11 +3,16 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User as UserIcon, LogIn, LogOut } from "lucide-react";
 import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
+import { loginWithIdToken } from "@/apis/AuthAPI";
+import { toast } from "sonner";
+import { updateUserProfile } from "@/apis/UserAPI";
+import { useNavigate } from "react-router-dom";
 
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
 const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI;
 
 export default function GoogleLogin() {
+  const navigate = useNavigate();
   const [userAuthInfo, setUserAuthInfo] = useState<{
     name: string;
     email: string;
@@ -32,25 +37,17 @@ export default function GoogleLogin() {
       avatar: jwtPayload.picture,
     };
 
-    fetch("https://coursecompass-demo.onrender.com/api/auth/login", {
-      // fetch("/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ idToken }),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Backend verification failed");
-        return res.json();
-      })
+    // Imported form @/apis/Auth.ts
+    loginWithIdToken(idToken)
       .then((data) => {
         console.log("Authenticated user:", data);
+        toast.success("User Authenticated !");
         setUserProfile(data);
-        // localStorage.setItem("userProfile", JSON.stringify(data));
       })
       .catch((err) => {
-        console.error("Login failed:", err);
+        toast.error("Login failed", {
+          description: err.message || "Could not authenticate user",
+        });
       });
 
     setUserAuthInfo(userInfo);
@@ -115,33 +112,49 @@ export default function GoogleLogin() {
   }
 
   async function handleLogout() {
+    if (!userProfile) {
+      setUserAuthInfo(null);
+      setUserProfile(null);
+      localStorage.removeItem("userAuthInfo");
+      localStorage.removeItem("google_nonce");
+      localStorage.removeItem("id_token");
+      setTimeout(() => {
+        navigate("/");
+      }, 200);
+      toast.error("Failed to retrieve user profile");
+      return;
+    }
+
     try {
       const idToken = localStorage.getItem("id_token");
       if (!idToken) throw new Error("No token found");
 
-      const res = await // fetch("/api/user/update", {
-      fetch("https://coursecompass-demo.onrender.com/api/user/update", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`,
-        },
-        body: JSON.stringify({
-          userName: userProfile?.userName,
+
+      // Imported from @/apis/UserAPI.ts
+      const res = await updateUserProfile(
+        {
+          userName: userProfile?.userName ?? "",
           currentSemesterIndex: userProfile?.currentSemesterIndex ?? 1,
           bookmarkedCourseIds: userProfile?.bookmarkedCourseIds ?? [],
-        }),
-      });
+        },
+        idToken
+      );
 
       if (!res.ok) {
         const err = await res.json();
-        console.warn(
-          "Lazy update failed on logout:",
-          err.error || "Unknown error"
-        );
+        toast.error("Failed to save profile before logout", {
+          description: err.error || "Unknown error",
+        });
       }
+      toast.success("User logged out !");
     } catch (e) {
-      console.warn("Lazy update error during logout:", e);
+      const message =
+        e instanceof Error
+          ? e.message
+          : typeof e === "string"
+          ? e
+          : "Unknown error";
+      toast.error("Logout failed to sync data", { description: message });
     }
 
     setUserAuthInfo(null);
@@ -149,7 +162,9 @@ export default function GoogleLogin() {
     localStorage.removeItem("userAuthInfo");
     localStorage.removeItem("google_nonce");
     localStorage.removeItem("id_token");
-    window.location.href = "/";
+    setTimeout(() => {
+      navigate("/");
+    }, 200);
   }
 
   return (
