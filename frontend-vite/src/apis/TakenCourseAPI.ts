@@ -1,3 +1,6 @@
+const API_URL = "http://localhost:8080/api/";
+// const API_URL = "https://coursecompass-demo.onrender.com/api/";
+
 export interface TakenCourse {
   id: number;
   semesterIndex: number;
@@ -5,8 +8,6 @@ export interface TakenCourse {
   units: number;
   courseCode: string;
 }
-
-const API_URL = "http://localhost:8080/api/";
 
 export async function fetchTakenCourses(): Promise<TakenCourse[]> {
   const token = localStorage.getItem("id_token");
