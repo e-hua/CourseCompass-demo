@@ -129,7 +129,6 @@ export default function GoogleLogin() {
       const idToken = localStorage.getItem("id_token");
       if (!idToken) throw new Error("No token found");
 
-
       // Imported from @/apis/UserAPI.ts
       const res = await updateUserProfile(
         {
