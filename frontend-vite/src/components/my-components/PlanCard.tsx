@@ -20,7 +20,7 @@ export default function PlanCard({ nodes, edges, onNodesChange, onEdgesChange }:
     ...[1, 2, 3, 4, 5, 6, 7, 8].map((i) => ({
       id: `${i}`,
       position: { x: 1200, y: 50 + i * 200 },
-      data: { label: `Semester ${i}` },
+      data: { label: <div>`Semester ${i}`</div> },
       width: 2400,
       height: 100,
       type: "labeledGroupNode",

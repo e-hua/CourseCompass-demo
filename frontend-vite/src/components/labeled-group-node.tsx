@@ -1,4 +1,4 @@
-import React, { forwardRef, type HTMLAttributes, type ReactNode } from "react";
+import { forwardRef, type HTMLAttributes, type ReactNode } from "react";
 import { type NodeProps, Panel, type PanelPosition } from "@xyflow/react";
 import { BaseNode } from "@/components/base-node";
 import { cn } from "@/lib/utils";
