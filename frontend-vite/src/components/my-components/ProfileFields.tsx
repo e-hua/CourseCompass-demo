@@ -54,6 +54,7 @@ export default function UserProfileCard() {
     }
     setIsSaving(true);
     try {
+      // Imported from @/apis/UserAPI.ts
       const res = await updateUserProfile(
         {
           userName: name,

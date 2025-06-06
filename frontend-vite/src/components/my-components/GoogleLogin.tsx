@@ -7,6 +7,7 @@ import { loginWithIdToken } from "@/apis/AuthAPI";
 import { toast } from "sonner";
 import { updateUserProfile } from "@/apis/UserAPI";
 import { useNavigate } from "react-router-dom";
+import UserProfile from "./Dashboard";
 
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
 const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI;
@@ -112,10 +113,24 @@ export default function GoogleLogin() {
   }
 
   async function handleLogout() {
+    if (!userProfile) {
+      setUserAuthInfo(null);
+      setUserProfile(null);
+      localStorage.removeItem("userAuthInfo");
+      localStorage.removeItem("google_nonce");
+      localStorage.removeItem("id_token");
+      setTimeout(() => {
+        navigate("/");
+      }, 200);
+      toast.error("Failed to retrieve user profile");
+      return;
+    }
+
     try {
       const idToken = localStorage.getItem("id_token");
       if (!idToken) throw new Error("No token found");
 
+      // Imported from @/apis/UserAPI.ts
       const res = await updateUserProfile(
         {
           userName: userProfile?.userName ?? "",
