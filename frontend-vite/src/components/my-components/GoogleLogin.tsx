@@ -7,7 +7,6 @@ import { loginWithIdToken } from "@/apis/AuthAPI";
 import { toast } from "sonner";
 import { updateUserProfile } from "@/apis/UserAPI";
 import { useNavigate } from "react-router-dom";
-import UserProfile from "./Dashboard";
 
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
 const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI;
