@@ -19,7 +19,7 @@ export default function PlanCard({ nodes, edges, onNodesChange, onEdgesChange }:
     ...nodes,
     ...[1, 2, 3, 4, 5, 6, 7, 8].map((i) => ({
       id: `${i}`,
-      position: { x: 1200, y: 50 + i * 400 },
+      position: { x: 0, y: (i-1) * 400 },
       data: { label: <div>{"Y"+Math.floor((i + 1) / 2)+"S"+(i % 2 === 0 ? 2 : 1)}</div> },
       width: 2400,
       height: 300,

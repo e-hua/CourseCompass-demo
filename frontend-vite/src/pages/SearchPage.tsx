@@ -70,21 +70,13 @@ function SearchPage() {
                   <div>
                     <strong>Description:</strong>
                     <div className="space-y-1 max-h-64 overflow-y-auto pr-2">
-  <p
-    className={`text-sm text-muted-foreground whitespace-pre-line transition-all ${
-      expanded ? "line-clamp-none" : "line-clamp-5"
-    }`}
-  >
-    {selectedCourse.description}
-  </p>
-  <button
-    onClick={() => setExpanded((prev) => !prev)}
-    className="text-white text-xs hover:underline"
-  >
-    {expanded ? "Show less" : "Read more"}
-  </button>
-</div>
-
+                    <p className={`text-sm text-muted-foreground whitespace-pre-line transition-all ${
+                      expanded ? "line-clamp-none" : "line-clamp-5"}`}>
+                    {selectedCourse.description}</p>
+                    <button onClick={() => setExpanded((prev) => !prev)}
+                        className="text-white text-xs hover:underline">
+                    {expanded ? "Show less" : "Read more"}</button>
+                    </div>
                   </div>
                 </div>
               </div>
