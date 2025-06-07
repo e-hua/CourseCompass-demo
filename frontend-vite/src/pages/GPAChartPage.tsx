@@ -1,6 +1,6 @@
 import Layout from "@/components/Sidebar/layout";
 
-import { TrendingUp } from "lucide-react";
+import { TrendingDown, TrendingUp } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import {
@@ -27,6 +27,12 @@ const chartConfig = {
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
+
+function formatSemester(index: number): string {
+  const year = Math.floor((index - 1) / 2) + 1;
+  const sem = index % 2 === 1 ? 1 : 2;
+  return "Y" + year + "S" + sem;
+}
 
 export default function GPAChartPage() {
   const { data: takenCourses = [] } = useQuery({
@@ -83,17 +89,32 @@ export default function GPAChartPage() {
             </ChartContainer>
           </CardContent>
           <CardFooter>
-            <div className="flex w-full items-start gap-2 text-sm">
-              <div className="grid gap-2">
-                <div className="flex items-center gap-2 font-medium leading-none">
-                  Trending up by 7.78% this Sem{" "}
-                  <TrendingUp className="h-4 w-4" />
-                </div>
-                <div className="flex items-center gap-2 leading-none text-muted-foreground">
-                  Y3S1 - Y3S2
-                </div>
-              </div>
-            </div>
+            {chartData.length >= 2 &&
+              (() => {
+                const current = chartData[chartData.length - 1];
+                const prev = chartData[chartData.length - 2];
+                const diff = current.SGPA - prev.SGPA;
+                const percent = ((diff / prev.SGPA) * 100).toFixed(2);
+                const isUp = diff >= 0;
+
+                return (
+                  <div className="grid gap-2">
+                    <div className="flex items-center gap-2 font-medium leading-none">
+                      {isUp ? "Trending up" : "Trending down"} by{" "}
+                      {Math.abs(Number(percent))}% this Sem{" "}
+                      {isUp ? (
+                        <TrendingUp className="h-4 w-4 text-green-800" />
+                      ) : (
+                        <TrendingDown className="h-4 w-4 text-red-800" />
+                      )}
+                    </div>
+                    <div className="text-xs flex items-center gap-2 text-muted-foreground">
+                      {formatSemester(chartData.length - 1)} -{" "}
+                      {formatSemester(chartData.length)}
+                    </div>
+                  </div>
+                );
+              })()}
           </CardFooter>
         </Card>
       </div>
