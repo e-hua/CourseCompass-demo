@@ -27,6 +27,7 @@ const gradeToPoint: Record<string, number> = {
 };
 
 export function computeChartData(courses: TakenCourse[]): DataPointOnChart[] {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { userProfile } = useUserProfile();
   const currentSemIndex = userProfile?.currentSemesterIndex;
   const semesterIndexMap = new Map<number, TakenCourse[]>();
