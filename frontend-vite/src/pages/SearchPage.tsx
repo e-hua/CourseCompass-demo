@@ -104,7 +104,10 @@ function SearchPage() {
                   />
                 </div>
               ) : (
-                <AddTakenCourseDialog courseCode={selectedCourse.moduleCode} />
+                <AddTakenCourseDialog
+                  courseCode={selectedCourse.moduleCode}
+                  units={selectedCourse.credits}
+                />
               )}
             </SheetContent>
           </Sheet>

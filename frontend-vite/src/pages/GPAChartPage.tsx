@@ -17,15 +17,9 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-
-const chartData = [
-  { Semester: "Y1S1", SGPA: 4.0 },
-  { Semester: "Y1S2", SGPA: 4.5 },
-  { Semester: "Y2S1", SGPA: 4.8 },
-  { Semester: "Y2S2", SGPA: 4.3 },
-  { Semester: "Y3S1", SGPA: 4.5 },
-  { Semester: "Y3S2", SGPA: 4.85 },
-];
+import { useQuery } from "@tanstack/react-query";
+import { fetchTakenCourses } from "@/apis/TakenCourseAPI";
+import { computeChartData } from "@/lib/GPA/computeChartData";
 
 const chartConfig = {
   SGPA: {
@@ -35,9 +29,14 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function GPAChartPage() {
+  const { data: takenCourses = [] } = useQuery({
+    queryKey: ["takenCourses"],
+    queryFn: fetchTakenCourses,
+  });
+
+  const chartData = computeChartData(takenCourses);
+
   return (
-    /*
-     */
     <Layout>
       <div className="p-6 mx-8 space-y-10">
         <Card>
@@ -61,7 +60,7 @@ export default function GPAChartPage() {
                   dataKey="Semester"
                   tickLine={false}
                   axisLine={false}
-                  tickFormatter={(value) => value}
+                  tickFormatter={(value) => value.substring(0, 4)}
                 />
                 <YAxis
                   tickLine={false}

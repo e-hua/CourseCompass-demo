@@ -30,6 +30,7 @@ export interface PostTakenCourseProps {
   courseCode: string;
   semesterIndex: number;
   letterGrade: string;
+  units: number;
 }
 
 export async function addTakenCourse(
