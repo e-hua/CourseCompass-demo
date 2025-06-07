@@ -28,14 +28,14 @@ export default function AcademicPlanPage() {
 
     const computedNodes: Node[] = courses.map((course) => {
       const SEMESTER_WIDTH = 300;
-      const SEMESTER_HEIGHT = 200;
+      const SEMESTER_HEIGHT = 400;
       const index = course.semesterIndex;
       const count = semCourseCount.get(index) || 0;
       semCourseCount.set(index, count + 1);
 
       return {
         id: course.courseCode,
-        position: {
+        position: {//need to change tomorrow, to make nodes free
           x: 50 + count * SEMESTER_WIDTH,
           y: 50 + index * SEMESTER_HEIGHT,
         },

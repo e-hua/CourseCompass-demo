@@ -15,21 +15,21 @@ const nodeTypes = {
 
 export default function PlanCard({ nodes, edges, onNodesChange, onEdgesChange }: PlanCardProps) {
 
-  const defaultNodes: Node[] = [
+  const allNodes: Node[] = [
     ...nodes,
     ...[1, 2, 3, 4, 5, 6, 7, 8].map((i) => ({
       id: `${i}`,
-      position: { x: 1200, y: 50 + i * 200 },
-      data: { label: <div>`Semester ${i}`</div> },
+      position: { x: 1200, y: 50 + i * 400 },
+      data: { label: <div>{"Y"+Math.floor((i + 1) / 2)+"S"+(i % 2 === 0 ? 2 : 1)}</div> },
       width: 2400,
-      height: 100,
+      height: 300,
       type: "labeledGroupNode",
       draggable: false,
     })),
 ]
     return (<Card className="h-full w-full rounded border">
           <ReactFlow
-            defaultNodes={defaultNodes} nodeTypes={nodeTypes}
+            nodes={allNodes} nodeTypes={nodeTypes}
             onNodesChange={onNodesChange}
             edges={edges}
             onEdgesChange={onEdgesChange} fitView
