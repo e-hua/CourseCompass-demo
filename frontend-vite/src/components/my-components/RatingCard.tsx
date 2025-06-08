@@ -2,31 +2,62 @@ import Ratings from "@/components/my-components/Ratings";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
+import { useState } from "react";
 
 export default function RatingCard({ courseName }: { courseName: string }) {
+
+  const [difficulty, setDifficulty] = useState<number>(0);
+  const [workload, setWorkload] = useState<number>(0);
+  const [enjoyability, setEnjoyability] = useState<number>(0);
+  const [ratingSubmitted, setRatingSubmitted] = useState<boolean>(false);
+
+  const handleUpload = () => {
+    if (difficulty === 0 || workload === 0 || enjoyability === 0) {
+      alert("Please rate all categories before submitting.");
+      return;
+    }
+
+   
+    // Simulate a successful submission
+    setRatingSubmitted(true);
+  };  
+
+  if (ratingSubmitted) {
+    return (
+    <Card className="m-10 p-6 mx-auto space-y-5 w-200 h-100">
+      <CardHeader>
+        <CardTitle className="text-xl font-bold">{courseName}</CardTitle>
+      </CardHeader>
+      <CardContent className="text-center">
+        <p>Thank you for your ratings!</p>
+      </CardContent> 
+    </Card>
+    );
+  }
+
   return (
-    <Card className="m-10 p-6 mx-auto space-y-5  w-200 h-100">
+    <Card className="m-10 p-6 mx-auto space-y-5 w-200 h-100">
       <CardHeader>
         <CardTitle className="text-xl font-bold">{courseName}</CardTitle>
       </CardHeader>
 
       <CardContent className="flex items-center space-x-2">
         <CardTitle>Rate its Difficulty !</CardTitle>
-        <Ratings />
+        <Ratings onChange={v => setDifficulty(v)}/>
       </CardContent>
 
       <CardContent className="flex items-center space-x-2">
         <CardTitle>Rate its Workloads !</CardTitle>
-        <Ratings />
+        <Ratings onChange={v => setWorkload(v)}/>
       </CardContent>
 
       <CardContent className="flex items-center space-x-2">
         <CardTitle>Rate its Enjoyability !</CardTitle>
-        <Ratings />
+        <Ratings onChange={v => setEnjoyability(v)}/>
       </CardContent>
 
       <CardContent className="flex items-center-safe space-x-2">
-        <Button className="w-30">
+        <Button className="w-30" onClick={handleUpload}>
           <Upload /> Upload Rating
         </Button>
       </CardContent>

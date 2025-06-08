@@ -6,7 +6,7 @@ import type { NodeChange, EdgeChange, Node, Edge } from "@xyflow/react";
 import { useTakenCourses } from "@/components/my-hooks/UseTakenCourses";
 import { Skeleton } from "@/components/ui/skeleton";
 import PlanCard from "@/components/my-components/PlanCard";
-import extractEdgesFromPrereqTree from "@/components/my-hooks/UsePrereqTree";
+import extractEdgesFromPrereqTree from "@/lib/Plan/UsePrereqTree";
 
 export default function AcademicPlanPage() {
   const { data: courses, isLoading, error } = useTakenCourses();
@@ -27,8 +27,8 @@ export default function AcademicPlanPage() {
     const semCourseCount = new Map<number, number>();
 
     const computedNodes: Node[] = courses.map((course) => {
-      const SEMESTER_WIDTH = 300;
-      const SEMESTER_HEIGHT = 200;
+      const SEMESTER_WIDTH = 400;
+      //const SEMESTER_HEIGHT = 400;//useless?
       const index = course.semesterIndex;
       const count = semCourseCount.get(index) || 0;
       semCourseCount.set(index, count + 1);
@@ -36,8 +36,8 @@ export default function AcademicPlanPage() {
       return {
         id: course.courseCode,
         position: {
-          x: 50 + count * SEMESTER_WIDTH,
-          y: 50 + index * SEMESTER_HEIGHT,
+          x: 100 + count * SEMESTER_WIDTH,
+          y: 100 //- (index-1) * SEMESTER_HEIGHT,
         },
         data: {
           label: <div className="text-xs text-black">{course.courseCode}</div>,
