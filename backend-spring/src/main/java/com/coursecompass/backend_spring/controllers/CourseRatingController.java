@@ -1,26 +1,90 @@
 package com.coursecompass.backend_spring.controllers;
 
+import com.coursecompass.backend_spring.GoogleTokenVerifier;
+import com.coursecompass.backend_spring.entities.Course;
 import com.coursecompass.backend_spring.entities.CourseRating;
+import com.coursecompass.backend_spring.entities.User;
+import com.coursecompass.backend_spring.repositories.CourseRatingRepository;
+import com.coursecompass.backend_spring.repositories.CourseRepository;
+import com.coursecompass.backend_spring.repositories.UserRepository;
 import com.coursecompass.backend_spring.services.CourseRatingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/ratings")
 public class CourseRatingController {
 
+    private final GoogleTokenVerifier googleTokenVerifier;
     private final CourseRatingService courseRatingService;
+    private final UserRepository userRepository;
+    private final CourseRepository courseRepository;
+    private final CourseRatingRepository courseRatingRepository;
 
     @Autowired
-    public CourseRatingController(CourseRatingService courseRatingService) {
+    public CourseRatingController(
+            GoogleTokenVerifier googleTokenVerifier,
+            CourseRatingService courseRatingService,
+            UserRepository userRepository,
+            CourseRepository courseRepository, CourseRatingRepository courseRatingRepository) {
+        this.googleTokenVerifier = googleTokenVerifier;
         this.courseRatingService = courseRatingService;
+        this.userRepository = userRepository;
+        this.courseRepository = courseRepository;
+        this.courseRatingRepository = courseRatingRepository;
     }
 
     @PostMapping
-    public CourseRating createCourseRating(@RequestBody CourseRating rating) {
-        return courseRatingService.createCourseRating(rating);
+    public ResponseEntity<?> createCourseRating(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody CourseRating rating) {
+
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
+        }
+
+        String idToken = authorizationHeader.substring(7);
+        try {
+            Map<String, Object> claims = googleTokenVerifier.verify(idToken);
+            String email = (String) claims.get("email");
+            Optional<User> optionalUser = userRepository.findByEmail(email);
+            if (optionalUser.isEmpty()) {
+                return ResponseEntity.status(404).body(Map.of("error", "User not found"));
+            }
+
+            User user = optionalUser.get();
+            Course course = courseRepository.findByid(rating.getCourse().getId())
+                    .orElseGet(() -> {
+                        Course newCourse = new Course();
+                        newCourse.setId(rating.getCourse().getId());
+                        return courseRepository.save(newCourse);
+                    });
+
+            Optional<CourseRating> existing = courseRatingRepository
+                    .findByUserAndCourse(user, course);
+
+            if (existing.isPresent()) {
+                return ResponseEntity.status(409).body(Map.of("error", "Course already rated"));
+            }
+
+            CourseRating newRating = new CourseRating();
+            newRating.setUser(user);
+            newRating.setCourse(course);
+            newRating.setCreatedAt(LocalDateTime.ofInstant(new Date().toInstant(), ZoneId.systemDefault()));
+            courseRatingRepository.save(newRating);
+
+            return ResponseEntity.ok(Map.of("success", true));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Failed to upload course rating"));
+        }
     }
 
     @PutMapping("/{id}")

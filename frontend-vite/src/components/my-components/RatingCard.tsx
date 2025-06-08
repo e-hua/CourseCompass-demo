@@ -5,7 +5,7 @@ import { Upload } from "lucide-react";
 
 export default function RatingCard({ courseName }: { courseName: string }) {
   return (
-    <Card className="m-10 p-6 mx-auto space-y-5  w-200 h-100">
+    <Card className="m-10 p-6 mx-auto space-y-5 w-200 h-100">
       <CardHeader>
         <CardTitle className="text-xl font-bold">{courseName}</CardTitle>
       </CardHeader>
