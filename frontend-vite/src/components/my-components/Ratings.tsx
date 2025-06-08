@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import StarIcon from "@mui/icons-material/Star";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
 
-export default function Ratings() {
+export default function Ratings({ onChange }: { onChange: (value: number) => void }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [filledIndex, setFilledIndex] = useState(0);
   const [hoverIndex, setHoverIndex] = useState(0);
@@ -26,6 +26,7 @@ export default function Ratings() {
         }
       );
       setFilledIndex(0);
+      onChange(0);
     } else {
       animate(
         filledStars,
@@ -33,6 +34,7 @@ export default function Ratings() {
         { duration: 0.5, delay: stagger(0.075) }
       );
       setFilledIndex(y);
+      onChange(y);
     }
   };
 

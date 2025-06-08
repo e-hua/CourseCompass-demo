@@ -78,7 +78,12 @@ public class CourseRatingController {
             CourseRating newRating = new CourseRating();
             newRating.setUser(user);
             newRating.setCourse(course);
-            newRating.setCreatedAt(LocalDateTime.ofInstant(new Date().toInstant(), ZoneId.systemDefault()));
+            newRating.setCreatedAt(LocalDateTime.now());
+            //newRating.setCreatedAt(LocalDateTime.ofInstant(new Date().toInstant(), ZoneId.systemDefault()));
+            newRating.setDifficulty(rating.getDifficulty());
+            newRating.setAverageWorkload(rating.getAverageWorkload());
+            newRating.setEnjoyability(rating.getEnjoyability());
+
             courseRatingRepository.save(newRating);
 
             return ResponseEntity.ok(Map.of("success", true));

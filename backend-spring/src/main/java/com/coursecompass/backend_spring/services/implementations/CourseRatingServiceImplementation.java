@@ -38,12 +38,12 @@ public class CourseRatingServiceImplementation implements CourseRatingService {
         return ratingRepository.findById(id)
                 .map(existingRating -> {
                     existingRating.setUpdatedAt(updatedRating.getUpdatedAt());
-                    existingRating.setCourse(updatedRating.getCourse());
-                    existingRating.setUser(updatedRating.getUser());
+                    //existingRating.setCourse(updatedRating.getCourse());
+                    //existingRating.setUser(updatedRating.getUser());
                     existingRating.setDifficulty(updatedRating.getDifficulty());
                     existingRating.setAverageWorkload(updatedRating.getAverageWorkload());
                     existingRating.setEnjoyability(updatedRating.getEnjoyability());
-                    existingRating.setCreatedAt(updatedRating.getCreatedAt());
+                    //existingRating.setCreatedAt(updatedRating.getCreatedAt());
                     return ratingRepository.save(existingRating);
                 })
                 .orElseThrow(() -> new RuntimeException("Rating not found with id " + id));
