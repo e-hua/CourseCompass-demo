@@ -87,7 +87,7 @@ export default function RatingCard({ courseName }: { courseName: string }) {
         </CardContent>
 
         <CardContent className="flex items-center-safe space-x-2">
-          <Button className="w-30" onClick={handleUpload}>
+          <Button onClick={handleUpload}>
             <Update /> Update Rating
           </Button>
         </CardContent>
@@ -116,7 +116,7 @@ export default function RatingCard({ courseName }: { courseName: string }) {
         </CardContent>
 
         <CardContent className="flex items-center-safe space-x-2">
-          <Button className="w-30" onClick={handleUpload}>
+          <Button onClick={handleUpload}>
             <Upload /> Upload Rating
           </Button>
         </CardContent>

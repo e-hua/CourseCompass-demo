@@ -20,6 +20,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { fetchTakenCourses } from "@/apis/TakenCourseAPI";
 import { computeChartData } from "@/lib/GPA/computeChartData";
+import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
 
 const chartConfig = {
   SGPA: {
@@ -41,6 +42,24 @@ export default function GPAChartPage() {
   });
 
   const chartData = computeChartData(takenCourses);
+
+  const { userProfile } = useUserProfile();
+  if (!userProfile) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center h-screen">
+          <Card className="p-6">
+            <CardHeader>
+              <CardTitle className="text-xl">You're not logged in</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm">
+              Please log in to view your GPA chart.
+            </CardContent>
+          </Card>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>

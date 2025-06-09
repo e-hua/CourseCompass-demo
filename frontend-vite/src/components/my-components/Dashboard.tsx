@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useUserProfile } from "../my-hooks/UserProfileContext";
-import ProfileCard from "./ProfileCard";
 import ProgressCard from "./ProgressCard";
+import ProfileFields from "./ProfileFields";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 export interface TakenCourse {
   id: number;
@@ -37,6 +38,7 @@ export interface User {
 export default function UserProfile() {
   const { setUserProfile } = useUserProfile();
   const [loading, setLoading] = useState<boolean>(true);
+  const { userProfile } = useUserProfile();
 
   useEffect(() => {
     const profile = localStorage.getItem("userProfile");
@@ -55,10 +57,25 @@ export default function UserProfile() {
     );
   }
 
-  return (
-    <div className=" mx-8 p-6 space-y-10">
-      <ProfileCard />
-      <ProgressCard />
-    </div>
-  );
+  if (!userProfile) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Card className="p-6">
+          <CardHeader>
+            <CardTitle className="text-xl">You're not logged in</CardTitle>
+          </CardHeader>
+          <CardContent className="text-sm">
+            Please log in to view your dashboard.
+          </CardContent>
+        </Card>
+      </div>
+    );
+  } else {
+    return (
+      <div className=" mx-8 p-6 space-y-10">
+        <ProfileFields />
+        <ProgressCard />
+      </div>
+    );
+  }
 }
