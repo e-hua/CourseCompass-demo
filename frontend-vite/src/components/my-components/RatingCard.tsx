@@ -3,9 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
 import { useState } from "react";
+import { postCourseRating } from "@/apis/CourseRatingAPI";
+import { toast } from "sonner";
 
 export default function RatingCard({ courseName }: { courseName: string }) {
-
   const [difficulty, setDifficulty] = useState<number>(0);
   const [workload, setWorkload] = useState<number>(0);
   const [enjoyability, setEnjoyability] = useState<number>(0);
@@ -13,25 +14,37 @@ export default function RatingCard({ courseName }: { courseName: string }) {
 
   const handleUpload = () => {
     if (difficulty === 0 || workload === 0 || enjoyability === 0) {
-      alert("Please rate all categories before submitting.");
+      toast.error("Please rate all categories before submitting.");
       return;
     }
 
-   
     // Simulate a successful submission
+    try {
+      postCourseRating(courseName, difficulty, workload, enjoyability);
+    } catch (e) {
+      const message =
+        e instanceof Error
+          ? e.message
+          : typeof e === "string"
+          ? e
+          : "Unknown error";
+      toast.error("Logout failed to sync data", { description: message });
+    }
+
     setRatingSubmitted(true);
-  };  
+    toast.success("Rating submitted !");
+  };
 
   if (ratingSubmitted) {
     return (
-    <Card className="m-10 p-6 mx-auto space-y-5 w-200 h-100">
-      <CardHeader>
-        <CardTitle className="text-xl font-bold">{courseName}</CardTitle>
-      </CardHeader>
-      <CardContent className="text-center">
-        <p>Thank you for your ratings!</p>
-      </CardContent> 
-    </Card>
+      <Card className="m-10 p-6 mx-auto space-y-5 w-200 h-100">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold">{courseName}</CardTitle>
+        </CardHeader>
+        <CardContent className="text-center">
+          <p>Thank you for your ratings!</p>
+        </CardContent>
+      </Card>
     );
   }
 
@@ -43,17 +56,17 @@ export default function RatingCard({ courseName }: { courseName: string }) {
 
       <CardContent className="flex items-center space-x-2">
         <CardTitle>Rate its Difficulty !</CardTitle>
-        <Ratings onChange={v => setDifficulty(v)}/>
+        <Ratings onChange={(v) => setDifficulty(v)} />
       </CardContent>
 
       <CardContent className="flex items-center space-x-2">
         <CardTitle>Rate its Workloads !</CardTitle>
-        <Ratings onChange={v => setWorkload(v)}/>
+        <Ratings onChange={(v) => setWorkload(v)} />
       </CardContent>
 
       <CardContent className="flex items-center space-x-2">
         <CardTitle>Rate its Enjoyability !</CardTitle>
-        <Ratings onChange={v => setEnjoyability(v)}/>
+        <Ratings onChange={(v) => setEnjoyability(v)} />
       </CardContent>
 
       <CardContent className="flex items-center-safe space-x-2">

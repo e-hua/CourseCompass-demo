@@ -1,6 +1,7 @@
 package com.coursecompass.backend_spring.controllers;
 
 import com.coursecompass.backend_spring.GoogleTokenVerifier;
+import com.coursecompass.backend_spring.dto.CourseRatingDTO;
 import com.coursecompass.backend_spring.entities.Course;
 import com.coursecompass.backend_spring.entities.CourseRating;
 import com.coursecompass.backend_spring.entities.User;
@@ -45,7 +46,7 @@ public class CourseRatingController {
     @PostMapping
     public ResponseEntity<?> createCourseRating(
             @RequestHeader("Authorization") String authorizationHeader,
-            @RequestBody CourseRating rating) {
+            @RequestBody CourseRatingDTO rating) {
 
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
@@ -54,6 +55,8 @@ public class CourseRatingController {
         String idToken = authorizationHeader.substring(7);
         try {
             Map<String, Object> claims = googleTokenVerifier.verify(idToken);
+            System.out.println(claims);
+            System.out.println(rating);
             String email = (String) claims.get("email");
             Optional<User> optionalUser = userRepository.findByEmail(email);
             if (optionalUser.isEmpty()) {
@@ -61,10 +64,10 @@ public class CourseRatingController {
             }
 
             User user = optionalUser.get();
-            Course course = courseRepository.findByid(rating.getCourse().getId())
+            Course course = courseRepository.findByid(rating.getCourseCode())
                     .orElseGet(() -> {
                         Course newCourse = new Course();
-                        newCourse.setId(rating.getCourse().getId());
+                        newCourse.setId(rating.getCourseCode());
                         return courseRepository.save(newCourse);
                     });
 
@@ -81,13 +84,14 @@ public class CourseRatingController {
             newRating.setCreatedAt(LocalDateTime.now());
             //newRating.setCreatedAt(LocalDateTime.ofInstant(new Date().toInstant(), ZoneId.systemDefault()));
             newRating.setDifficulty(rating.getDifficulty());
-            newRating.setAverageWorkload(rating.getAverageWorkload());
+            newRating.setAverageWorkload(rating.getWorkload());
             newRating.setEnjoyability(rating.getEnjoyability());
 
             courseRatingRepository.save(newRating);
 
             return ResponseEntity.ok(Map.of("success", true));
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.badRequest().body(Map.of("error", "Failed to upload course rating"));
         }
     }

@@ -1,5 +1,5 @@
-// const API_URL = "http://localhost:8080/api/";
-const API_URL = "https://coursecompass-demo.onrender.com/api/";
+const API_URL = "http://localhost:8080/api/";
+// const API_URL = "https://coursecompass-demo.onrender.com/api/";
 
 export interface CourseRating {
   id: number;
@@ -11,7 +11,7 @@ export interface CourseRating {
 }
 
 export interface PostCourseRatingProps {
-  courseCode: string;//not consistent, remember to change
+  courseCode: string; //not consistent, remember to change
   difficulty: number;
   workload: number;
   enjoyability: number;
@@ -33,7 +33,7 @@ export async function postCourseRating(
     enjoyability,
   };
 
-  const res = await fetch(`${API_URL}ratings`, {
+  const res = await fetch(API_URL + "ratings", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -43,4 +43,4 @@ export async function postCourseRating(
   });
 
   if (!res.ok) throw new Error("Failed to post course rating");
-}       
+}
