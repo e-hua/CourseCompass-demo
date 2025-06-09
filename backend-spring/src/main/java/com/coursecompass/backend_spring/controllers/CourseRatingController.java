@@ -73,7 +73,7 @@ public class CourseRatingController {
                     .findByUserAndCourse(user, course);
 
             if (existing.isPresent()) {
-                return ResponseEntity.status(409).body(Map.of("error", "Course already rated"));
+                courseRatingRepository.deleteById(existing.get().getId());
             }
 
             CourseRating newRating = new CourseRating();

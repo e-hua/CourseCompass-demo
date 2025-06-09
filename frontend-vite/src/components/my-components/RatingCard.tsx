@@ -2,7 +2,7 @@ import Ratings from "@/components/my-components/Ratings";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { postCourseRating } from "@/apis/CourseRatingAPI";
 import { toast } from "sonner";
 import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
@@ -14,10 +14,14 @@ export default function RatingCard({ courseName }: { courseName: string }) {
   const [enjoyability, setEnjoyability] = useState<number>(0);
   const [ratingSubmitted, setRatingSubmitted] = useState<boolean>(false);
 
-  const { userProfile } = useUserProfile();
+  const { userProfile, refetchUserProfile } = useUserProfile();
   const existingRating = (userProfile?.courseRatings ?? []).filter(
     (x) => x.courseCode === courseName
   );
+
+  useEffect(() => {
+    refetchUserProfile();
+  }, []);
 
   const handleUpload = () => {
     if (difficulty === 0 || workload === 0 || enjoyability === 0) {

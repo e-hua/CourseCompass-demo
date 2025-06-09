@@ -1,15 +1,18 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { type User } from "@/components/my-components/Dashboard";
 import { toast } from "sonner";
+import { loginWithIdToken } from "@/apis/AuthAPI";
 
 const UserContext = createContext<{
   userProfile: User | null;
   setUserProfile: (user: User | null) => void;
   toggleBookmark: (moduleCode: string) => void;
+  refetchUserProfile: () => Promise<void>;
 }>({
   userProfile: null,
   setUserProfile: () => {},
   toggleBookmark: () => {},
+  refetchUserProfile: async () => {},
 });
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
@@ -54,9 +57,30 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const refetchUserProfile = async () => {
+    const idToken = localStorage.getItem("id_token");
+    if (!idToken) {
+      console.warn("No ID token found in localStorage.");
+      return;
+    }
+
+    try {
+      const user = await loginWithIdToken(idToken);
+      setUserProfile(user);
+    } catch (err) {
+      console.error("Refetch failed", err);
+      toast.error("Failed to refetch user profile");
+    }
+  };
+
   return (
     <UserContext.Provider
-      value={{ userProfile, setUserProfile, toggleBookmark }}
+      value={{
+        userProfile,
+        setUserProfile,
+        toggleBookmark,
+        refetchUserProfile,
+      }}
     >
       {children}
     </UserContext.Provider>
