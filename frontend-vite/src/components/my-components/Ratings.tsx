@@ -1,11 +1,17 @@
 import { animate, motion, stagger } from "framer-motion";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import StarIcon from "@mui/icons-material/Star";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
 
-export default function Ratings({ onChange }: { onChange: (value: number) => void }) {
+export default function Ratings({
+  onChange,
+  existingIndex,
+}: {
+  onChange: (value: number) => void;
+  existingIndex: number;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [filledIndex, setFilledIndex] = useState(0);
+  const [filledIndex, setFilledIndex] = useState(existingIndex);
   const [hoverIndex, setHoverIndex] = useState(0);
 
   const onClickLambda = (y: number) => {
@@ -37,6 +43,10 @@ export default function Ratings({ onChange }: { onChange: (value: number) => voi
       onChange(y);
     }
   };
+
+  useEffect(() => {
+    onChange(existingIndex);
+  }, []);
 
   return (
     <div ref={containerRef} className="flex rating-component">

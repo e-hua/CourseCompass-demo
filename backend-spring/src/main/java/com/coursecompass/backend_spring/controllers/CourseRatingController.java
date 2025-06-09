@@ -55,8 +55,6 @@ public class CourseRatingController {
         String idToken = authorizationHeader.substring(7);
         try {
             Map<String, Object> claims = googleTokenVerifier.verify(idToken);
-            System.out.println(claims);
-            System.out.println(rating);
             String email = (String) claims.get("email");
             Optional<User> optionalUser = userRepository.findByEmail(email);
             if (optionalUser.isEmpty()) {
@@ -82,6 +80,7 @@ public class CourseRatingController {
             newRating.setUser(user);
             newRating.setCourse(course);
             newRating.setCreatedAt(LocalDateTime.now());
+            newRating.setCourseCode(rating.getCourseCode());
             //newRating.setCreatedAt(LocalDateTime.ofInstant(new Date().toInstant(), ZoneId.systemDefault()));
             newRating.setDifficulty(rating.getDifficulty());
             newRating.setAverageWorkload(rating.getWorkload());

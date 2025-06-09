@@ -12,6 +12,7 @@ export interface TakenCourse {
 
 export interface CourseRating {
   id: number;
+  courseCode: string;
   createdAt: string;
   updatedAt: string;
   difficulty: number;
