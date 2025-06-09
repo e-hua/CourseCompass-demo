@@ -2,36 +2,37 @@ import Ratings from "@/components/my-components/Ratings";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { postCourseRating } from "@/apis/CourseRatingAPI";
 import { toast } from "sonner";
 import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
 import { Update } from "@mui/icons-material";
+import { LoaderCircle } from "lucide-react";
 
 export default function RatingCard({ courseName }: { courseName: string }) {
   const [difficulty, setDifficulty] = useState<number>(0);
   const [workload, setWorkload] = useState<number>(0);
   const [enjoyability, setEnjoyability] = useState<number>(0);
-  const [ratingSubmitted, setRatingSubmitted] = useState<boolean>(false);
+  // const [ratingSubmitted, setRatingSubmitted] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
 
   const { userProfile, refetchUserProfile } = useUserProfile();
   const existingRating = (userProfile?.courseRatings ?? []).filter(
     (x) => x.courseCode === courseName
   );
 
-  useEffect(() => {
-    refetchUserProfile();
-  }, []);
-
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (difficulty === 0 || workload === 0 || enjoyability === 0) {
       toast.error("Please rate all categories before submitting.");
       return;
     }
 
-    // Simulate a successful submission
+    setLoading(true);
     try {
-      postCourseRating(courseName, difficulty, workload, enjoyability);
+      await postCourseRating(courseName, difficulty, workload, enjoyability);
+      await refetchUserProfile();
+      // setRatingSubmitted(true);
+      toast.success("Rating submitted!");
     } catch (e) {
       const message =
         e instanceof Error
@@ -39,13 +40,14 @@ export default function RatingCard({ courseName }: { courseName: string }) {
           : typeof e === "string"
           ? e
           : "Unknown error";
-      toast.error("Logout failed to sync data", { description: message });
-    }
 
-    setRatingSubmitted(true);
-    toast.success("Rating submitted !");
+      toast.error("Failed to submit rating", { description: message });
+    } finally {
+      setLoading(false); // stop spinner
+    }
   };
 
+  /*
   if (ratingSubmitted) {
     return (
       <Card className="m-10 p-6 mx-auto space-y-5 w-200 h-100">
@@ -58,6 +60,7 @@ export default function RatingCard({ courseName }: { courseName: string }) {
       </Card>
     );
   }
+*/
 
   if (existingRating.length > 0) {
     return (
@@ -91,8 +94,15 @@ export default function RatingCard({ courseName }: { courseName: string }) {
         </CardContent>
 
         <CardContent className="flex items-center-safe space-x-2">
-          <Button onClick={handleUpload}>
-            <Update /> Update Rating
+          <Button onClick={handleUpload} disabled={loading}>
+            {loading ? (
+              <LoaderCircle className="animate-spin w-5 h-5" />
+            ) : (
+              <>
+                {" "}
+                <Update /> Update Rating{" "}
+              </>
+            )}
           </Button>
         </CardContent>
       </Card>
@@ -120,8 +130,15 @@ export default function RatingCard({ courseName }: { courseName: string }) {
         </CardContent>
 
         <CardContent className="flex items-center-safe space-x-2">
-          <Button onClick={handleUpload}>
-            <Upload /> Upload Rating
+          <Button onClick={handleUpload} disabled={loading}>
+            {loading ? (
+              <LoaderCircle className="animate-spin w-5 h-5" />
+            ) : (
+              <>
+                {" "}
+                <Upload /> Upload Rating{" "}
+              </>
+            )}
           </Button>
         </CardContent>
       </Card>
