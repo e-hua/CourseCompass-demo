@@ -16,6 +16,8 @@ public class CourseRating {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String courseCode;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 

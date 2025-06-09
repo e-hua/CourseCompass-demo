@@ -6,7 +6,9 @@ import type { NodeChange, EdgeChange, Node, Edge } from "@xyflow/react";
 import { useTakenCourses } from "@/components/my-hooks/UseTakenCourses";
 import { Skeleton } from "@/components/ui/skeleton";
 import PlanCard from "@/components/my-components/PlanCard";
-import extractEdgesFromPrereqTree from "@/components/my-hooks/UsePrereqTree";
+import extractEdgesFromPrereqTree from "@/lib/Plan/UsePrereqTree";
+import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function AcademicPlanPage() {
   const { data: courses, isLoading, error } = useTakenCourses();
@@ -15,11 +17,15 @@ export default function AcademicPlanPage() {
   const [edges, setEdges] = useState<Edge[]>([]);
 
   const onNodesChange = useCallback(
-    (changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)),
-    []);
+    (changes: NodeChange[]) =>
+      setNodes((nds) => applyNodeChanges(changes, nds)),
+    []
+  );
   const onEdgesChange = useCallback(
-    (changes: EdgeChange[]) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-    []);
+    (changes: EdgeChange[]) =>
+      setEdges((eds) => applyEdgeChanges(changes, eds)),
+    []
+  );
 
   useEffect(() => {
     if (!courses) return;
@@ -27,8 +33,8 @@ export default function AcademicPlanPage() {
     const semCourseCount = new Map<number, number>();
 
     const computedNodes: Node[] = courses.map((course) => {
-      const SEMESTER_WIDTH = 300;
-      const SEMESTER_HEIGHT = 200;
+      const SEMESTER_WIDTH = 400;
+      //const SEMESTER_HEIGHT = 400;//useless?
       const index = course.semesterIndex;
       const count = semCourseCount.get(index) || 0;
       semCourseCount.set(index, count + 1);
@@ -36,8 +42,8 @@ export default function AcademicPlanPage() {
       return {
         id: course.courseCode,
         position: {
-          x: 50 + count * SEMESTER_WIDTH,
-          y: 50 + index * SEMESTER_HEIGHT,
+          x: 100 + count * SEMESTER_WIDTH,
+          y: 100, //- (index-1) * SEMESTER_HEIGHT,
         },
         data: {
           label: <div className="text-xs text-black">{course.courseCode}</div>,
@@ -65,7 +71,7 @@ export default function AcademicPlanPage() {
           const prereqEdges = extractEdgesFromPrereqTree(
             prereqTree,
             course.courseCode
-          ).filter(e => courses.some(code => code.courseCode === e.source));
+          ).filter((e) => courses.some((code) => code.courseCode === e.source));
 
           setEdges((prev) => [
             ...prev,
@@ -80,6 +86,24 @@ export default function AcademicPlanPage() {
       })
     );
   }, [courses]);
+
+  const { userProfile } = useUserProfile();
+  if (!userProfile) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center h-screen">
+          <Card className="p-6">
+            <CardHeader>
+              <CardTitle className="text-xl">You're not logged in</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm">
+              Please log in to customize your Academic plan.
+            </CardContent>
+          </Card>
+        </div>
+      </Layout>
+    );
+  }
 
   if (isLoading) {
     return (

@@ -1,10 +1,30 @@
 import Layout from "@/components/Sidebar/layout";
 import RatingCard from "@/components/my-components/RatingCard";
 import { useTakenCourses } from "@/components/my-hooks/UseTakenCourses";
+import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 function SearchPage() {
   const { data: courses, isLoading, error } = useTakenCourses();
+  const { userProfile } = useUserProfile();
+
+  if (!userProfile) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center h-screen">
+          <Card className="p-6">
+            <CardHeader>
+              <CardTitle className="text-xl">You're not logged in</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm">
+              Please log in to view your Ratings.
+            </CardContent>
+          </Card>
+        </div>
+      </Layout>
+    );
+  }
 
   if (isLoading)
     return (
@@ -19,7 +39,22 @@ function SearchPage() {
         </div>
       </Layout>
     );
-  if (error) return <p>Error message: {error.message}</p>;
+
+  if (error)
+    return (
+      <Layout>
+        <div className="flex items-center justify-center h-screen">
+          <Card className="p-6">
+            <CardHeader>
+              <CardTitle className="text-xl">Your profile is broken</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm">
+              Please try login again to view your courseRatings.
+            </CardContent>
+          </Card>
+        </div>
+      </Layout>
+    );
 
   return (
     <Layout>
