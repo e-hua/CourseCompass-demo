@@ -105,6 +105,7 @@ public class CourseRatingController {
             course.setAverageWorkload(averageWorkload);
             course.setAverageDifficulty(averageDifficulty);
             course.setAverageEnjoyability(averageEnjoyability);
+            course.setRatingCount(allRatings.size());
             courseRepository.save(course);
 
             return ResponseEntity.ok(Map.of("success", true));

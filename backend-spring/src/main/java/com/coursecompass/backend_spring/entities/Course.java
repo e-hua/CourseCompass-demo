@@ -19,6 +19,7 @@ public class Course {
     private Double averageDifficulty;
     private Double averageWorkload;
     private Double averageEnjoyability;
+    private Integer ratingCount;
 
     @JsonIgnore
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
