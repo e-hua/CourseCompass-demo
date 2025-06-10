@@ -3,18 +3,39 @@ import { useEffect, useState } from "react";
 import { fetchModData, type Course } from "@/apis/FetchModDataAPI";
 import Layout from "@/components/Sidebar/layout";
 import { Separator } from "@/components/ui/separator";
+import { fetchCourseStats, type CourseStats } from "@/apis/CourseStatsAPI";
+import { Card, CardContent } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+
 export default function CoursePage() {
   const { moduleCode } = useParams<{ moduleCode: string }>();
   const [course, setCourse] = useState<Course | null>(null);
   const [expanded, setExpanded] = useState(false);
+  const [courseStats, setCourseStats] = useState<CourseStats | null>(null);
 
   useEffect(() => {
     if (moduleCode) {
-      fetchModData(moduleCode).then(setCourse);
+      fetchModData(moduleCode).then((x) => setCourse(x));
+      fetchCourseStats(moduleCode).then((x) => setCourseStats(x));
     }
   }, [moduleCode]);
 
   if (!course) return <div className="p-4">Loading...</div>;
+
+  const ratingProps = [
+    {
+      label: "Difficulty",
+      value: courseStats?.averageDifficulty ?? 0,
+    },
+    {
+      label: "Workload",
+      value: courseStats?.averageWorkload ?? 0,
+    },
+    {
+      label: "Enjoyability",
+      value: courseStats?.averageEnjoyability ?? 0,
+    },
+  ];
 
   return (
     <Layout>
@@ -24,6 +45,26 @@ export default function CoursePage() {
             <h1 className="text-2xl font-semibold">{course.moduleCode}</h1>
             <p className="text-muted-foreground">{course.title}</p>
           </div>
+
+          <Separator />
+
+          <Card className="w-full max-w-md mx-auto shadow-md rounded-2xl">
+            <CardContent className="p-6 space-y-4">
+              <div className="flex justify-between items-center">
+                <div>{courseStats?.ratingCount ?? 0} Ratings</div>
+              </div>
+
+              {ratingProps.map(({ label, value }) => (
+                <div key={label}>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span>{label}</span>
+                    <span>{value.toFixed(2)} / 5</span>
+                  </div>
+                  <Progress value={(value / 5) * 100} />
+                </div>
+              ))}
+            </CardContent>
+          </Card>
 
           <Separator />
 
