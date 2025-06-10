@@ -1,7 +1,7 @@
 import {
   Home,
   Person,
-  Search,
+  AutoStories,
   School,
   Bookmark,
   Lightbulb,
@@ -23,9 +23,9 @@ const items = [
     icon: <Home fontSize="medium" />,
   },
   {
-    title: "Search Courses",
-    url: "/search",
-    icon: <Search fontSize="medium" />,
+    title: "Courses",
+    url: "/courses",
+    icon: <AutoStories fontSize="medium" />,
   },
   {
     title: "My Academic Plan",

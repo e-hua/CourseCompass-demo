@@ -10,7 +10,7 @@ import { AppSidebar } from "@/components/Sidebar/app-sidebar";
 import { SidebarTrigger } from "@/components/diy-ui/SidebatTrigger";
 import SearchBar from "@/components/diy-ui/SearchBar";
 import { useState } from "react";
-import type { Course } from "@/components/diy-ui/SearchBar";
+import type { Course } from "@/apis/FetchModDataAPI";
 import { Button } from "@/components/ui/button";
 import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
 import { useTakenCourses } from "@/components/my-hooks/UseTakenCourses";
@@ -87,7 +87,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                       </p>
                       <button
                         onClick={() => setExpanded((prev) => !prev)}
-                        className="text-white text-xs hover:underline"
+                        className="text-xs hover:underline"
                       >
                         {expanded ? "Show less" : "Read more"}
                       </button>
