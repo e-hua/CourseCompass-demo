@@ -22,7 +22,7 @@ export default function CoursePage() {
 
   if (!course) return <div className="p-4">Loading...</div>;
 
-  const ratingProps = [
+  const ratingMap = [
     {
       label: "Difficulty",
       value: courseStats?.averageDifficulty ?? 0,
@@ -48,13 +48,13 @@ export default function CoursePage() {
 
           <Separator />
 
-          <Card className="w-full max-w-md mx-auto shadow-md rounded-2xl">
+          <Card>
             <CardContent className="p-6 space-y-4">
               <div className="flex justify-between items-center">
                 <div>{courseStats?.ratingCount ?? 0} Ratings</div>
               </div>
 
-              {ratingProps.map(({ label, value }) => (
+              {ratingMap.map(({ label, value }) => (
                 <div key={label}>
                   <div className="flex justify-between text-sm mb-1">
                     <span>{label}</span>
