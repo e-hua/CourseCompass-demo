@@ -41,10 +41,6 @@ public class BackendSpringApplication {
 
 			Course CS1101S = new Course();
 			CS1101S.setId("CS1101S");
-			CS1101S.setAverageDifficulty(4.5);
-			CS1101S.setAverageWorkload(5.0);
-			CS1101S.setAverageEnjoyability(5.0);
-			courseRepo.deleteAll();
 			courseRepo.save(CS1101S);
 
 			TakenCourse takenCS1101S = new TakenCourse();

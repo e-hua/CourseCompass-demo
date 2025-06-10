@@ -31,7 +31,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   };
 
   const { userProfile, toggleBookmark } = useUserProfile();
-  const isBookmarked = userProfile?.bookmarkedCourseIds.includes(
+  const isBookmarked = (userProfile?.bookmarkedCourseIds ?? []).includes(
     selectedCourse?.moduleCode ?? "a"
   );
 

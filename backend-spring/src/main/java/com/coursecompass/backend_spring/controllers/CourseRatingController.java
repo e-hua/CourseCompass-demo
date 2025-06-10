@@ -88,6 +88,25 @@ public class CourseRatingController {
 
             courseRatingRepository.save(newRating);
 
+            List<CourseRating> allRatings = courseRatingRepository.findByCourseCode(newRating.getCourseCode());
+            double averageDifficulty = allRatings.stream()
+                    .mapToInt(CourseRating::getDifficulty)
+                    .average().orElse(0.0);
+
+            double averageWorkload = allRatings.stream()
+                    .mapToInt(CourseRating::getAverageWorkload)
+                    .average().orElse(0.0);
+
+            double averageEnjoyability = allRatings.stream()
+                    .mapToInt(CourseRating::getEnjoyability)
+                    .average().orElse(0.0);
+
+
+            course.setAverageWorkload(averageWorkload);
+            course.setAverageDifficulty(averageDifficulty);
+            course.setAverageEnjoyability(averageEnjoyability);
+            courseRepository.save(course);
+
             return ResponseEntity.ok(Map.of("success", true));
         } catch (Exception e) {
             System.out.println(e.getMessage());
