@@ -1,13 +1,21 @@
+export type SemesterData = {
+  semester: number;
+  examDate?: string;
+  examDuration?: number;
+};
+
 export type Course = {
   moduleCode: string;
   title: string;
-  credits: number;
-  semesterOffered: string;
   description: string;
-};
-
-type SemesterData = {
-  semester: string;
+  credits: number;
+  department: string;
+  faculty: string;
+  workload: string;
+  prerequisite?: string;
+  preclusion?: string;
+  corequisite?: string;
+  semesterData: SemesterData[];
 };
 
 export async function fetchModData(moduleCode: string) {
@@ -20,11 +28,15 @@ export async function fetchModData(moduleCode: string) {
   const course: Course = {
     moduleCode: data.moduleCode,
     title: data.title,
-    credits: parseInt(data.moduleCredit),
-    semesterOffered: data.semesterData
-      .map((s: SemesterData) => "Sem " + s.semester)
-      .join(", "),
     description: data.description,
+    credits: parseInt(data.moduleCredit),
+    department: data.department,
+    faculty: data.faculty,
+    workload: data.workload,
+    prerequisite: data.prerequisite,
+    preclusion: data.preclusion,
+    corequisite: data.corequisite,
+    semesterData: data.semesterData ?? [],
   };
 
   return course;

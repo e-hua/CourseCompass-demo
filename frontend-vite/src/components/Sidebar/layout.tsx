@@ -73,7 +73,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     <strong>Credits:</strong> {selectedCourse.credits}
                   </p>
                   <p>
-                    <strong>Semester:</strong> {selectedCourse.semesterOffered}
+                    <strong>Semester:</strong>{" "}
+                    {selectedCourse.semesterData
+                      .map((x) => "Sem " + x.semester)
+                      .join(", ")}
                   </p>
                   <div>
                     <strong>Description:</strong>
