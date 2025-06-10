@@ -19,6 +19,7 @@ import { deleteTakenCourse } from "@/apis/TakenCourseAPI";
 import { toast } from "sonner";
 import { AddTakenCourseDialog } from "@/components/my-components/AddTakenCourseDialog";
 import { UpdateTakenCourseDialog } from "@/components/my-components/UpdateTakenCourseDialog";
+import { Link } from "react-router-dom";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
@@ -136,6 +137,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   units={selectedCourse.credits}
                 />
               )}
+              <div className="flex justify-center">
+                <Link to={"/courses/" + selectedCourse.moduleCode}>
+                  <Button variant="ghost" className="text-xs underline">
+                    View Full Page
+                  </Button>
+                </Link>
+              </div>
             </SheetContent>
           </Sheet>
         )}
