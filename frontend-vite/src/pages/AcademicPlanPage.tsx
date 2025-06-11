@@ -38,7 +38,6 @@ export default function AcademicPlanPage() {
     const semCourseCount = new Map<number, number>();
 
     const computedNodes: Node[] = courses.map((course) => {
-      const SEMESTER_WIDTH = 400;
       const index = course.semesterIndex;
       const count = semCourseCount.get(index) || 0;
       semCourseCount.set(index, count + 1);
@@ -46,14 +45,12 @@ export default function AcademicPlanPage() {
       return {
         id: course.courseCode,
         position: {// position is relative to the parent node
-          x: 100 + count * SEMESTER_WIDTH,
+          x: 100 + count * 400,
           y: 100, 
         },
         data: {
-          //label: <div className="text-xs text-black">{course.courseCode}</div>,
-          //info: <div className="text-xs text-black"></div>
           label: course.courseCode,
-          info: course.units+"MC "+course.letterGrade,
+          info: course.units + course.letterGrade,
         },
         type: "CourseNode",
         draggable: true,

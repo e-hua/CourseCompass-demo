@@ -9,9 +9,8 @@ import type { TooltipNodeProps } from "@/components/diy-ui/CourseNode";
   edges: Edge[];       
   onNodesChange: (changes: NodeChange[]) => void;
   onEdgesChange: (changes: EdgeChange[]) => void;
-courseNodeTypes: { CourseNode: React.MemoExoticComponent<React.FC<TooltipNodeProps>> };
+  courseNodeTypes: { CourseNode: React.MemoExoticComponent<React.FC<TooltipNodeProps>> };
 }
-
 
 export default function PlanCard({ nodes, edges, onNodesChange, onEdgesChange, courseNodeTypes }: PlanCardProps) {
 
