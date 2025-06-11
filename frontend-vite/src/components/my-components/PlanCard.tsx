@@ -3,18 +3,22 @@ import { ReactFlow, Background, BackgroundVariant, Controls } from "@xyflow/reac
 import type { NodeChange, EdgeChange, Node, Edge } from "@xyflow/react";
 import LabeledGroupNode from "@/components/diy-ui/LabelGroupNode";
 import '@xyflow/react/dist/style.css';
-interface PlanCardProps {
+import type { TooltipNodeProps } from "@/components/diy-ui/CourseNode";
+  interface PlanCardProps {
   nodes: Node[];     
   edges: Edge[];       
   onNodesChange: (changes: NodeChange[]) => void;
   onEdgesChange: (changes: EdgeChange[]) => void;
+courseNodeTypes: { CourseNode: React.MemoExoticComponent<React.FC<TooltipNodeProps>> };
 }
 
-const nodeTypes = {
-  labeledGroupNode: LabeledGroupNode,
-};
 
-export default function PlanCard({ nodes, edges, onNodesChange, onEdgesChange }: PlanCardProps) {
+export default function PlanCard({ nodes, edges, onNodesChange, onEdgesChange, courseNodeTypes }: PlanCardProps) {
+
+  const nodeTypes = {
+  labeledGroupNode: LabeledGroupNode,
+  ...courseNodeTypes, 
+  }
 
   const allNodes: Node[] = [
     ...[1, 2, 3, 4, 5, 6, 7, 8].map((i) => ({

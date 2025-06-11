@@ -9,6 +9,7 @@ import PlanCard from "@/components/my-components/PlanCard";
 import extractEdgesFromPrereqTree from "@/lib/Plan/UsePrereqTree";
 import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import CourseNode from "@/components/diy-ui/CourseNode";
 
 export default function AcademicPlanPage() {
   const { data: courses, isLoading, error } = useTakenCourses();
@@ -26,6 +27,10 @@ export default function AcademicPlanPage() {
       setEdges((eds) => applyEdgeChanges(changes, eds)),
     []
   );
+
+  const nodeTypes = {
+    CourseNode: CourseNode,
+  }
 
   useEffect(() => {
     if (!courses) return;
@@ -45,9 +50,12 @@ export default function AcademicPlanPage() {
           y: 100, 
         },
         data: {
-          label: <div className="text-xs text-black">{course.courseCode}</div>,
+          //label: <div className="text-xs text-black">{course.courseCode}</div>,
+          //info: <div className="text-xs text-black"></div>
+          label: course.courseCode,
+          info: course.units+"MC "+course.letterGrade,
         },
-        type: "default",
+        type: "CourseNode",
         draggable: true,
         parentId: `${index}`,
         extent: "parent",
@@ -128,6 +136,7 @@ export default function AcademicPlanPage() {
           edges={edges}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
+          courseNodeTypes={nodeTypes}
         />
       </div>
     </Layout>
