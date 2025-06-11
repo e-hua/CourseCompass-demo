@@ -9,6 +9,7 @@ import PlanCard from "@/components/my-components/PlanCard";
 import extractEdgesFromPrereqTree from "@/lib/Plan/UsePrereqTree";
 import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import CourseNode from "@/components/diy-ui/CourseNode";
 
 export default function AcademicPlanPage() {
   const { data: courses, isLoading, error } = useTakenCourses();
@@ -27,28 +28,31 @@ export default function AcademicPlanPage() {
     []
   );
 
+  const nodeTypes = {
+    CourseNode: CourseNode,
+  }
+
   useEffect(() => {
     if (!courses) return;
 
     const semCourseCount = new Map<number, number>();
 
     const computedNodes: Node[] = courses.map((course) => {
-      const SEMESTER_WIDTH = 400;
-      //const SEMESTER_HEIGHT = 400;//useless?
       const index = course.semesterIndex;
       const count = semCourseCount.get(index) || 0;
       semCourseCount.set(index, count + 1);
 
       return {
         id: course.courseCode,
-        position: {
-          x: 100 + count * SEMESTER_WIDTH,
-          y: 100, //- (index-1) * SEMESTER_HEIGHT,
+        position: {// position is relative to the parent node
+          x: 100 + count * 400,
+          y: 100, 
         },
         data: {
-          label: <div className="text-xs text-black">{course.courseCode}</div>,
+          label: course.courseCode,
+          info: course.units + course.letterGrade,
         },
-        type: "default",
+        type: "CourseNode",
         draggable: true,
         parentId: `${index}`,
         extent: "parent",
@@ -129,6 +133,7 @@ export default function AcademicPlanPage() {
           edges={edges}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
+          courseNodeTypes={nodeTypes}
         />
       </div>
     </Layout>
