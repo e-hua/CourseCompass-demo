@@ -38,7 +38,7 @@ export default function CoursePage() {
 
   return (
     <Layout>
-      <div className="max-w-5xl mx-auto px-6 py-8 shadow-xl rounded-2xl mt-6">
+      <div className="max-w-5xl mx-auto px-6 py-8 shadow-xl ">
         <div className="space-y-4">
           <div>
             <h1 className="text-2xl font-semibold">{course.moduleCode}</h1>
@@ -47,14 +47,26 @@ export default function CoursePage() {
 
           <Separator />
 
-          <div className="flex justify-between items-center">
-            <div>{courseStats?.ratingCount ?? 0} Ratings</div>
+          <div className="flex space-x-1 items-center">
+            <p className="text-sm text-muted-foreground">
+              {courseStats?.ratingCount ?? 0}{" "}
+            </p>
+            <p className="text-sm ">
+              {(courseStats?.ratingCount ?? 0) === 1 ? "Rating" : "Ratings"}
+            </p>
           </div>
 
           {ratingMap.map(({ label, value }) => (
             <div key={label} className="space-y-1">
               <div className="text-sm">{label}</div>
-              <Stars value={value} />
+
+              <div className="flex space-x-1 items-center">
+                <Stars value={value} />
+                <strong>{value.toFixed(1)}</strong>
+                <p className="text-muted-foreground whitespace-pre-line transition-all">
+                  / 5
+                </p>
+              </div>
             </div>
           ))}
 
