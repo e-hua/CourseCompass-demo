@@ -35,10 +35,15 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       return;
     }
 
-    const isBookmark = userProfile.bookmarkedCourseIds.includes(moduleCode);
+    const isBookmark = (userProfile?.bookmarkedCourseIds ?? []).includes(
+      moduleCode
+    );
 
     if (!isBookmark) {
-      const updatedBookmarks = [...userProfile.bookmarkedCourseIds, moduleCode];
+      const updatedBookmarks = [
+        ...(userProfile?.bookmarkedCourseIds ?? []),
+        moduleCode,
+      ];
       setUserProfile({ ...userProfile, bookmarkedCourseIds: updatedBookmarks });
 
       toast.success("Bookmarked", {

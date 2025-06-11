@@ -4,8 +4,7 @@ import { fetchModData, type Course } from "@/apis/FetchModDataAPI";
 import Layout from "@/components/Sidebar/layout";
 import { Separator } from "@/components/ui/separator";
 import { fetchCourseStats, type CourseStats } from "@/apis/CourseStatsAPI";
-import { Card, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import Stars from "@/components/my-components/Stars";
 
 export default function CoursePage() {
   const { moduleCode } = useParams<{ moduleCode: string }>();
@@ -48,23 +47,16 @@ export default function CoursePage() {
 
           <Separator />
 
-          <Card>
-            <CardContent className="p-6 space-y-4">
-              <div className="flex justify-between items-center">
-                <div>{courseStats?.ratingCount ?? 0} Ratings</div>
-              </div>
+          <div className="flex justify-between items-center">
+            <div>{courseStats?.ratingCount ?? 0} Ratings</div>
+          </div>
 
-              {ratingMap.map(({ label, value }) => (
-                <div key={label}>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span>{label}</span>
-                    <span>{value.toFixed(2)} / 5</span>
-                  </div>
-                  <Progress value={(value / 5) * 100} />
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+          {ratingMap.map(({ label, value }) => (
+            <div key={label} className="space-y-1">
+              <div className="text-sm">{label}</div>
+              <Stars value={value} />
+            </div>
+          ))}
 
           <Separator />
 
