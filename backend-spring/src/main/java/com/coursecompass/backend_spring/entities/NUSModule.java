@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "NUSModules")
+@Table(name = "modules")
 @AllArgsConstructor
 @NoArgsConstructor
 public class NUSModule {
