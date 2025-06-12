@@ -7,10 +7,10 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "Modules")
+@Table(name = "NUSModules")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Module {
+public class NUSModule {
   @Id
   private String moduleCode;
 
