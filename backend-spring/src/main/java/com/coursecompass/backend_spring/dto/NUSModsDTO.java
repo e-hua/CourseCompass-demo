@@ -30,17 +30,22 @@ public class NUSModsDTO {
     @JsonProperty(defaultValue = "false")
     private boolean su;
 
+    /*
     @JsonProperty(defaultValue = "false")
     private boolean mpes1;
 
     @JsonProperty(defaultValue = "false")
     private boolean mpes2;
+
+     */
   }
 
   @Data
   public static class SemesterData {
     private int semester;
+    /*
     private String examDate;
     private int examDuration;
+    */
   }
 }

@@ -81,8 +81,6 @@ export default function CoursePreviewCard({
           </div>
         </div>
       ))}
-
-      <Separator />
     </Card>
   );
 }
