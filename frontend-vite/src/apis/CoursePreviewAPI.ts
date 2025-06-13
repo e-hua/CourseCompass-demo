@@ -13,6 +13,14 @@ export interface CoursePreview {
   averageEnjoyability: number;
   ratingCount: number;
 }
+export type PageDTO<T> = {
+  content: T[];
+  pageNumber: number;
+  pageSize: number;
+  totalElements: number;
+  totalPages: number;
+};
+export type CoursePreviewPage = PageDTO<CoursePreview>;
 
 export async function fetchCoursePreview(
   moduleCode: string
@@ -24,4 +32,14 @@ export async function fetchCoursePreview(
   }
 
   return res.json();
+}
+
+export async function fetchCoursePreviewPage(
+  page: number,
+  size: number = 12
+): Promise<CoursePreviewPage> {
+  const response = await fetch(
+    API_URL + `coursePreviews?page=${page}&size=${size}`
+  );
+  return await response.json();
 }
