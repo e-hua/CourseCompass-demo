@@ -2,6 +2,8 @@ import type { CoursePreview } from "@/apis/CoursePreviewAPI";
 import { Card } from "@/components/ui/card";
 import { Separator } from "../ui/separator";
 import Stars from "./Stars";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function CoursePreviewCard({
   course,
@@ -23,8 +25,18 @@ export default function CoursePreviewCard({
     },
   ];
 
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    try {
+      navigate("/courses/" + course.courseCode);
+    } catch (err) {
+      toast.error("Failed to open course page. Course not be available." + err);
+    }
+  };
+
   return (
-    <Card className="p-4">
+    <Card className="p-4" onClick={() => handleClick()}>
       <div className="text-sm text-muted-foreground">{course.courseCode}</div>
 
       <div className="font-semibold text-lg">{course.courseTitle}</div>
