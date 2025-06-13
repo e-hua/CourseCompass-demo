@@ -1,7 +1,7 @@
 import {
   Home,
   Person,
-  Search,
+  AutoStories,
   School,
   Bookmark,
   Lightbulb,
@@ -23,9 +23,9 @@ const items = [
     icon: <Home fontSize="medium" />,
   },
   {
-    title: "Search Courses",
-    url: "/search",
-    icon: <Search fontSize="medium" />,
+    title: "Courses",
+    url: "/courses",
+    icon: <AutoStories fontSize="medium" />,
   },
   {
     title: "My Academic Plan",
@@ -92,7 +92,10 @@ export function AppSidebar() {
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton
                       asChild
-                      isActive={item.url === currentPath}
+                      isActive={
+                        currentPath === item.url ||
+                        (currentPath.startsWith(item.url) && item.url !== "/")
+                      }
                     >
                       <a href={item.url}>
                         <div className="flex items-center gap-2 w-8 h-8">

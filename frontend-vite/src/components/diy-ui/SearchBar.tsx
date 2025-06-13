@@ -8,22 +8,11 @@ import {
 } from "@/components/ui/command";
 import { X } from "lucide-react";
 import useModuleList from "../my-hooks/UseModuleList";
-
-export type Course = {
-  moduleCode: string;
-  title: string;
-  credits: number;
-  semesterOffered: string;
-  description: string;
-};
+import { fetchModData, type Course } from "@/apis/FetchModDataAPI";
 
 interface SearchBarProps {
   onSelectCourse: (course: Course | null) => void;
 }
-
-type SemesterData = {
-  semester: string;
-};
 
 export default function ModuleSearchBar({ onSelectCourse }: SearchBarProps) {
   const options = useModuleList() ?? [];
@@ -41,23 +30,8 @@ export default function ModuleSearchBar({ onSelectCourse }: SearchBarProps) {
 
   const handleSelect = (moduleCode: string) => {
     setQuery(moduleCode);
-    console.log(moduleCode);
-    fetch(
-      "https://api.nusmods.com/v2/2024-2025/modules/" + moduleCode + ".json"
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        const course: Course = {
-          moduleCode: data.moduleCode,
-          title: data.title,
-          credits: parseInt(data.moduleCredit),
-          semesterOffered: data.semesterData
-            .map((s: SemesterData) => "Sem " + s.semester)
-            .join(", "),
-          description: data.description,
-        };
-        onSelectCourse(course);
-      });
+    // Use the API call from FetchModDataAPI.ts
+    fetchModData(moduleCode).then((course) => onSelectCourse(course));
   };
 
   return (
@@ -78,7 +52,7 @@ export default function ModuleSearchBar({ onSelectCourse }: SearchBarProps) {
           </button>
         )}
         {query.length > 1 && (
-          <CommandList className="absolute z-50 mt-9.25 w-full max-h-60 overflow-auto rounded-md shadow-lg">
+          <CommandList className="absolute z-50 mt-9.25 w-97 max-h-60 overflow-auto rounded-md shadow-lg bg-white dark:bg-neutral-900">
             {filteredOptions.length ? (
               filteredOptions.map((option, index) => (
                 <CommandItem
