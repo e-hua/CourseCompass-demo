@@ -33,6 +33,7 @@ export interface User {
   plannedCourseIds: string[];
   takenCourses: TakenCourse[];
   courseRatings: CourseRating[];
+  major: string;
 }
 
 export default function UserProfile() {

@@ -13,6 +13,7 @@ import {
 import { toast } from "sonner";
 import { z } from "zod";
 import { updateUserProfile } from "@/apis/UserAPI";
+import MajorSelectForm from "@/components/diy-ui/Combobox";
 
 const nameSchema = z
   .string()
@@ -85,8 +86,7 @@ export default function UserProfileCard() {
   if (!userProfile) return null;
 
   return (
-    // <Card className="w-full max-w-xl mx-auto shadow-xl border rounded-2xl">
-    <Card className="m-10 p-6 mx-auto space-y-5  w-200">
+    <Card className="m-10 p-6 mx-auto space-y-5 w-200">
       <CardHeader>
         <CardTitle className="text-2xl font-semibold">User Profile</CardTitle>
       </CardHeader>
@@ -116,6 +116,12 @@ export default function UserProfileCard() {
                 </SelectContent>
               </Select>
             </div>
+            <div className="absolute inset-y-73 right-4">
+              <label className="block mb-1 text-sm font-medium text-muted-foreground">
+                Major
+              </label>
+              <MajorSelectForm />
+            </div>
             <div className="flex gap-3">
               <Button onClick={handleSave} disabled={isSaving}>
                 {isSaving ? "Saving..." : "Save"}
@@ -144,6 +150,10 @@ export default function UserProfileCard() {
             <div className="text-sm">
               <strong>Updated:</strong>{" "}
               {new Date(userProfile.updatedAt).toLocaleDateString()}
+            </div>
+            <div className="text-sm absolute inset-y-74 right-60">
+              <strong>Major: </strong>{" "}
+              {userProfile.major ?? "Not set"}
             </div>
             <Button
               variant="outline"

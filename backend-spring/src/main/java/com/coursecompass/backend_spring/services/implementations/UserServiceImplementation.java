@@ -51,6 +51,8 @@ public class UserServiceImplementation implements UserService {
                     existingUser.setEmail(updatedUser.getEmail());
                     existingUser.setBookmarkedCourseIds(updatedUser.getBookmarkedCourseIds());
                     existingUser.setPlannedCourseIds(updatedUser.getPlannedCourseIds());
+                    existingUser.setMajor(updatedUser.getMajor());
+                    existingUser.setPrevMajor(updatedUser.getPrevMajor());
                     return userRepository.save(existingUser);
                 })
                 .orElseThrow(() -> new RuntimeException("Cannot find user with ID " + id));

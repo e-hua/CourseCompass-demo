@@ -1,16 +1,11 @@
 package com.coursecompass.backend_spring.controllers;
 
 import com.coursecompass.backend_spring.GoogleTokenVerifier;
-import com.coursecompass.backend_spring.entities.Course;
-import com.coursecompass.backend_spring.entities.TakenCourse;
 import com.coursecompass.backend_spring.entities.User;
-import com.coursecompass.backend_spring.repositories.CourseRepository;
-import com.coursecompass.backend_spring.repositories.TakenCourseRepository;
 import com.coursecompass.backend_spring.repositories.UserRepository;
 import com.coursecompass.backend_spring.services.UserService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.coursecompass.backend_spring.dto.TakenCourseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

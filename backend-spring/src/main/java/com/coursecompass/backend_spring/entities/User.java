@@ -1,6 +1,5 @@
 package com.coursecompass.backend_spring.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -31,6 +30,11 @@ public class User {
     // Indicating how many semesters passed since the user's entrance
     // For example Y1S2 => 2, Y2S1 => 3
     private Integer currentSemesterIndex;
+
+    private String major;
+
+    @Column(nullable = true)
+    private String prevMajor;
 
     @Column(nullable = false, unique = true)
     private String email;
