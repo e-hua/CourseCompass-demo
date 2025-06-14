@@ -58,6 +58,9 @@ export default function AcademicPlanPage() {
         extent: "parent",
         width: 200,
         height: 50,
+        //onClick: () => {
+        //  console.log(`Clicked on course: ${course.courseCode}`);
+        //}
       };
     });
 

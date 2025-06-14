@@ -5,6 +5,7 @@ export interface UpdateUserPayload {
   userName: string;
   currentSemesterIndex: number;
   bookmarkedCourseIds?: string[];
+  major: string;
 }
 
 export async function updateUserProfile(
