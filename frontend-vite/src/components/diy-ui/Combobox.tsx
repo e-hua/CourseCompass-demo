@@ -1,6 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+//import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -12,14 +11,6 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
 import {
   Popover,
   PopoverContent,
@@ -87,92 +78,60 @@ const majors = [
 { value: "QF", label: "💸 Quantitative Finance" },
 ];
 
-const FormSchema = z.object({
-  major: z.string({
-    required_error: "Please select a major.",
-  }),
-});
-
-interface MajorSelectFormProps {
-  onChange?: (value: string) => void;
-  defaultValue?: string;
-}
-
-export default function MajorSelectForm({onChange, defaultValue} : MajorSelectFormProps) {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      major: defaultValue || "",
-    },
+export const majorSchema = z
+  .string()
+  .min(1, {
+    message: "Please select a major.",
+  })
+  .refine((value) => majors.some((m) => m.value === value), {
+    message: "Invalid major selected.",
   });
 
+interface MajorSelectFormProps {
+  onChange: (value: string) => void;
+  value: string;
+}
+
+export default function MajorSelectForm({onChange, value} : MajorSelectFormProps) {
+
   return (
-    <Form {...form}>
-      <form className="space-y-6">
-        <FormField
-          control={form.control}
-          name="major"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      className={cn(
-                        "w-[500px] justify-between",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value
-                        ? majors.find((m) => m.value === field.value)?.label
-                        : defaultValue || "Select a major"}
-                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-[500px] p-0">
-                  <Command>
-                    <CommandInput
-                      placeholder="Search major..."
-                      className="h-9"
-                    />
-                    <CommandList>
-                      <CommandEmpty>No major found.</CommandEmpty>
-                      <CommandGroup>
-                        {majors.map((m) => (
-                          <CommandItem
-                            key={m.value}
-                            value={m.label}
-                            onSelect={() => {
-                              form.setValue("major", m.value);
-                              onChange?.(m.value);
-                            }}
-                          >
-                            {m.label}
-                            <Check
-                              className={cn(
-                                "ml-auto h-4 w-4",
-                                m.value === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              <FormDescription>
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </form>
-    </Form>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" role="combobox" className={cn("w-[500px] justify-between", !value && "text-muted-foreground")}>
+                {value ? majors.find((m) => m.value === value)?.label : value || "Select a major"}
+                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[500px] p-0">
+              <Command>
+                <CommandInput placeholder="Search major..." className="h-9"/>
+                  <CommandList>
+                    <CommandEmpty>No major found.</CommandEmpty>
+                    <CommandGroup>
+                    {majors.map((m) => (
+                      <CommandItem
+                        key={m.value}
+                        value={m.label}
+                        onSelect={() => {
+                          onChange?.(m.value);
+                        }}
+                        >
+                      {m.label}
+                        <Check
+                          className={cn(
+                            "ml-auto h-4 w-4",
+                            m.value === value
+                              ? "opacity-100"
+                              : "opacity-0"
+                          )}
+                        />
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
   );
 }
+  

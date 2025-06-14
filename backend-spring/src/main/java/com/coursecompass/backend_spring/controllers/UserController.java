@@ -65,6 +65,8 @@ public class UserController {
                 user.setCurrentSemesterIndex(semester);
             }
 
+            user.setMajor((String)payload.getOrDefault("major", user.getMajor()));
+
             if (payload.containsKey("bookmarkedCourseIds")) {
                 Object rawBookmarked = payload.get("bookmarkedCourseIds");
 

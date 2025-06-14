@@ -13,7 +13,7 @@ import {
 import { toast } from "sonner";
 import { z } from "zod";
 import { updateUserProfile } from "@/apis/UserAPI";
-import MajorSelectForm from "@/components/diy-ui/Combobox";
+import MajorSelectForm, { majorSchema } from "@/components/diy-ui/Combobox";
 
 const nameSchema = z
   .string()
@@ -48,14 +48,22 @@ export default function UserProfileCard() {
   };
 
   const handleSave = async () => {
-    const validation = nameSchema.safeParse(name);
-    if (!validation.success) {
+    const nameValidation = nameSchema.safeParse(name);
+    const majorValidation = majorSchema.safeParse(major);
+    if (!nameValidation.success) {
       toast.error("Invalid name", {
-        description: validation.error.issues[0].message,
+        description: nameValidation.error.issues[0].message,
+      });
+      return;
+    }
+    if (!majorValidation.success) {
+      toast.error("Invalid major", {
+        description: majorValidation.error.issues[0].message,
       });
       return;
     }
     setIsSaving(true);
+
     try {
       // Imported from @/apis/UserAPI.ts
       const res = await updateUserProfile(
@@ -123,7 +131,7 @@ export default function UserProfileCard() {
               <label className="block mb-1 text-sm font-medium text-muted-foreground">
                 Major
               </label>
-              <MajorSelectForm onChange={(val) => {setMajor(val)}} defaultValue={major}/>
+              <MajorSelectForm onChange={(val) => {setMajor(val)}} value={major}/>
             </div>
             <div className="flex gap-3">
               <Button onClick={handleSave} disabled={isSaving}>
