@@ -37,7 +37,7 @@ const majors = [
 { value: "BBA", label: "💰 Business Administration" },
 { value: "PHY", label: "🧲 Physics" },
 { value: "CHEM", label: "⚗️ Chemistry" },
-{ value: "BIO", label: "🧬 Life Sciences" },
+{ value: "BIO", label: "🧬 Life Science" },
 { value: "MA", label: "➗ Mathematics" },
 { value: "STAT", label: "📈 Statistics" },
 { value: "ENV", label: "🌱 Environmental Studies" },
@@ -108,14 +108,12 @@ export default function MajorSelectForm({onChange, defaultValue} : MajorSelectFo
 
   return (
     <Form {...form}>
-      <form //onSubmit={form.handleSubmit(onSubmit)} 
-      className="space-y-6">
+      <form className="space-y-6">
         <FormField
           control={form.control}
           name="major"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-            
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -149,6 +147,7 @@ export default function MajorSelectForm({onChange, defaultValue} : MajorSelectFo
                             value={m.label}
                             onSelect={() => {
                               form.setValue("major", m.value);
+                              onChange?.(m.value);
                             }}
                           >
                             {m.label}
@@ -168,7 +167,6 @@ export default function MajorSelectForm({onChange, defaultValue} : MajorSelectFo
                 </PopoverContent>
               </Popover>
               <FormDescription>
-                This major will be displayed on your profile.
               </FormDescription>
               <FormMessage />
             </FormItem>

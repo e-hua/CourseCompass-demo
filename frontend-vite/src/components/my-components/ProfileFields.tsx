@@ -38,10 +38,12 @@ export default function UserProfileCard() {
   const [semester, setSemester] = useState(
     userProfile?.currentSemesterIndex?.toString() || "1"
   );
+  const [major, setMajor] = useState(userProfile?.major || "Please select your major ");
 
   const handleCancle = () => {
     setName(userProfile?.userName || "");
     setSemester(userProfile?.currentSemesterIndex?.toString() || "1");
+    setMajor(userProfile?.major || "");
     setIsEditing(false);
   };
 
@@ -61,6 +63,7 @@ export default function UserProfileCard() {
           userName: name,
           currentSemesterIndex: parseInt(semester),
           bookmarkedCourseIds: userProfile?.bookmarkedCourseIds ?? [],
+          major: major,
         },
         localStorage.getItem("id_token") ?? ""
       );
@@ -120,7 +123,7 @@ export default function UserProfileCard() {
               <label className="block mb-1 text-sm font-medium text-muted-foreground">
                 Major
               </label>
-              <MajorSelectForm />
+              <MajorSelectForm onChange={(val) => {setMajor(val)}} defaultValue={major}/>
             </div>
             <div className="flex gap-3">
               <Button onClick={handleSave} disabled={isSaving}>
