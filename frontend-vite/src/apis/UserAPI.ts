@@ -1,5 +1,5 @@
- const API_URL = "http://localhost:8080/api/";
-//const API_URL = "https://coursecompass-demo.onrender.com/api/";
+// const API_URL = "http://localhost:8080/api/";
+const API_URL = "https://coursecompass-demo.onrender.com/api/";
 
 export interface UpdateUserPayload {
   userName: string;
