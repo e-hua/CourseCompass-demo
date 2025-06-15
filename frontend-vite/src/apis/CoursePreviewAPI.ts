@@ -36,10 +36,11 @@ export async function fetchCoursePreview(
 
 export async function fetchCoursePreviewPage(
   page: number,
+  searchTerm: string,
   size: number = 12
 ): Promise<CoursePreviewPage> {
   const response = await fetch(
-    API_URL + `coursePreviews?page=${page}&size=${size}`
+    API_URL + `coursePreviews?page=${page}&size=${size}&search=${searchTerm}`
   );
   return await response.json();
 }

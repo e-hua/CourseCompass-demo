@@ -18,8 +18,7 @@ public class NUSModuleSpecification {
       if (filter.getSearch() != null && !filter.getSearch().isBlank()) {
         String searchLower = "%" + filter.getSearch().toLowerCase() + "%";
         predicates.add(cb.or(
-                cb.like(cb.lower(root.get("moduleCode")), searchLower),
-                cb.like(cb.lower(root.get("title")), searchLower)
+                cb.like(cb.lower(root.get("moduleCode")), searchLower)
         ));
       }
 

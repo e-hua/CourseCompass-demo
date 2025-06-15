@@ -1,11 +1,12 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Layout from "@/components/Sidebar/layout";
 import CoursePreviewCard from "@/components/my-components/CoursePreviewCard";
-import { Command, CommandInput } from "@/components/diy-ui/UnderlineCommand";
 import { useCoursePreviewPages } from "@/components/my-hooks/UseCoursePreviews";
 import type { CoursePreview, CoursePreviewPage } from "@/apis/CoursePreviewAPI";
+import { UnderlinedSearchBar } from "@/components/diy-ui/UnderlinedSearchBar";
 
 export default function CoursesPage() {
+  const [searchTerm, setSearchTerm] = useState("");
   const {
     data,
     fetchNextPage,
@@ -13,7 +14,7 @@ export default function CoursesPage() {
     isFetchingNextPage,
     status,
     error,
-  } = useCoursePreviewPages();
+  } = useCoursePreviewPages(searchTerm);
 
   const sentinelRef = useRef<HTMLDivElement>(null);
 
@@ -38,21 +39,22 @@ export default function CoursesPage() {
   return (
     <Layout>
       <div className="p-4">
-        <Command>
-          <CommandInput />
-        </Command>
+        <UnderlinedSearchBar
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
 
       <div className="p-6 space-y-4">
         {status === "pending" ? (
-          <>Pending</>
+          <></>
         ) : status === "error" ? (
           <p>Error: {(error as Error).message}</p>
         ) : (
           <>
             <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
               {data?.pages.flatMap((page: CoursePreviewPage) =>
-                page.content.map((course: CoursePreview) => (
+                page?.content?.map((course: CoursePreview) => (
                   <CoursePreviewCard key={course.courseCode} course={course} />
                 ))
               )}
