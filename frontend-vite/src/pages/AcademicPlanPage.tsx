@@ -6,7 +6,7 @@ import type { NodeChange, EdgeChange, Node, Edge } from "@xyflow/react";
 import { useTakenCourses } from "@/components/my-hooks/UseTakenCourses";
 import { Skeleton } from "@/components/ui/skeleton";
 import PlanCard from "@/components/my-components/PlanCard";
-import extractEdgesFromPrereqTree from "@/lib/Plan/UsePrereqTree";
+import extractEdgesFromPrereqTree from "@/lib/Plan/ExtractEdgesFromPrereqTree";
 import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import CourseNode from "@/components/diy-ui/CourseNode";
@@ -58,9 +58,6 @@ export default function AcademicPlanPage() {
         extent: "parent",
         width: 200,
         height: 50,
-        //onClick: () => {
-        //  console.log(`Clicked on course: ${course.courseCode}`);
-        //}
       };
     });
 
