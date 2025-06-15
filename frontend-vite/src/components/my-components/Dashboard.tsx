@@ -73,7 +73,7 @@ export default function UserProfile() {
     );
   } else {
     return (
-      <div className=" mx-8 p-6 space-y-10">
+      <div className="mx-8 p-6 space-y-10">
         <ProfileFields />
         <ProgressCard />
       </div>

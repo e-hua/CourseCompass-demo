@@ -34,7 +34,7 @@ public class User {
     private String major;
 
     //For future personalization, e.g:double degree, college, previous major, second major, minor
-    private String specialAcademicTag;
+    private String academicTag;
 
     @Column(nullable = false, unique = true)
     private String email;
