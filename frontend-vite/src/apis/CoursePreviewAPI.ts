@@ -1,5 +1,7 @@
-// const API_URL = "http://localhost:8080/api/";
-const API_URL = "https://coursecompass-demo.onrender.com/api/";
+import type { CoursePreviewFilter } from "@/components/my-components/FilterPopover";
+
+const API_URL = "http://localhost:8080/api/";
+// const API_URL = "https://coursecompass-demo.onrender.com/api/";
 
 export interface CoursePreview {
   courseCode: string;
@@ -36,10 +38,19 @@ export async function fetchCoursePreview(
 
 export async function fetchCoursePreviewPage(
   page: number,
+  searchTerm: string,
+  filter: CoursePreviewFilter,
   size: number = 12
 ): Promise<CoursePreviewPage> {
+  const semestersQuery = filter?.semesters?.length
+    ? filter.semesters.map((sem) => `semesters=${sem}`).join("&")
+    : "";
+
   const response = await fetch(
-    API_URL + `coursePreviews?page=${page}&size=${size}`
+    API_URL +
+      `coursePreviews?page=${page}&size=${size}&su=${
+        filter?.su ?? ""
+      }&faculty=${filter?.faculty ?? ""}&${semestersQuery}&search=${searchTerm}`
   );
   return await response.json();
 }
