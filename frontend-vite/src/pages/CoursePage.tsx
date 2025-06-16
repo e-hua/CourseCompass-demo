@@ -19,7 +19,12 @@ export default function CoursePage() {
     }
   }, [moduleCode]);
 
-  if (!course) return <div className="p-4">Loading...</div>;
+  if (!course)
+    return (
+      <Layout>
+        <div>Loading</div>
+      </Layout>
+    );
 
   const ratingMap = [
     {

@@ -1,6 +1,7 @@
 package com.coursecompass.backend_spring.services.implementations;
 
 import com.coursecompass.backend_spring.dto.CoursePreviewDTO;
+import com.coursecompass.backend_spring.dto.CoursePreviewFilter;
 import com.coursecompass.backend_spring.dto.PageDTO;
 import com.coursecompass.backend_spring.entities.Course;
 import com.coursecompass.backend_spring.entities.NUSModule;
@@ -8,18 +9,21 @@ import com.coursecompass.backend_spring.services.CoursePreviewService;
 import com.coursecompass.backend_spring.services.CourseService;
 import com.coursecompass.backend_spring.services.NUSModuleService;
 import com.coursecompass.backend_spring.services.UserService;
+import com.coursecompass.backend_spring.specifications.NUSModuleSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.coursecompass.backend_spring.dto.NUSModsDTO;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class CoursePreviewServiceImplementation implements CoursePreviewService {
@@ -64,18 +68,99 @@ public class CoursePreviewServiceImplementation implements CoursePreviewService 
   }
 
   @Override
-  public PageDTO<CoursePreviewDTO> getPaginatedCoursePreviews(int page, int size) {
+  public PageDTO<CoursePreviewDTO> getPaginatedCoursePreviews(int page, int size, CoursePreviewFilter filter) {
+    Specification<NUSModule> specification = NUSModuleSpecification.build(filter, new HashSet<>());
+
+    // Fetch modules page by page, only need to fetch once per page
     Pageable pageable = PageRequest.of(page, size);
-    Page<NUSModule> modulePage = moduleService.getAllModules(pageable);
+    Page<NUSModule> modulePage = moduleService.findAll(specification, pageable);
+    List<NUSModule> modules = modulePage.getContent();
 
-    List<CoursePreviewDTO> dtos = modulePage.getContent().stream()
+    Set<String> moduleCodes = modules.stream()
+            .map(NUSModule::getModuleCode)
+            .collect(Collectors.toSet());
+
+    Map<String, Course> courseMap = courseService.readCourseById(moduleCodes).stream()
+            .collect(Collectors.toMap(Course::getId, Function.identity()));
+
+    List<CoursePreviewDTO> dtos = modules.stream()
             .map(module -> {
-              Course course = courseService
-                      .readCourseById(module.getModuleCode())
-                      .orElse(new Course(
-                              "", 0.0, 0.0, 0.0, 0, new ArrayList<>()
-                      ));
+              Course course = courseMap.get(module.getModuleCode());
+              if (course != null) {
+                return new CoursePreviewDTO(
+                        module.getModuleCode(),
+                        module.getTitle(),
+                        module.getModuleCredit(),
+                        module.isSu(),
+                        module.getSemesters(),
+                        module.getFaculty(),
+                        course.getAverageDifficulty(),
+                        course.getAverageWorkload(),
+                        course.getAverageEnjoyability(),
+                        course.getRatingCount()
+                );
+              } else {
+                return new CoursePreviewDTO(
+                        module.getModuleCode(),
+                        module.getTitle(),
+                        module.getModuleCredit(),
+                        module.isSu(),
+                        module.getSemesters(),
+                        module.getFaculty(),
+                        0.0, 0.0, 0.0, 0
+                );
+              }
+            })
+            .toList();
 
+    return new PageDTO<>(dtos, page, size, (int) modulePage.getTotalElements(), modulePage.getTotalPages());
+  }
+
+  @Override
+  public PageDTO<CoursePreviewDTO> getPaginatedRatedCoursePreviews(int page, int size, CoursePreviewFilter filter) {
+    List<Course> ratedCourses = courseService.readAllCourses();
+
+    // Using enhanced Switch statement
+    Comparator<Course> comparator = switch (filter.getSortBy()) {
+      case "averageDifficulty" -> Comparator.comparing(Course::getAverageDifficulty, Double::compare);
+      case "averageWorkload" -> Comparator.comparing(Course::getAverageWorkload, Double::compare);
+      case "averageEnjoyability" -> Comparator.comparing(Course::getAverageEnjoyability, Double::compare);
+      case "ratingCount" -> Comparator.comparing(Course::getRatingCount, Integer::compare);
+      default -> null;
+    };
+
+    if (comparator != null) {
+      if (filter.getDescending()) {
+        comparator = comparator.reversed();
+      }
+      ratedCourses.sort(comparator);
+    }
+    List<String> sortedCourseIds = ratedCourses.stream().map(Course::getId).toList();
+
+    Specification<NUSModule> specification = NUSModuleSpecification.build(filter, new HashSet<>(sortedCourseIds));
+
+    Pageable pageable = PageRequest.of(page, size);
+    Page<NUSModule> modulePage = moduleService.findAll(specification, pageable);
+    List<NUSModule> modules = modulePage.getContent();
+
+    Set<String> moduleCodes = modules.stream()
+            .map(NUSModule::getModuleCode)
+            .collect(Collectors.toSet());
+
+    Map<String, NUSModule> moduleMap = modulePage.getContent().stream()
+            .collect(Collectors.toMap(NUSModule::getModuleCode, Function.identity()));
+
+    List<String> sortedIdsInPage = sortedCourseIds.stream()
+            .filter(moduleMap::containsKey)
+            .toList();
+
+    List<NUSModule> reorderedModules = sortedIdsInPage.stream()
+            .map(moduleMap::get)
+            .toList();
+
+    List<CoursePreviewDTO> dtos = reorderedModules.stream()
+            .map(module -> {
+              Course course = courseService.readCourseById(module.getModuleCode()).get();
               return new CoursePreviewDTO(
                       module.getModuleCode(),
                       module.getTitle(),
@@ -88,15 +173,9 @@ public class CoursePreviewServiceImplementation implements CoursePreviewService 
                       course.getAverageEnjoyability(),
                       course.getRatingCount()
               );
-            }).toList();
+            })
+            .toList();
 
-    return new PageDTO<>(
-            dtos,
-            modulePage.getNumber(),
-            modulePage.getSize(),
-            modulePage.getTotalElements(),
-            modulePage.getTotalPages()
-    );
+    return new PageDTO<>(dtos, page, size, modulePage.getTotalElements(), modulePage.getTotalPages());
   }
-
 }

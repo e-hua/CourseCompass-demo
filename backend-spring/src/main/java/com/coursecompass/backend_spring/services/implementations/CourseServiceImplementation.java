@@ -1,5 +1,6 @@
 package com.coursecompass.backend_spring.services.implementations;
 
+import com.coursecompass.backend_spring.dto.CoursePreviewFilter;
 import com.coursecompass.backend_spring.entities.Course;
 import com.coursecompass.backend_spring.repositories.CourseRepository;
 import com.coursecompass.backend_spring.services.CourseService;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CourseServiceImplementation implements CourseService {
@@ -49,5 +51,10 @@ public class CourseServiceImplementation implements CourseService {
     @Override
     public void deleteCourse(String id) {
         courseRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Course> readCourseById(Set<String> moduleCodes) {
+        return courseRepository.findAllById(moduleCodes);
     }
 }
