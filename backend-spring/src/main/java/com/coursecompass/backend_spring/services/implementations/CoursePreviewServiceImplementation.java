@@ -118,8 +118,26 @@ public class CoursePreviewServiceImplementation implements CoursePreviewService 
 
   @Override
   public PageDTO<CoursePreviewDTO> getPaginatedRatedCoursePreviews(int page, int size, CoursePreviewFilter filter) {
-    List<String> ratedCourseIds = courseService.readAllCourses().stream().map(course -> course.getId()).toList();
-    Specification<NUSModule> specification = NUSModuleSpecification.build(filter, new HashSet<>(ratedCourseIds));
+    List<Course> ratedCourses = courseService.readAllCourses();
+
+    // Using enhanced Switch statement
+    Comparator<Course> comparator = switch (filter.getSortBy()) {
+      case "averageDifficulty" -> Comparator.comparing(Course::getAverageDifficulty, Double::compare);
+      case "averageWorkload" -> Comparator.comparing(Course::getAverageWorkload, Double::compare);
+      case "averageEnjoyability" -> Comparator.comparing(Course::getAverageEnjoyability, Double::compare);
+      case "ratingCount" -> Comparator.comparing(Course::getRatingCount, Integer::compare);
+      default -> null;
+    };
+
+    if (comparator != null) {
+      if (filter.getDescending()) {
+        comparator = comparator.reversed();
+      }
+      ratedCourses.sort(comparator);
+    }
+    List<String> sortedCourseIds = ratedCourses.stream().map(Course::getId).toList();
+
+    Specification<NUSModule> specification = NUSModuleSpecification.build(filter, new HashSet<>(sortedCourseIds));
 
     Pageable pageable = PageRequest.of(page, size);
     Page<NUSModule> modulePage = moduleService.findAll(specification, pageable);
