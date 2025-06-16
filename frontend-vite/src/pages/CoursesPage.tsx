@@ -8,6 +8,10 @@ import {
   FilterPopover,
   type CoursePreviewFilter,
 } from "@/components/my-components/FilterPopover";
+import {
+  SorterPopover,
+  type CoursePreviewSorter,
+} from "@/components/my-components/SorterPopover";
 
 export default function CoursesPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,6 +19,11 @@ export default function CoursesPage() {
   // Set the default selected semesters
   const [filter, setFilter] = useState<CoursePreviewFilter>({
     semesters: [1, 2],
+  });
+
+  // Set the default sorting rules
+  const [sorter, setSorter] = useState<CoursePreviewSorter>({
+    descending: false,
   });
 
   const {
@@ -51,11 +60,12 @@ export default function CoursesPage() {
     <Layout>
       <div className="flex p-4 space-x-10">
         <UnderlinedSearchBar
-          className="w-250"
+          className="w-220"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <FilterPopover filter={filter} onChange={(val) => setFilter(val)} />
+        <SorterPopover sorter={sorter} onChange={(val) => setSorter(val)} />
       </div>
 
       <div className="p-6 space-y-4">

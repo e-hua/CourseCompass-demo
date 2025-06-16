@@ -48,7 +48,11 @@ export function FilterPopover({ filter, onChange }: FilterPopoverProps) {
         <div className="space-y-1">
           <label className="text-sm font-medium">Faculty</label>
           <Select
-            value={localFilter.faculty ?? "All"}
+            value={
+              !!localFilter.faculty && localFilter.faculty !== "All"
+                ? localFilter.faculty
+                : "All"
+            }
             onValueChange={(value) =>
               setLocalFilter({
                 ...localFilter,
