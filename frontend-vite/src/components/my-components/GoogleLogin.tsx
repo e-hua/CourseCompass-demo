@@ -135,6 +135,7 @@ export default function GoogleLogin() {
           userName: userProfile?.userName ?? "",
           currentSemesterIndex: userProfile?.currentSemesterIndex ?? 1,
           bookmarkedCourseIds: userProfile?.bookmarkedCourseIds ?? [],
+          major: userProfile?.major ?? "",
         },
         idToken
       );
