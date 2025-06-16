@@ -26,6 +26,8 @@ export default function CoursesPage() {
     descending: false,
   });
 
+  const isSorting = !!sorter.sortBy;
+
   const {
     data,
     fetchNextPage,
@@ -33,7 +35,7 @@ export default function CoursesPage() {
     isFetchingNextPage,
     status,
     error,
-  } = useCoursePreviews(searchTerm, filter);
+  } = useCoursePreviews(searchTerm, filter, sorter, isSorting);
 
   const sentinelRef = useRef<HTMLDivElement>(null);
 

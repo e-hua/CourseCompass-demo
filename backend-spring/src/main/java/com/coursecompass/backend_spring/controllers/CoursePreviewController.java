@@ -38,7 +38,7 @@ public class CoursePreviewController {
 
   @GetMapping("/previews/rated")
   public ResponseEntity<PageDTO<CoursePreviewDTO>> getRatedCoursePreviews(
-          CoursePreviewFilter filter,
+          @ModelAttribute CoursePreviewFilter filter,
           @RequestParam(defaultValue = "0") int page,
           @RequestParam(defaultValue = "20") int size
   ) {

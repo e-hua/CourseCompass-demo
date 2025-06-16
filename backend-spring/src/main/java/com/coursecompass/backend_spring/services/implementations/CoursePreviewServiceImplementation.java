@@ -147,13 +147,20 @@ public class CoursePreviewServiceImplementation implements CoursePreviewService 
             .map(NUSModule::getModuleCode)
             .collect(Collectors.toSet());
 
-    Map<String, Course> courseMap = courseService.readCourseById(moduleCodes).stream()
-            .collect(Collectors.toMap(Course::getId, Function.identity()));
+    Map<String, NUSModule> moduleMap = modulePage.getContent().stream()
+            .collect(Collectors.toMap(NUSModule::getModuleCode, Function.identity()));
 
-    List<CoursePreviewDTO> dtos = modules.stream()
-            .filter(module -> courseMap.containsKey(module.getModuleCode()))
+    List<String> sortedIdsInPage = sortedCourseIds.stream()
+            .filter(moduleMap::containsKey)
+            .toList();
+
+    List<NUSModule> reorderedModules = sortedIdsInPage.stream()
+            .map(moduleMap::get)
+            .toList();
+
+    List<CoursePreviewDTO> dtos = reorderedModules.stream()
             .map(module -> {
-              Course course = courseMap.get(module.getModuleCode());
+              Course course = courseService.readCourseById(module.getModuleCode()).get();
               return new CoursePreviewDTO(
                       module.getModuleCode(),
                       module.getTitle(),
@@ -169,6 +176,6 @@ public class CoursePreviewServiceImplementation implements CoursePreviewService 
             })
             .toList();
 
-    return new PageDTO<>(dtos, page, size, dtos.size(), (int) Math.ceil((double) dtos.size() / size));
+    return new PageDTO<>(dtos, page, size, modulePage.getTotalElements(), modulePage.getTotalPages());
   }
 }

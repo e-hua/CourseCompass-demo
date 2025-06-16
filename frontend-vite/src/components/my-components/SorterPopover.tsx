@@ -96,7 +96,7 @@ export function SorterPopover({ sorter, onChange }: SorterPopoverProps) {
           <Button
             variant="ghost"
             onClick={() => {
-              setLocalSorter({ sortBy: "None", descending: false });
+              setLocalSorter({ sortBy: "", descending: false });
             }}
           >
             Reset

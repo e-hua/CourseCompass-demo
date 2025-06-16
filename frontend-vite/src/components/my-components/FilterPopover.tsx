@@ -75,9 +75,16 @@ export function FilterPopover({ filter, onChange }: FilterPopoverProps) {
           <Checkbox
             id="su-checkbox"
             checked={localFilter.su ?? false}
-            onCheckedChange={(checked) =>
-              setLocalFilter({ ...localFilter, su: Boolean(checked) })
-            }
+            onCheckedChange={(checked) => {
+              if (checked) {
+                setLocalFilter({ ...localFilter, su: Boolean(checked) });
+              } else {
+                setLocalFilter({
+                  faculty: localFilter.faculty,
+                  semesters: localFilter.semesters,
+                });
+              }
+            }}
           />
           <label
             htmlFor="su-checkbox"
