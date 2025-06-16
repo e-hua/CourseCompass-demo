@@ -132,6 +132,7 @@ export default function GoogleLogin() {
       // Imported from @/apis/UserAPI.ts
       const res = await updateUserProfile(
         {
+          ...userProfile,
           userName: userProfile?.userName ?? "",
           currentSemesterIndex: userProfile?.currentSemesterIndex ?? 1,
           bookmarkedCourseIds: userProfile?.bookmarkedCourseIds ?? [],
