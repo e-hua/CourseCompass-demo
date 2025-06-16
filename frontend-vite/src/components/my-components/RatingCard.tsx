@@ -64,7 +64,7 @@ export default function RatingCard({ courseName }: { courseName: string }) {
 
   if (existingRating.length > 0) {
     return (
-      <Card className="m-10 p-6 mx-auto space-y-5 w-200 h-100">
+      <Card className="m-10 p-6 mx-auto space-y-5 w-150 h-100">
         <CardHeader>
           <CardTitle className="text-xl font-bold">{courseName}</CardTitle>
         </CardHeader>
@@ -109,7 +109,7 @@ export default function RatingCard({ courseName }: { courseName: string }) {
     );
   } else {
     return (
-      <Card className="m-10 p-6 mx-auto space-y-5 w-200 h-100">
+      <Card className="m-10 p-6 mx-auto space-y-5 w-150 h-100">
         <CardHeader>
           <CardTitle className="text-xl font-bold">{courseName}</CardTitle>
         </CardHeader>
