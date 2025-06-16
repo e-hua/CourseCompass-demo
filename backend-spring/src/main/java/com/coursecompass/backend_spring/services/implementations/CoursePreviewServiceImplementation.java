@@ -122,10 +122,10 @@ public class CoursePreviewServiceImplementation implements CoursePreviewService 
 
     // Using enhanced Switch statement
     Comparator<Course> comparator = switch (filter.getSortBy()) {
-      case "averageDifficulty" -> Comparator.comparing(Course::getAverageDifficulty, Double::compare);
-      case "averageWorkload" -> Comparator.comparing(Course::getAverageWorkload, Double::compare);
-      case "averageEnjoyability" -> Comparator.comparing(Course::getAverageEnjoyability, Double::compare);
-      case "ratingCount" -> Comparator.comparing(Course::getRatingCount, Integer::compare);
+      case "averageDifficulty" -> Comparator.comparing(Course::getAverageDifficulty, Comparator.nullsLast(Double::compare));
+      case "averageWorkload" -> Comparator.comparing(Course::getAverageWorkload, Comparator.nullsLast(Double::compare));
+      case "averageEnjoyability" -> Comparator.comparing(Course::getAverageEnjoyability, Comparator.nullsLast(Double::compare));
+      case "ratingCount" -> Comparator.comparing(Course::getRatingCount, Comparator.nullsLast(Integer::compare));
       default -> null;
     };
 
@@ -168,10 +168,10 @@ public class CoursePreviewServiceImplementation implements CoursePreviewService 
                       module.isSu(),
                       module.getSemesters(),
                       module.getFaculty(),
-                      course.getAverageDifficulty(),
-                      course.getAverageWorkload(),
-                      course.getAverageEnjoyability(),
-                      course.getRatingCount()
+                      Optional.ofNullable(course.getAverageDifficulty()).orElse(0.0),
+                      Optional.ofNullable(course.getAverageWorkload()).orElse(0.0),
+                      Optional.ofNullable(course.getAverageEnjoyability()).orElse(0.0),
+                      Optional.ofNullable(course.getRatingCount()).orElse(0)
               );
             })
             .toList();
