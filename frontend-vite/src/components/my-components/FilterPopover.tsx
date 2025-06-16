@@ -28,12 +28,18 @@ interface FilterPopoverProps {
 
 export function FilterPopover({ filter, onChange }: FilterPopoverProps) {
   const [localFilter, setLocalFilter] = useState(filter);
+  const isFilterActive = (filter: CoursePreviewFilter) => {
+    return filter.su || filter.faculty || filter.semesters?.length !== 2;
+  };
 
   return (
     <Popover>
       <PopoverTrigger>
-        <Button variant="outline">
-          <FilterIcon className="w-4 h-4" />
+        <Button
+          variant="outline"
+          className={isFilterActive(filter) ? "text-[var(--vite-purple)]" : ""}
+        >
+          <FilterIcon className="mr-2 h-4 w-4" />
           Filter
         </Button>
       </PopoverTrigger>
@@ -56,7 +62,7 @@ export function FilterPopover({ filter, onChange }: FilterPopoverProps) {
             <SelectContent>
               <SelectItem value="All">All</SelectItem>
               <SelectItem value="Computing">Computing</SelectItem>
-              <SelectItem value="Science">Engineering</SelectItem>
+              <SelectItem value="Science">Science</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -106,7 +112,6 @@ export function FilterPopover({ filter, onChange }: FilterPopoverProps) {
             variant="ghost"
             onClick={() => {
               setLocalFilter({ semesters: [1, 2] });
-              onChange({});
             }}
           >
             Reset
