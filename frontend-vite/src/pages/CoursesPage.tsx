@@ -1,12 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import Layout from "@/components/Sidebar/layout";
 import CoursePreviewCard from "@/components/my-components/CoursePreviewCard";
-import { useCoursePreviewPages } from "@/components/my-hooks/UseCoursePreviews";
+import { useCoursePreviews } from "@/components/my-hooks/UseCoursePreviews";
 import type { CoursePreview, CoursePreviewPage } from "@/apis/CoursePreviewAPI";
 import { UnderlinedSearchBar } from "@/components/diy-ui/UnderlinedSearchBar";
+import {
+  FilterPopover,
+  type CoursePreviewFilter,
+} from "@/components/my-components/FilterPopover";
 
 export default function CoursesPage() {
   const [searchTerm, setSearchTerm] = useState("");
+
+  // Set the default selected semesters
+  const [filter, setFilter] = useState<CoursePreviewFilter>({
+    semesters: [1, 2],
+  });
+
   const {
     data,
     fetchNextPage,
@@ -14,7 +24,7 @@ export default function CoursesPage() {
     isFetchingNextPage,
     status,
     error,
-  } = useCoursePreviewPages(searchTerm);
+  } = useCoursePreviews(searchTerm, filter);
 
   const sentinelRef = useRef<HTMLDivElement>(null);
 
@@ -36,13 +46,16 @@ export default function CoursesPage() {
       observer.disconnect();
     };
   }, [hasNextPage, fetchNextPage]);
+
   return (
     <Layout>
-      <div className="p-4">
+      <div className="flex p-4 space-x-10">
         <UnderlinedSearchBar
+          className="w-250"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+        <FilterPopover filter={filter} onChange={(val) => setFilter(val)} />
       </div>
 
       <div className="p-6 space-y-4">

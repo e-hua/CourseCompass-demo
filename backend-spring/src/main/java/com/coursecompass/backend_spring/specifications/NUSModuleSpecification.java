@@ -33,6 +33,7 @@ public class NUSModuleSpecification {
       if (filter.getSemesters() != null && !filter.getSemesters().isEmpty()) {
         // semester filtering using element collection
         predicates.add(root.join("semesters").in(filter.getSemesters()));
+        query.distinct(true);
       }
 
       if (allowedModuleCodes != null && !allowedModuleCodes.isEmpty()) {
