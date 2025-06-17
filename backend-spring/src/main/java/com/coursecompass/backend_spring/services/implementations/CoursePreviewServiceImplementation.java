@@ -94,10 +94,10 @@ public class CoursePreviewServiceImplementation implements CoursePreviewService 
                         module.isSu(),
                         module.getSemesters(),
                         module.getFaculty(),
-                        course.getAverageDifficulty(),
-                        course.getAverageWorkload(),
-                        course.getAverageEnjoyability(),
-                        course.getRatingCount()
+                        Optional.ofNullable(course.getAverageDifficulty()).orElse(0.0),
+                        Optional.ofNullable(course.getAverageWorkload()).orElse(0.0),
+                        Optional.ofNullable(course.getAverageEnjoyability()).orElse(0.0),
+                        Optional.ofNullable(course.getRatingCount()).orElse(0)
                 );
               } else {
                 return new CoursePreviewDTO(

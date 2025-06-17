@@ -5,12 +5,39 @@ import Layout from "@/components/Sidebar/layout";
 import { Separator } from "@/components/ui/separator";
 import { fetchCourseStats, type CourseStats } from "@/apis/CourseStatsAPI";
 import Stars from "@/components/my-components/Stars";
+import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
+import { useTakenCourses } from "@/components/my-hooks/UseTakenCourses";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteTakenCourse } from "@/apis/TakenCourseAPI";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { UpdateTakenCourseDialog } from "@/components/my-components/UpdateTakenCourseDialog";
+import { AddTakenCourseDialog } from "@/components/my-components/AddTakenCourseDialog";
 
 export default function CoursePage() {
   const { moduleCode } = useParams<{ moduleCode: string }>();
   const [course, setCourse] = useState<Course | null>(null);
   const [expanded, setExpanded] = useState(false);
   const [courseStats, setCourseStats] = useState<CourseStats | null>(null);
+
+  const { userProfile, toggleBookmark } = useUserProfile();
+  const isBookmarked = (userProfile?.bookmarkedCourseIds ?? []).includes(
+    course?.moduleCode ?? "a"
+  );
+
+  const { data: takenCourses } = useTakenCourses();
+
+  const queryClient = useQueryClient();
+  const handleDelete = useMutation({
+    mutationFn: (id: number) => deleteTakenCourse(id),
+    onSuccess: () => {
+      toast.success("Course deleted from Taken Courses!");
+      queryClient.invalidateQueries({ queryKey: ["takenCourses"] });
+    },
+    onError: () => {
+      toast.error("Failed to delete the course from Taken Courses");
+    },
+  });
 
   useEffect(() => {
     if (moduleCode) {
@@ -44,40 +71,79 @@ export default function CoursePage() {
   return (
     <Layout>
       <div className="max-w-5xl mx-auto px-6 py-8">
-        <div className="space-y-1">
-          <div className="text-sm text-muted-foreground">
-            {course.moduleCode}
+        <div className="flex flex-row justify-between">
+          <div className="space-y-1">
+            <div className="text-sm text-muted-foreground">
+              {course.moduleCode}
+            </div>
+            <h1 className="text-2xl font-semibold">{course.title}</h1>
+
+            <div className="flex flex-wrap gap-2 mt-4">
+              <span className="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-800 dark:bg-muted dark:text-blue-300">
+                {course.credits} MCs
+              </span>
+
+              <span
+                className={`inline-block text-xs font-semibold px-3 py-1 rounded-full ${
+                  course.su
+                    ? "bg-green-100 text-green-800 dark:bg-muted dark:text-green-300"
+                    : "bg-red-100 text-red-800 dark:bg-muted dark:text-red-300"
+                }`}
+              >
+                {course.su ? "SU Available" : "SU Not Available"}
+              </span>
+
+              <span className="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-purple-100 text-purple-800 dark:bg-muted dark:text-purple-300">
+                {course.faculty}
+              </span>
+
+              {course.semesterData.map((s) => (
+                <span
+                  key={s.semester}
+                  className="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800 dark:bg-muted dark:text-yellow-200"
+                >
+                  Sem {s.semester}
+                </span>
+              ))}
+            </div>
           </div>
-          <h1 className="text-2xl font-semibold">{course.title}</h1>
-        </div>
-
-        <div className="flex flex-wrap gap-2 mt-4">
-          <span className="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-800 dark:bg-muted dark:text-blue-300">
-            {course.credits} MCs
-          </span>
-
-          <span
-            className={`inline-block text-xs font-semibold px-3 py-1 rounded-full ${
-              course.su
-                ? "bg-green-100 text-green-800 dark:bg-muted dark:text-green-300"
-                : "bg-red-100 text-red-800 dark:bg-muted dark:text-red-300"
-            }`}
-          >
-            {course.su ? "SU Available" : "SU Not Available"}
-          </span>
-
-          <span className="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-purple-100 text-purple-800 dark:bg-muted dark:text-purple-300">
-            {course.faculty}
-          </span>
-
-          {course.semesterData.map((s) => (
-            <span
-              key={s.semester}
-              className="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800 dark:bg-muted dark:text-yellow-200"
+          <div className="flex flex-col gap-2 items-stretch w-full md:w-60">
+            <Button
+              onClick={() => toggleBookmark(course.moduleCode)}
+              className="flex gap-2 justify-center items-center"
             >
-              Sem {s.semester}
-            </span>
-          ))}
+              {isBookmarked ? "★ Bookmarked" : "☆ Bookmark"}
+            </Button>
+
+            {takenCourses?.some((tc) => tc.courseCode === course.moduleCode) ? (
+              <>
+                <Button
+                  variant="destructive"
+                  onClick={() =>
+                    handleDelete.mutate(
+                      takenCourses.find(
+                        (tc) => tc.courseCode === course.moduleCode
+                      )!.id
+                    )
+                  }
+                >
+                  Remove from Taken Courses
+                </Button>
+                <UpdateTakenCourseDialog
+                  takenCourse={
+                    takenCourses.find(
+                      (tc) => tc.courseCode === course.moduleCode
+                    )!
+                  }
+                />
+              </>
+            ) : (
+              <AddTakenCourseDialog
+                courseCode={course.moduleCode}
+                units={course.credits}
+              />
+            )}
+          </div>
         </div>
 
         <Separator className="my-4" />
@@ -113,6 +179,24 @@ export default function CoursePage() {
           <p>
             <strong>Department:</strong> {course.department}
           </p>
+          <div>
+            <strong>Description:</strong>
+            <div className="space-y-1 max-h-64 overflow-y-auto pr-2">
+              <p
+                className={`text-sm text-muted-foreground whitespace-pre-line transition-all ${
+                  expanded ? "line-clamp-none" : "line-clamp-5"
+                }`}
+              >
+                {course.description}
+              </p>
+              <button
+                onClick={() => setExpanded((prev) => !prev)}
+                className="text-xs hover:underline"
+              >
+                {expanded ? "Show less" : "Read more"}
+              </button>
+            </div>
+          </div>
           {
             <>
               <p>
@@ -143,24 +227,6 @@ export default function CoursePage() {
               </p>
             </>
           }
-          <div>
-            <strong>Description:</strong>
-            <div className="space-y-1 max-h-64 overflow-y-auto pr-2">
-              <p
-                className={`text-sm text-muted-foreground whitespace-pre-line transition-all ${
-                  expanded ? "line-clamp-none" : "line-clamp-5"
-                }`}
-              >
-                {course.description}
-              </p>
-              <button
-                onClick={() => setExpanded((prev) => !prev)}
-                className="text-xs hover:underline"
-              >
-                {expanded ? "Show less" : "Read more"}
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </Layout>
