@@ -14,6 +14,9 @@ public class Comment {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @CreationTimestamp
+  private LocalDateTime createdAt;
+
   @OneToOne(optional = false)
   @JoinColumn(name = "course_rating_id", unique = true)
   private CourseRating courseRating;
@@ -28,7 +31,4 @@ public class Comment {
 
   @Column(nullable = false, length = 3000)
   private String content;
-
-  @CreationTimestamp
-  private LocalDateTime createdAt;
 }
