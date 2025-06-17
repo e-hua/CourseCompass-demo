@@ -1,4 +1,4 @@
-import { applyEdgeChanges, applyNodeChanges } from "@xyflow/react";
+import { applyEdgeChanges, applyNodeChanges, ReactFlowProvider } from "@xyflow/react";
 import Layout from "@/components/Sidebar/layout";
 import "@xyflow/react/dist/style.css";
 import { useState, useCallback, useEffect } from "react";
@@ -126,15 +126,19 @@ export default function AcademicPlanPage() {
   if (error) return <p>Error message: {error.message}</p>;
 
   return (
-    <Layout>
-      <div className="flex-1 overflow-hidden p-8">
+    <Layout >
+      
+      <div className="flex-1 overflow-hidden p-4">
+        <ReactFlowProvider>
         <PlanCard
           nodes={nodes}
           edges={edges}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           courseNodeTypes={nodeTypes}
+
         />
+        </ReactFlowProvider>
       </div>
     </Layout>
   );
