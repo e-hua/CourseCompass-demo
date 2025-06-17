@@ -16,6 +16,7 @@ export type Course = {
   preclusion?: string;
   corequisite?: string;
   semesterData: SemesterData[];
+  su: boolean;
 };
 
 export async function fetchModData(moduleCode: string) {
@@ -37,6 +38,7 @@ export async function fetchModData(moduleCode: string) {
     preclusion: data.preclusion,
     corequisite: data.corequisite,
     semesterData: data.semesterData ?? [],
+    su: data?.attributes ?? false,
   };
 
   return course;
