@@ -13,9 +13,12 @@ export default function CommentCard({ comment }: CommentCardProps) {
       <CardContent className="flex flex-row justify-between">
         <div className="flex space-x-3">
           <Avatar className="mt-2">
-            <AvatarFallback>{comment.authorUsername[0]}</AvatarFallback>
+            <AvatarFallback>
+              {comment.authorUsername[0].toUpperCase()}
+            </AvatarFallback>
           </Avatar>
-          <div className="font-medium mt-2">{comment.authorUsername}</div>
+
+          <div className="font-medium mt-2.5">{comment.authorUsername}</div>
           <div className="flex flex-wrap gap-2 mt-2">
             <Badge variant="secondary">Grade: {comment.letterGrade}</Badge>
             <Badge variant="outline">Diff: {comment.difficulty}</Badge>
