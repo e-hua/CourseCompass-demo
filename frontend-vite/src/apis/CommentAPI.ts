@@ -9,6 +9,7 @@ export interface CommentCreateDTO {
 export interface CommentReadDTO {
   // id: number;
   content: string;
+  authorEmail: string;
   authorUsername: string;
   courseCode: string;
   letterGrade: string;
@@ -16,6 +17,7 @@ export interface CommentReadDTO {
   averageWorkload: number;
   enjoyability: number;
   createdAt: string;
+  updatedAt: string;
 }
 
 export async function createComment(

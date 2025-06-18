@@ -32,13 +32,15 @@ public class CommentServiceImplementation implements CommentService {
     return new CommentReadDTO(
             comment.getId(),
             comment.getContent(),
+            comment.getUser().getEmail(),
             comment.getUser().getUserName(),
             comment.getCourseRating().getCourseCode(),
             comment.getTakenCourse().getLetterGrade(),
             comment.getCourseRating().getDifficulty(),
             comment.getCourseRating().getAverageWorkload(),
             comment.getCourseRating().getEnjoyability(),
-            comment.getCreatedAt()
+            comment.getCreatedAt(),
+            comment.getUpdatedAt()
     );
   }
 

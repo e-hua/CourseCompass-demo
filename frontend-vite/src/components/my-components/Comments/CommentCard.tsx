@@ -19,6 +19,9 @@ export default function CommentCard({ comment }: CommentCardProps) {
           </Avatar>
 
           <div className="font-medium mt-2.5">{comment.authorUsername}</div>
+          <div className="text-sm font-extralight mt-3">
+            {comment.authorEmail}
+          </div>
           <div className="flex flex-wrap gap-2 mt-2">
             <Badge variant="secondary">Grade: {comment.letterGrade}</Badge>
             <Badge variant="outline">Diff: {comment.difficulty}</Badge>

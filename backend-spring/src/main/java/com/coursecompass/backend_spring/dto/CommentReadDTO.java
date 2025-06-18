@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class CommentReadDTO {
   private Long id;
   private String content;
+  private String authorEmail;
   private String authorUsername;
   private String courseCode;
   private String letterGrade;
@@ -17,4 +18,5 @@ public class CommentReadDTO {
   private int averageWorkload;
   private int enjoyability;
   private LocalDateTime createdAt;
+  private LocalDateTime updatedAt;
 }
