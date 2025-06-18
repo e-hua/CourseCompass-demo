@@ -8,9 +8,13 @@ import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
 
 interface PostCommentFormProps {
   courseCode: string;
+  onSuccess: () => void;
 }
 
-export default function PostCommentForm({ courseCode }: PostCommentFormProps) {
+export default function PostCommentForm({
+  courseCode,
+  onSuccess,
+}: PostCommentFormProps) {
   const [content, setContent] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const { data: takenCourses } = useTakenCourses();
@@ -32,6 +36,7 @@ export default function PostCommentForm({ courseCode }: PostCommentFormProps) {
       });
       toast.success("Comment posted!");
       setContent("");
+      onSuccess();
     } catch (err) {
       toast.error("" + err);
     } finally {

@@ -21,6 +21,7 @@ export default function CoursePage() {
   const [course, setCourse] = useState<Course | null>(null);
   const [expanded, setExpanded] = useState(false);
   const [courseStats, setCourseStats] = useState<CourseStats | null>(null);
+  const [refreshTrigger, setRefreshTrigger] = useState<boolean>(false);
 
   const { userProfile, toggleBookmark } = useUserProfile();
   const isBookmarked = (userProfile?.bookmarkedCourseIds ?? []).includes(
@@ -232,9 +233,15 @@ export default function CoursePage() {
         </div>
         <Separator className="my-4" />
         <div className="my-5">
-          <PostCommentForm courseCode={course.moduleCode} />
+          <PostCommentForm
+            courseCode={course.moduleCode}
+            onSuccess={() => setRefreshTrigger(!refreshTrigger)}
+          />
         </div>
-        <CommentList courseCode={course.moduleCode} />
+        <CommentList
+          courseCode={course.moduleCode}
+          refreshTrigger={refreshTrigger}
+        />
       </div>
     </Layout>
   );

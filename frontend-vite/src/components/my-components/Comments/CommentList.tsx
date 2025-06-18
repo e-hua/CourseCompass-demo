@@ -6,9 +6,13 @@ import { toast } from "sonner";
 
 interface CommentListProps {
   courseCode: string;
+  refreshTrigger: boolean;
 }
 
-export default function CommentList({ courseCode }: CommentListProps) {
+export default function CommentList({
+  courseCode,
+  refreshTrigger,
+}: CommentListProps) {
   const [comments, setComments] = useState<CommentReadDTO[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,7 +23,7 @@ export default function CommentList({ courseCode }: CommentListProps) {
         toast.error("" + err);
         setError("Failed to load comments");
       });
-  }, [courseCode]);
+  }, [courseCode, refreshTrigger]);
 
   if (error) {
     return <p>{error}</p>;
