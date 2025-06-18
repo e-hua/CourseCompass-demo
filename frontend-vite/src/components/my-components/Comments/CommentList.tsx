@@ -14,7 +14,7 @@ export default function CommentList({ courseCode }: CommentListProps) {
 
   useEffect(() => {
     readComments(courseCode)
-      .then((x) => setComments(x))
+      .then((x) => setComments(x.reverse()))
       .catch((err) => {
         toast.error("" + err);
         setError("Failed to load comments");

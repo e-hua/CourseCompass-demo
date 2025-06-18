@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { UpdateTakenCourseDialog } from "@/components/my-components/UpdateTakenCourseDialog";
 import { AddTakenCourseDialog } from "@/components/my-components/AddTakenCourseDialog";
 import CommentList from "@/components/my-components/Comments/CommentList";
+import PostCommentForm from "@/components/my-components/Comments/PostCommentForm";
 
 export default function CoursePage() {
   const { moduleCode } = useParams<{ moduleCode: string }>();
@@ -230,6 +231,9 @@ export default function CoursePage() {
           }
         </div>
         <Separator className="my-4" />
+        <div className="my-5">
+          <PostCommentForm courseCode={course.moduleCode} />
+        </div>
         <CommentList courseCode={course.moduleCode} />
       </div>
     </Layout>

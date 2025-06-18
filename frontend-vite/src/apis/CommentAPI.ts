@@ -33,7 +33,11 @@ export async function createComment(
     body: JSON.stringify(data),
   });
 
-  if (!res.ok) throw new Error("Failed to create comment: " + res.text());
+  if (!res.ok) {
+    const message = await res.text();
+    throw new Error("Failed to create comment: " + message);
+  }
+
   return res.json();
 }
 
@@ -44,7 +48,10 @@ export async function readComments(
     method: "GET",
   });
 
-  if (!res.ok) throw new Error("Failed to read comments: " + res.text());
+  if (!res.ok) {
+    const message = await res.text();
+    throw new Error("Failed to create comment: " + message);
+  }
 
   return res.json();
 }
