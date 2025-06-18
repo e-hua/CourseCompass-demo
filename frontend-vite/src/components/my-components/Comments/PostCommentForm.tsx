@@ -50,7 +50,7 @@ export default function PostCommentForm({
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder="Type your comment here..."
-        rows={3}
+        rows={4}
       />
       <Button onClick={handleSubmit} disabled={submitting || content === ""}>
         {submitting ? "Posting..." : "Post Comment"}
