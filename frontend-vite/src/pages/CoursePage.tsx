@@ -13,20 +13,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { UpdateTakenCourseDialog } from "@/components/my-components/UpdateTakenCourseDialog";
 import { AddTakenCourseDialog } from "@/components/my-components/AddTakenCourseDialog";
-import CommentCard from "@/components/my-components/Comments/CommentCard";
 import CommentList from "@/components/my-components/Comments/CommentList";
-
-const dummyComment = {
-  content:
-    "I found this module surprisingly enjoyable despite the heavy workload!",
-  authorUsername: "guanhua",
-  courseCode: "CS2040S",
-  letterGrade: "A+",
-  difficulty: 4,
-  averageWorkload: 5,
-  enjoyability: 5,
-  createdAt: new Date().toISOString(),
-};
 
 export default function CoursePage() {
   const { moduleCode } = useParams<{ moduleCode: string }>();
@@ -242,8 +229,6 @@ export default function CoursePage() {
             </>
           }
         </div>
-        <Separator className="my-4" />
-        <CommentCard comment={dummyComment} />
         <Separator className="my-4" />
         <CommentList courseCode={course.moduleCode} />
       </div>

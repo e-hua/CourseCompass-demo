@@ -46,6 +46,7 @@ public class AuthController {
 
       return ResponseEntity.ok(user);
     } catch (Exception e) {
+      System.out.println(e);
       return ResponseEntity.badRequest().body(Map.of("error", "Invalid token"));
     }
   }
