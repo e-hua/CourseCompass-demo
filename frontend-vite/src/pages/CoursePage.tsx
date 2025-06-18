@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { UpdateTakenCourseDialog } from "@/components/my-components/UpdateTakenCourseDialog";
 import { AddTakenCourseDialog } from "@/components/my-components/AddTakenCourseDialog";
 import CommentCard from "@/components/my-components/Comments/CommentCard";
+import CommentList from "@/components/my-components/Comments/CommentList";
 
 const dummyComment = {
   content:
@@ -243,6 +244,8 @@ export default function CoursePage() {
         </div>
         <Separator className="my-4" />
         <CommentCard comment={dummyComment} />
+        <Separator className="my-4" />
+        <CommentList courseCode={course.moduleCode} />
       </div>
     </Layout>
   );
