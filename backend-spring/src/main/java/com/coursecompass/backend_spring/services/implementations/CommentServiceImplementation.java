@@ -54,7 +54,7 @@ public class CommentServiceImplementation implements CommentService {
     }
 
     if (!takenCourse.getUser().getId().equals(userId)) {
-      throw new RuntimeException("Cannot comment on this course due to different users");
+      throw new RuntimeException("Cannot delete this comment due to it belongs to another user");
     }
 
     CourseRating courseRating = courseRatingRepository.findByUser_IdAndCourse_Id(
@@ -78,5 +78,51 @@ public class CommentServiceImplementation implements CommentService {
     return commentRepository.findByCourseRating_courseCode(courseCode).stream()
             .map(this::flattenToDTO)
             .toList();
+  }
+
+  @Override
+  public void deleteComment(Long userId, CommentCreateDTO dto) {
+    TakenCourse takenCourse = takenCourseRepository.findById(dto.getTakenCourseId())
+            .orElseThrow(() -> new RuntimeException("Taken course not found"));
+
+    if (commentRepository.findByTakenCourseId(dto.getTakenCourseId()).isEmpty()) {
+      throw new RuntimeException("Cannot delete this comment due to it does not exist");
+    }
+
+    if (!takenCourse.getUser().getId().equals(userId)) {
+      throw new RuntimeException("Cannot delete this comment due to it belongs to another user");
+    }
+
+    CourseRating courseRating = courseRatingRepository.findByUser_IdAndCourse_Id(
+            userId, takenCourse.getCourse().getId()
+    ).orElseThrow(() -> new RuntimeException("Rating not found"));
+
+    Comment comment = commentRepository.findByTakenCourseId(dto.getTakenCourseId()).get();
+
+    commentRepository.delete(comment);
+  }
+
+  @Override
+  public CommentReadDTO updateComment(Long userId, CommentCreateDTO dto) {
+    TakenCourse takenCourse = takenCourseRepository.findById(dto.getTakenCourseId())
+            .orElseThrow(() -> new RuntimeException("Taken course not found"));
+
+    if (commentRepository.findByTakenCourseId(dto.getTakenCourseId()).isEmpty()) {
+      throw new RuntimeException("Cannot update this comment due to it does not exist");
+    }
+
+    if (!takenCourse.getUser().getId().equals(userId)) {
+      throw new RuntimeException("Cannot update this comment due to it belongs to another user");
+    }
+
+    courseRatingRepository.findByUser_IdAndCourse_Id(
+            userId, takenCourse.getCourse().getId()
+    ).orElseThrow(() -> new RuntimeException("Rating not found"));
+
+    Comment comment = commentRepository.findByTakenCourseId(dto.getTakenCourseId()).get();
+
+    comment.setContent(dto.getContent());
+
+    return flattenToDTO(comment);
   }
 }
