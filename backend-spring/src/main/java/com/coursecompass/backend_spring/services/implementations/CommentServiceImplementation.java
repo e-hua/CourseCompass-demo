@@ -123,6 +123,8 @@ public class CommentServiceImplementation implements CommentService {
 
     comment.setContent(dto.getContent());
 
+    commentRepository.save(comment);
+
     return flattenToDTO(comment);
   }
 }
