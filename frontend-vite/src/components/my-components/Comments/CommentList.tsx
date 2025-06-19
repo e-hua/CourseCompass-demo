@@ -5,6 +5,7 @@ import CommentCard from "@/components/my-components/Comments/CommentCard";
 import { toast } from "sonner";
 import { useTakenCourses } from "@/components/my-hooks/UseTakenCourses";
 import UserCommentCard from "./UserCommentCard";
+import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
 
 interface CommentListProps {
   courseCode: string;
@@ -19,6 +20,7 @@ export default function CommentList({
   const [error, setError] = useState<string | null>(null);
 
   const takenCourses = useTakenCourses();
+  const { userProfile } = useUserProfile();
 
   useEffect(() => {
     readComments(courseCode)
@@ -52,12 +54,18 @@ export default function CommentList({
 
   return (
     <div className="space-y-4">
-      {comments.map((comment, index) => (
-        <>
+      {comments
+        .filter((x) => x.authorEmail === userProfile?.email)
+        .map((comment, index) => (
           <UserCommentCard key={index} userComment={comment} />
-          <CommentCard key={index} comment={comment} />
-        </>
-      ))}
+        ))}
+      {comments
+        .filter((x) => x.authorEmail !== userProfile?.email)
+        .map((comment, index) => (
+          <>
+            <CommentCard key={index} comment={comment} />
+          </>
+        ))}
     </div>
   );
 }

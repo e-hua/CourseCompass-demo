@@ -38,6 +38,7 @@ public class AuthController {
                 User newUser = new User();
                 newUser.setEmail(email);
                 newUser.setUserName(name);
+                newUser.setCurrentSemesterIndex(1);
                 return newUser;
               }
       );
