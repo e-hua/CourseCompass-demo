@@ -1,4 +1,4 @@
-package com.coursecompass.backend_spring.services.implementations;
+package com.coursecompass.backend_spring.services.comments;
 
 import com.coursecompass.backend_spring.dto.comments.CommentCreateDTO;
 import com.coursecompass.backend_spring.dto.comments.CommentReadDTO;
@@ -9,7 +9,6 @@ import com.coursecompass.backend_spring.entities.User;
 import com.coursecompass.backend_spring.repositories.CommentRepository;
 import com.coursecompass.backend_spring.repositories.CourseRatingRepository;
 import com.coursecompass.backend_spring.repositories.TakenCourseRepository;
-import com.coursecompass.backend_spring.services.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

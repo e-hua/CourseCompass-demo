@@ -5,7 +5,7 @@ import com.coursecompass.backend_spring.dto.comments.CommentCreateDTO;
 import com.coursecompass.backend_spring.dto.comments.CommentReadDTO;
 import com.coursecompass.backend_spring.entities.User;
 import com.coursecompass.backend_spring.repositories.UserRepository;
-import com.coursecompass.backend_spring.services.CommentService;
+import com.coursecompass.backend_spring.services.comments.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

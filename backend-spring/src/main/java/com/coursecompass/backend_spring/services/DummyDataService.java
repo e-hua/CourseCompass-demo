@@ -6,6 +6,7 @@ import com.coursecompass.backend_spring.entities.Course;
 import com.coursecompass.backend_spring.entities.CourseRating;
 import com.coursecompass.backend_spring.entities.TakenCourse;
 import com.coursecompass.backend_spring.entities.User;
+import com.coursecompass.backend_spring.services.comments.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

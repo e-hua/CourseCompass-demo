@@ -1,4 +1,4 @@
-package com.coursecompass.backend_spring.services;
+package com.coursecompass.backend_spring.services.comments;
 
 import com.coursecompass.backend_spring.dto.comments.CommentCreateDTO;
 import com.coursecompass.backend_spring.dto.comments.CommentReadDTO;
