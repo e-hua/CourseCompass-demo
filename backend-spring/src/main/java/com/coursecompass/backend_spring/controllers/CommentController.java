@@ -47,6 +47,55 @@ public class CommentController {
     }
   }
 
+  @DeleteMapping
+  public ResponseEntity<?> deleteComment(
+          @RequestHeader("Authorization") String authorizationHeader,
+          @RequestBody CommentCreateDTO commentCreateDTO) {
+
+    if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+      return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
+    }
+
+    String idToken = authorizationHeader.substring(7);
+    try {
+      Map<String, Object> claims = googleTokenVerifier.verify(idToken);
+      String email = (String) claims.get("email");
+
+      User user = userRepository.findByEmail(email)
+              .orElseThrow(() -> new RuntimeException("User not found"));
+
+      commentService.deleteComment(user.getId(), commentCreateDTO);
+      return ResponseEntity.ok(Map.of("success", true));
+
+    } catch (Exception e) {
+      return ResponseEntity.status(400).body(Map.of("error", e.getMessage()));
+    }
+  }
+
+  @PutMapping
+  public ResponseEntity<?> updateComment(
+          @RequestHeader("Authorization") String authorizationHeader,
+          @RequestBody CommentCreateDTO commentCreateDTO) {
+
+    if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+      return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
+    }
+
+    String idToken = authorizationHeader.substring(7);
+    try {
+      Map<String, Object> claims = googleTokenVerifier.verify(idToken);
+      String email = (String) claims.get("email");
+
+      User user = userRepository.findByEmail(email)
+              .orElseThrow(() -> new RuntimeException("User not found"));
+
+      CommentReadDTO updatedComment = commentService.updateComment(user.getId(), commentCreateDTO);
+      return ResponseEntity.ok(updatedComment);
+
+    } catch (Exception e) {
+      return ResponseEntity.status(400).body(Map.of("error", e.getMessage()));
+    }
+  }
   @GetMapping("/{courseCode}")
   public ResponseEntity<?> getCommentsByCourseCode(@PathVariable String courseCode) {
     try {
