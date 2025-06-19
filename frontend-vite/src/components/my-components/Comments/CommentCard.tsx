@@ -4,6 +4,11 @@ import { type CommentReadDTO } from "@/apis/CommentAPI";
 import { Badge } from "@/components/ui/badge";
 import CommentReplyList from "./CommentReplyList";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Reply } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { createCommentReply } from "@/apis/CommentReplyAPI";
+import { toast } from "sonner";
 
 interface CommentCardProps {
   comment: CommentReadDTO;
@@ -11,6 +16,28 @@ interface CommentCardProps {
 
 export default function CommentCard({ comment }: CommentCardProps) {
   const [refreshTrigger, setRefreshTrigger] = useState<boolean>(false);
+  const [replying, setReplying] = useState<boolean>(false);
+  const [content, setContent] = useState<string>("");
+
+  const onSubmitReply = async () => {
+    try {
+      await createCommentReply({
+        commentId: comment.id,
+        content: content,
+      });
+      setReplying(false);
+    } catch (err) {
+      toast.error("" + err);
+    } finally {
+      setRefreshTrigger(!refreshTrigger);
+    }
+  };
+
+  const onCancelReply = () => {
+    setReplying(false);
+    setContent("");
+  };
+
   return (
     <>
       <Card>
@@ -44,8 +71,40 @@ export default function CommentCard({ comment }: CommentCardProps) {
             <div className="text-muted-foreground">{comment.content}</div>
           </div>
         </CardContent>
-      </Card>
 
+        <CardContent className="flex">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setReplying(true);
+            }}
+            className={
+              "flex items-center  text-muted-foreground hover:text-green-600 transition-colors " +
+              (replying ? "text-green-600" : "")
+            }
+          >
+            <Reply className="w-4 h-4" />
+            <span className="text-sm">Reply</span>
+          </Button>
+        </CardContent>
+      </Card>
+      {replying ? (
+        <div className="space-x-2 space-y-3">
+          <Textarea
+            className="w-full"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="Type your reply here..."
+          />
+          <Button onClick={onSubmitReply}> Submit </Button>
+          <Button variant="ghost" onClick={onCancelReply}>
+            Cancel
+          </Button>
+        </div>
+      ) : (
+        <> </>
+      )}
       <CommentReplyList
         commentId={comment.id}
         setRefreshTrigger={() => setRefreshTrigger(!refreshTrigger)}

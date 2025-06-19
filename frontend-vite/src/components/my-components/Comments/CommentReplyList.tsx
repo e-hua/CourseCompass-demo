@@ -28,7 +28,7 @@ CommentReplyListProps) {
 
   useEffect(() => {
     readCommentReplies(commentId)
-      .then((x) => setCommentReplies(x))
+      .then((x) => setCommentReplies(x.reverse()))
       .catch((err) => {
         toast.error("" + err);
         setError("Failed to load comments");
