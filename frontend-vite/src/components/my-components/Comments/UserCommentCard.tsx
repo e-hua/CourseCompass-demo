@@ -31,7 +31,7 @@ export default function UserCommentCard({
   );
 
   const onDelete = async () => {
-    // The user must had taken this course and makde comments on this course to view this comment
+    // The user must had taken this course and make comments on this course to view this comment
     try {
       await deleteComment({
         takenCourseId: takenCourse?.id ?? 0,

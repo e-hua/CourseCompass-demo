@@ -7,6 +7,8 @@ import {
   type CommentReplyReadDTO,
 } from "@/apis/CommentReplyAPI";
 import CommentReplyItem from "./CommentReplyItem";
+import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
+import UserCommentReplyItem from "./UserCommentReplyItem";
 
 interface CommentReplyListProps {
   commentId: number;
@@ -17,14 +19,14 @@ interface CommentReplyListProps {
 export default function CommentReplyList({
   commentId,
   refreshTrigger,
-}: // setRefreshTrigger,
-CommentReplyListProps) {
+  setRefreshTrigger,
+}: CommentReplyListProps) {
   const [commentReplies, setCommentReplies] = useState<
     CommentReplyReadDTO[] | null
   >(null);
   const [error, setError] = useState<string | null>(null);
 
-  // const { userProfile } = useUserProfile();
+  const { userProfile } = useUserProfile();
 
   useEffect(() => {
     readCommentReplies(commentId)
@@ -74,11 +76,18 @@ CommentReplyListProps) {
     <div className="space-y-4">
       {commentReplies
         // .filter((x) => x.authorEmail !== userProfile?.email)
-        .map((comment, index) => (
-          <>
-            <CommentReplyItem key={index} commentReply={comment} />
-          </>
-        ))}
+        .map((commentReply, index) =>
+          commentReply.authorEmail === userProfile?.email ? (
+            <UserCommentReplyItem
+              key={index}
+              commentReply={commentReply}
+              commentId={commentId}
+              setRefreshTrigger={setRefreshTrigger}
+            />
+          ) : (
+            <CommentReplyItem key={index} commentReply={commentReply} />
+          )
+        )}
     </div>
   );
 }
