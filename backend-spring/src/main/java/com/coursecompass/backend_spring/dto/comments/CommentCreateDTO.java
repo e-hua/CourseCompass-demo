@@ -1,4 +1,4 @@
-package com.coursecompass.backend_spring.dto;
+package com.coursecompass.backend_spring.dto.comments;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

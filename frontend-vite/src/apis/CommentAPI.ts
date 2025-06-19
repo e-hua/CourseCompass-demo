@@ -7,7 +7,7 @@ export interface CommentCreateDTO {
 }
 
 export interface CommentReadDTO {
-  // id: number;
+  id: number;
   content: string;
   authorEmail: string;
   authorUsername: string;

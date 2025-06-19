@@ -1,7 +1,7 @@
 package com.coursecompass.backend_spring.services.implementations;
 
-import com.coursecompass.backend_spring.dto.CommentCreateDTO;
-import com.coursecompass.backend_spring.dto.CommentReadDTO;
+import com.coursecompass.backend_spring.dto.comments.CommentCreateDTO;
+import com.coursecompass.backend_spring.dto.comments.CommentReadDTO;
 import com.coursecompass.backend_spring.entities.Comment;
 import com.coursecompass.backend_spring.entities.CourseRating;
 import com.coursecompass.backend_spring.entities.TakenCourse;

@@ -1,8 +1,8 @@
 package com.coursecompass.backend_spring.controllers;
 
 import com.coursecompass.backend_spring.GoogleTokenVerifier;
-import com.coursecompass.backend_spring.dto.CommentCreateDTO;
-import com.coursecompass.backend_spring.dto.CommentReadDTO;
+import com.coursecompass.backend_spring.dto.comments.CommentCreateDTO;
+import com.coursecompass.backend_spring.dto.comments.CommentReadDTO;
 import com.coursecompass.backend_spring.entities.User;
 import com.coursecompass.backend_spring.repositories.UserRepository;
 import com.coursecompass.backend_spring.services.CommentService;
