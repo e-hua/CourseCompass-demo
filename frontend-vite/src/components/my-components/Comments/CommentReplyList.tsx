@@ -53,7 +53,9 @@ CommentReplyListProps) {
   }
 
   if (commentReplies.length === 0) {
-    return <p className="text-sm text-muted-foreground">No comments yet.</p>;
+    return (
+      <p className="text-sm text-muted-foreground">No comment reply yet.</p>
+    );
   }
 
   return (

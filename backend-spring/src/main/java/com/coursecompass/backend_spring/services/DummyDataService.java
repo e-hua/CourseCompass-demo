@@ -2,10 +2,12 @@ package com.coursecompass.backend_spring.services;
 
 import com.coursecompass.backend_spring.dto.comments.CommentCreateDTO;
 import com.coursecompass.backend_spring.dto.comments.CommentReadDTO;
+import com.coursecompass.backend_spring.dto.comments.CommentReplyCreateDTO;
 import com.coursecompass.backend_spring.entities.Course;
 import com.coursecompass.backend_spring.entities.CourseRating;
 import com.coursecompass.backend_spring.entities.TakenCourse;
 import com.coursecompass.backend_spring.entities.User;
+import com.coursecompass.backend_spring.services.comments.CommentReplyService;
 import com.coursecompass.backend_spring.services.comments.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ public class DummyDataService {
   private final TakenCourseService takenCourseService;
   private final CourseRatingService courseRatingService;
   private final CommentService commentService;
+  private final CommentReplyService commentReplyService;
 
   @Transactional
   public void insertDummyComment() {
@@ -97,6 +100,18 @@ public class DummyDataService {
     );
 
     commentService.createComment(user.getId(), dummy);
+
+    CommentReadDTO comment = commentService.readCommentsByCourseCode(targetCourseCode).stream()
+            .filter(c -> c.getAuthorEmail().equals(dummyEmail))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Comment not found for dummy user"));
+
+    CommentReplyCreateDTO commentReplyCreateDTO = new CommentReplyCreateDTO(
+            comment.getId(),
+            "@John thanks for the comment! This is a dummy reply."
+    );
+
+    commentReplyService.createCommentReply(user.getId(), commentReplyCreateDTO);
     System.out.println("Dummy comment inserted !");
   }
 }
