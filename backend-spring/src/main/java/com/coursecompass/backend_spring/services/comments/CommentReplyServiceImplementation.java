@@ -60,7 +60,7 @@ public class CommentReplyServiceImplementation implements CommentReplyService {
   }
 
   @Override
-  public List<CommentReplyReadDTO> readCommentsReplyByCommentCode(Long commentId) {
+  public List<CommentReplyReadDTO> readCommentRepliesByCommentCode(Long commentId) {
     return commentRepository.findById(commentId)
             .map(x -> x.getReplies())
             .orElseThrow(() -> new RuntimeException("Parent comment not found"))
@@ -80,7 +80,7 @@ public class CommentReplyServiceImplementation implements CommentReplyService {
   }
 
   @Override
-  public CommentReplyReadDTO updateComment(Long userId, CommentReplyCreateDTO dto) {
+  public CommentReplyReadDTO updateCommentReply(Long userId, CommentReplyCreateDTO dto) {
     CommentReply reply = commentReplyRepository.findByCommentIdOrderByCreatedAtAsc(dto.getCommentId()).stream()
             .filter(r -> r.getUser().getId().equals(userId))
             .findFirst()
