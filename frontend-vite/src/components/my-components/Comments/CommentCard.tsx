@@ -2,44 +2,55 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { type CommentReadDTO } from "@/apis/CommentAPI";
 import { Badge } from "@/components/ui/badge";
+import CommentReplyList from "./CommentReplyList";
+import { useState } from "react";
 
 interface CommentCardProps {
   comment: CommentReadDTO;
 }
 
 export default function CommentCard({ comment }: CommentCardProps) {
+  const [refreshTrigger, setRefreshTrigger] = useState<boolean>(false);
   return (
-    <Card>
-      <CardContent className="flex flex-row justify-between">
-        <div className="flex space-x-3">
-          <Avatar className="mt-2">
-            <AvatarFallback>
-              {comment.authorUsername[0].toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
+    <>
+      <Card>
+        <CardContent className="flex flex-row justify-between">
+          <div className="flex space-x-3">
+            <Avatar className="mt-2">
+              <AvatarFallback>
+                {comment.authorUsername[0].toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
 
-          <div className="font-medium mt-2.5">{comment.authorUsername}</div>
-          <div className="text-sm font-extralight mt-3">
-            {comment.authorEmail}
+            <div className="font-medium mt-2.5">{comment.authorUsername}</div>
+            <div className="text-sm font-extralight mt-3">
+              {comment.authorEmail}
+            </div>
+            <div className="flex flex-wrap gap-2 mt-2">
+              <Badge variant="secondary">Grade: {comment.letterGrade}</Badge>
+              <Badge variant="outline">Diff: {comment.difficulty}</Badge>
+              <Badge variant="outline">WL: {comment.averageWorkload}</Badge>
+              <Badge variant="outline">Enjoy: {comment.enjoyability}</Badge>
+            </div>
           </div>
-          <div className="flex flex-wrap gap-2 mt-2">
-            <Badge variant="secondary">Grade: {comment.letterGrade}</Badge>
-            <Badge variant="outline">Diff: {comment.difficulty}</Badge>
-            <Badge variant="outline">WL: {comment.averageWorkload}</Badge>
-            <Badge variant="outline">Enjoy: {comment.enjoyability}</Badge>
+
+          <div className="text-xs text-muted-foreground">
+            {new Date(comment.createdAt).toLocaleString()}
           </div>
-        </div>
+        </CardContent>
 
-        <div className="text-xs text-muted-foreground">
-          {new Date(comment.createdAt).toLocaleString()}
-        </div>
-      </CardContent>
+        <CardContent className="flex gap-4 pt-4">
+          <div className="flex flex-col gap-1 text-sm">
+            <div className="text-muted-foreground">{comment.content}</div>
+          </div>
+        </CardContent>
+      </Card>
 
-      <CardContent className="flex gap-4 pt-4">
-        <div className="flex flex-col gap-1 text-sm">
-          <div className="text-muted-foreground">{comment.content}</div>
-        </div>
-      </CardContent>
-    </Card>
+      <CommentReplyList
+        commentId={comment.id}
+        setRefreshTrigger={() => setRefreshTrigger(!refreshTrigger)}
+        refreshTrigger={refreshTrigger}
+      />
+    </>
   );
 }

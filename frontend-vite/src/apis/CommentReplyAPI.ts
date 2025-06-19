@@ -80,7 +80,7 @@ export async function updateCommentReply(
 }
 
 export async function readCommentReplies(
-  commentId: string
+  commentId: number
 ): Promise<CommentReplyReadDTO[]> {
   const res = await fetch(API_URL + `commentReplies/${commentId}`, {
     method: "GET",
