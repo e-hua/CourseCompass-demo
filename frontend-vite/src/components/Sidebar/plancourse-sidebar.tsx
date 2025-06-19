@@ -1,6 +1,15 @@
 import { useUserProfile } from '@/components/my-hooks/UserProfileContext';
-import { type CourseInfo } from '@/pages/BookMarkPage';
 import { useEffect, useState } from 'react';
+import './plancourse-sidebar.css';
+
+interface CourseInfo {
+  moduleCode: string; 
+  title: string;
+  description: string;
+  moduleCredit: string;
+  prereqTree: PrereqTree;
+}
+type PrereqTree = string | { and?: PrereqTree[]; or?: PrereqTree[] };
 
 export default function PlanCourseSidebar() {
 
@@ -32,20 +41,21 @@ export default function PlanCourseSidebar() {
     ).then((mods) => setModules(mods));
   }, [userProfile?.bookmarkedCourseIds]);
 
-  const onDragStart = (event: React.DragEvent<HTMLDivElement>, moduleCode: string, title: string) => {
+  const onDragStart = (event: React.DragEvent<HTMLDivElement>, 
+    moduleCode: string, title: string, prereqTree: PrereqTree) => {
     event.dataTransfer.setData('application/reactflow', JSON.stringify({
       label: moduleCode,
-      info: title,
-      //type: 'BookmarkNode',
+      title: title,
+      prereqTree: prereqTree,
     }));
     event.dataTransfer.effectAllowed = 'move';
   };
  
   return (
     <aside>
-      <div className="description">You can drag these courses you bookmarked to the plan diagram.</div>
+      <div>You can drag these courses you bookmarked to the plan diagram.</div>
       {modules.map((m) => (
-        <div className="dndnode" key={m.moduleCode} onDragStart={(event) => onDragStart(event, m.moduleCode, m.title)} draggable>
+        <div className="dndnode" key={m.moduleCode} onDragStart={(event) => onDragStart(event, m.moduleCode, m.title, m.prereqTree)} draggable>
         {"⭐" + m.moduleCode}
         </div>))
       }
