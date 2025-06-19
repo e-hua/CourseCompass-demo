@@ -241,6 +241,7 @@ export default function CoursePage() {
         <CommentList
           courseCode={course.moduleCode}
           refreshTrigger={refreshTrigger}
+          setRefreshTrigger={() => setRefreshTrigger(!refreshTrigger)}
         />
       </div>
     </Layout>

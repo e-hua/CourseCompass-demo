@@ -10,11 +10,13 @@ import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
 interface CommentListProps {
   courseCode: string;
   refreshTrigger: boolean;
+  setRefreshTrigger: () => void;
 }
 
 export default function CommentList({
   courseCode,
   refreshTrigger,
+  setRefreshTrigger,
 }: CommentListProps) {
   const [comments, setComments] = useState<CommentReadDTO[] | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -57,7 +59,11 @@ export default function CommentList({
       {comments
         .filter((x) => x.authorEmail === userProfile?.email)
         .map((comment, index) => (
-          <UserCommentCard key={index} userComment={comment} />
+          <UserCommentCard
+            key={index}
+            userComment={comment}
+            setRefreshTrigger={setRefreshTrigger}
+          />
         ))}
       {comments
         .filter((x) => x.authorEmail !== userProfile?.email)
