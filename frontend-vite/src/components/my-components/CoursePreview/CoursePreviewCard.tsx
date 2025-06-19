@@ -1,7 +1,7 @@
 import type { CoursePreview } from "@/apis/CoursePreviewAPI";
 import { Card } from "@/components/ui/card";
-import { Separator } from "../ui/separator";
-import Stars from "./Stars";
+import { Separator } from "@/components/ui/separator";
+import Stars from "@/components/my-components/Stars";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 

@@ -3,8 +3,8 @@ import {
   type CoursePreviewPage,
 } from "@/apis/CoursePreviewAPI";
 import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
-import type { CoursePreviewFilter } from "../my-components/FilterPopover";
-import type { CoursePreviewSorter } from "../my-components/SorterPopover";
+import type { CoursePreviewFilter } from "../my-components/CoursePreview/FilterPopover";
+import type { CoursePreviewSorter } from "../my-components/CoursePreview/SorterPopover";
 
 export function useCoursePreviews(
   searchTerm: string,

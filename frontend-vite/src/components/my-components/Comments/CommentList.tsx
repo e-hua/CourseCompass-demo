@@ -4,6 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import CommentCard from "@/components/my-components/Comments/CommentCard";
 import { toast } from "sonner";
 import { useTakenCourses } from "@/components/my-hooks/UseTakenCourses";
+import UserCommentCard from "./UserCommentCard";
 
 interface CommentListProps {
   courseCode: string;
@@ -52,7 +53,10 @@ export default function CommentList({
   return (
     <div className="space-y-4">
       {comments.map((comment, index) => (
-        <CommentCard key={index} comment={comment} />
+        <>
+          <UserCommentCard key={index} userComment={comment} />
+          <CommentCard key={index} comment={comment} />
+        </>
       ))}
     </div>
   );
