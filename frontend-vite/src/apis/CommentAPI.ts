@@ -1,5 +1,4 @@
-const API_URL = "http://localhost:8080/api/";
-// const API_URL = "https://coursecompass-demo.onrender.com/api/";
+import { API_URL } from "@/constants/API";
 
 export interface CommentCreateDTO {
   takenCourseId: number;

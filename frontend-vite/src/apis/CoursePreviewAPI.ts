@@ -1,5 +1,4 @@
-const API_URL = "http://localhost:8080/api/";
-// const API_URL = "https://coursecompass-demo.onrender.com/api/";
+import { API_URL } from "@/constants/API";
 
 import type { CoursePreviewFilter } from "@/components/my-components/CoursePreview/FilterPopover";
 import type { CoursePreviewSorter } from "@/components/my-components/CoursePreview/SorterPopover";
