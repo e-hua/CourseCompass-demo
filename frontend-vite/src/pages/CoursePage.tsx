@@ -138,6 +138,7 @@ export default function CoursePage() {
                       (tc) => tc.courseCode === course.moduleCode
                     )!
                   }
+                  setRefreshTrigger={() => setRefreshTrigger(!refreshTrigger)}
                 />
               </>
             ) : (

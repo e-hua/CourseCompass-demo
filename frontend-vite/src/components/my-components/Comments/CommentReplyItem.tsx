@@ -73,7 +73,7 @@ export default function CommentReplyItem({
         </div>
       </div>
 
-      <div className="flex">
+      <div className="flex mt-3">
         <Button
           variant="ghost"
           size="sm"

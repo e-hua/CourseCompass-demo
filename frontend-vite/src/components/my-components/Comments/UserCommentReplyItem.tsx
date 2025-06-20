@@ -128,7 +128,7 @@ export default function UserCommentReplyItem({
         )}
       </div>
 
-      <div className="flex">
+      <div className="flex mt-3">
         <Button
           variant="ghost"
           size="sm"
