@@ -14,4 +14,5 @@ public interface CourseRatingRepository extends JpaRepository<CourseRating, Long
     Optional<CourseRating> findByUserAndCourse(User user, Course course);
 
   List<CourseRating> findByCourseCode(String courseCode);
+  Optional<CourseRating> findByUser_IdAndCourse_Id(Long userId, String courseId);
 }

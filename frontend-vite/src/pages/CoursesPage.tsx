@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import Layout from "@/components/Sidebar/layout";
-import CoursePreviewCard from "@/components/my-components/CoursePreviewCard";
+import CoursePreviewCard from "@/components/my-components/CoursePreview/CoursePreviewCard";
 import { useCoursePreviews } from "@/components/my-hooks/UseCoursePreviews";
 import type { CoursePreview, CoursePreviewPage } from "@/apis/CoursePreviewAPI";
 import { UnderlinedSearchBar } from "@/components/diy-ui/UnderlinedSearchBar";
 import {
   FilterPopover,
   type CoursePreviewFilter,
-} from "@/components/my-components/FilterPopover";
+} from "@/components/my-components/CoursePreview/FilterPopover";
 import {
   SorterPopover,
   type CoursePreviewSorter,
-} from "@/components/my-components/SorterPopover";
+} from "@/components/my-components/CoursePreview/SorterPopover";
 
 export default function CoursesPage() {
   const [searchTerm, setSearchTerm] = useState("");
