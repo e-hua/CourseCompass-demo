@@ -61,33 +61,19 @@ export default function CommentReplyList({
   }
 
   return (
-    /*
-      {commentReplies
-        .filter((x) => x.authorEmail === userProfile?.email)
-        .map((comment, index) => (
-          <UserCommentCard
+    <div className="space-y-4">
+      {commentReplies.map((commentReply, index) =>
+        commentReply.authorEmail === userProfile?.email ? (
+          <UserCommentReplyItem
             key={index}
-            userComment={comment}
+            commentReply={commentReply}
+            commentId={commentId}
             setRefreshTrigger={setRefreshTrigger}
           />
-          <></>
-        ))}
-        */
-    <div className="space-y-4">
-      {commentReplies
-        // .filter((x) => x.authorEmail !== userProfile?.email)
-        .map((commentReply, index) =>
-          commentReply.authorEmail === userProfile?.email ? (
-            <UserCommentReplyItem
-              key={index}
-              commentReply={commentReply}
-              commentId={commentId}
-              setRefreshTrigger={setRefreshTrigger}
-            />
-          ) : (
-            <CommentReplyItem key={index} commentReply={commentReply} />
-          )
-        )}
+        ) : (
+          <CommentReplyItem key={index} commentReply={commentReply} />
+        )
+      )}
     </div>
   );
 }
