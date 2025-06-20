@@ -3,7 +3,6 @@ import { type CommentReadDTO, readComments } from "@/apis/CommentAPI";
 import { Skeleton } from "@/components/ui/skeleton";
 import CommentCard from "@/components/my-components/Comments/CommentCard";
 import { toast } from "sonner";
-import { useTakenCourses } from "@/components/my-hooks/UseTakenCourses";
 import UserCommentCard from "./UserCommentCard";
 import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
 
@@ -21,7 +20,6 @@ export default function CommentList({
   const [comments, setComments] = useState<CommentReadDTO[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const takenCourses = useTakenCourses();
   const { userProfile } = useUserProfile();
 
   useEffect(() => {
@@ -31,7 +29,7 @@ export default function CommentList({
         toast.error("" + err);
         setError("Failed to load comments");
       });
-  }, [courseCode, refreshTrigger, takenCourses]);
+  }, [courseCode, refreshTrigger]);
 
   if (error) {
     return <p>{error}</p>;

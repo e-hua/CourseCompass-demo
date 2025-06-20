@@ -55,13 +55,11 @@ export default function CommentReplyList({
   }
 
   if (commentReplies.length === 0) {
-    return (
-      <p className="text-sm text-muted-foreground">No comment reply yet.</p>
-    );
+    return <div className="ml-4 pl-4 border-l-2 border-muted space-y-4"></div>;
   }
 
   return (
-    <div className="space-y-4">
+    <div className="ml-4 pl-4 border-l-2 border-muted space-y-4">
       {commentReplies.map((commentReply, index) =>
         commentReply.authorEmail === userProfile?.email ? (
           <UserCommentReplyItem
