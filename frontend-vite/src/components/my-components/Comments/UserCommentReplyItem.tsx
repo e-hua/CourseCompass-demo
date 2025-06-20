@@ -1,11 +1,12 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
+  createCommentReply,
   deleteCommentReply,
   updateCommentReply,
   type CommentReplyReadDTO,
 } from "@/apis/CommentReplyAPI";
 import { Button } from "@/components/ui/button";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Reply, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,6 +24,11 @@ export default function UserCommentReplyItem({
 }: CommentReplyItemProps) {
   const [updating, setUpdating] = useState<boolean>(false);
   const [content, setContent] = useState<string>(commentReply.content);
+
+  const [replying, setReplying] = useState<boolean>(false);
+  const [replyContent, setReplyContent] = useState<string>(
+    `[@${commentReply.authorUsername}]`
+  );
 
   const onDelete = async () => {
     try {
@@ -58,6 +64,25 @@ export default function UserCommentReplyItem({
   const onCancel = () => {
     setUpdating(false);
     setContent(commentReply.content);
+  };
+
+  const onSubmitReply = async () => {
+    try {
+      await createCommentReply({
+        commentId: commentId,
+        content: replyContent,
+      });
+      setReplying(false);
+    } catch (err) {
+      toast.error("" + err);
+    } finally {
+      setRefreshTrigger();
+    }
+  };
+
+  const onCancelReply = () => {
+    setReplying(false);
+    setReplyContent(`[@${commentReply.authorUsername}]`);
   };
 
   return (
@@ -128,7 +153,39 @@ export default function UserCommentReplyItem({
           <Pencil className="w-4 h-4" />
           <span className="text-sm">Edit</span>
         </Button>
+
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            setReplying(true);
+          }}
+          className={
+            "flex items-center  text-muted-foreground hover:text-green-600 transition-colors " +
+            (replying ? "text-green-600" : "")
+          }
+        >
+          <Reply className="w-4 h-4" />
+          <span className="text-sm">Reply</span>
+        </Button>
       </div>
+
+      {replying ? (
+        <div className="space-x-2 space-y-3">
+          <Textarea
+            className="w-full"
+            value={replyContent}
+            onChange={(e) => setReplyContent(e.target.value)}
+            placeholder="Type your reply here..."
+          />
+          <Button onClick={onSubmitReply}> Submit </Button>
+          <Button variant="ghost" onClick={onCancelReply}>
+            Cancel
+          </Button>
+        </div>
+      ) : (
+        <> </>
+      )}
     </div>
   );
 }

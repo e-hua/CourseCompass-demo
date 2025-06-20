@@ -71,7 +71,12 @@ export default function CommentReplyList({
             setRefreshTrigger={setRefreshTrigger}
           />
         ) : (
-          <CommentReplyItem key={index} commentReply={commentReply} />
+          <CommentReplyItem
+            key={index}
+            commentReply={commentReply}
+            commentId={commentId}
+            setRefreshTrigger={setRefreshTrigger}
+          />
         )
       )}
     </div>

@@ -108,7 +108,7 @@ public class DummyDataService {
 
     CommentReplyCreateDTO commentReplyCreateDTO = new CommentReplyCreateDTO(
             comment.getId(),
-            "@John thanks for the comment! This is a dummy reply."
+            "Thanks for the comment! This is a dummy reply."
     );
 
     commentReplyService.createCommentReply(user.getId(), commentReplyCreateDTO);
