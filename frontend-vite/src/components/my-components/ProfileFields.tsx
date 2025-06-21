@@ -38,7 +38,9 @@ export default function UserProfileCard() {
   const [semester, setSemester] = useState(
     userProfile?.currentSemesterIndex?.toString() || "1"
   );
-  const [major, setMajor] = useState(userProfile?.major || "Please select your major ");
+  const [major, setMajor] = useState(
+    userProfile?.major || "Please select your major "
+  );
 
   const handleCancle = () => {
     setName(userProfile?.userName || "");
@@ -127,11 +129,16 @@ export default function UserProfileCard() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="absolute inset-y-73 right-4">
+            <div>
               <label className="block mb-1 text-sm font-medium text-muted-foreground">
                 Major
               </label>
-              <MajorSelectForm onChange={(val) => {setMajor(val)}} value={major}/>
+              <MajorSelectForm
+                onChange={(val) => {
+                  setMajor(val);
+                }}
+                value={major}
+              />
             </div>
             <div className="flex gap-3">
               <Button onClick={handleSave} disabled={isSaving}>
@@ -162,9 +169,8 @@ export default function UserProfileCard() {
               <strong>Updated:</strong>{" "}
               {new Date(userProfile.updatedAt).toLocaleDateString()}
             </div>
-            <div className="text-sm absolute inset-y-74 right-60">
-              <strong>Major: </strong>{" "}
-              {userProfile.major ?? "Not set"}
+            <div className="text-sm">
+              <strong>Major: </strong> {userProfile.major ?? "Not set"}
             </div>
             <Button
               variant="outline"

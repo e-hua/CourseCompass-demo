@@ -21,8 +21,10 @@ import { toast } from "sonner";
 
 export function UpdateTakenCourseDialog({
   takenCourse,
+  setRefreshTrigger,
 }: {
   takenCourse: TakenCourse;
+  setRefreshTrigger: () => void;
 }) {
   const { userProfile } = useUserProfile();
   const [semesterIndex, setSemesterIndex] = useState<string>(
@@ -47,6 +49,7 @@ export function UpdateTakenCourseDialog({
       toast.success("Successfully updated " + takenCourse.courseCode + " !");
 
       queryClient.invalidateQueries({ queryKey: ["takenCourses"] });
+      setRefreshTrigger();
     },
     onError: () => {
       toast.error("Failed to update taken course");

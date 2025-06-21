@@ -1,7 +1,7 @@
 import type { CoursePreview } from "@/apis/CoursePreviewAPI";
 import { Card } from "@/components/ui/card";
-import { Separator } from "../ui/separator";
-import Stars from "./Stars";
+import { Separator } from "@/components/ui/separator";
+import Stars from "@/components/my-components/Stars";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -36,33 +36,36 @@ export default function CoursePreviewCard({
   };
 
   return (
-    <Card className="p-4" onClick={() => handleClick()}>
+    <Card
+      className="p-4 border border-transparent hover:border-muted-foreground/50 hover:scale-[1.01] transition-transform"
+      onClick={() => handleClick()}
+    >
       <div className="text-sm text-muted-foreground">{course.courseCode}</div>
 
       <div className="font-semibold text-lg">{course.courseTitle}</div>
 
       <div className="flex flex-wrap gap-2 mt-2">
-        <span className="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+        <span className="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-800 dark:bg-muted dark:text-blue-300">
           {course.units} MCs
         </span>
         <span
           className={`inline-block text-xs font-semibold px-3 py-1 rounded-full ${
             course.su
-              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-              : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+              ? "bg-green-100 text-green-800 dark:bg-muted dark:text-green-300"
+              : "bg-red-100 text-red-800 dark:bg-muted dark:text-red-300"
           }`}
         >
           {course.su ? "SU Available" : "SU Not Available"}
         </span>
 
-        <span className="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+        <span className="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-purple-100 text-purple-800 dark:bg-muted dark:text-purple-300">
           {course.faculty}
         </span>
 
         {course.semesters.map((sem) => (
           <span
             key={sem}
-            className="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+            className="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800 dark:bg-muted dark:text-yellow-200"
           >
             Sem {sem}
           </span>
@@ -81,7 +84,10 @@ export default function CoursePreviewCard({
       </div>
 
       {ratingMap.map(({ label, value }) => (
-        <div key={label}>
+        <div
+          key={label}
+          className="flex items-center justify-between w-full text-sm"
+        >
           <div className="text-sm">{label}</div>
 
           <div className="flex space-x-1 items-center">

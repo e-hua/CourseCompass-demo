@@ -38,6 +38,7 @@ public class AuthController {
                 User newUser = new User();
                 newUser.setEmail(email);
                 newUser.setUserName(name);
+                newUser.setCurrentSemesterIndex(1);
                 return newUser;
               }
       );
@@ -46,6 +47,7 @@ public class AuthController {
 
       return ResponseEntity.ok(user);
     } catch (Exception e) {
+      System.out.println(e);
       return ResponseEntity.badRequest().body(Map.of("error", "Invalid token"));
     }
   }
