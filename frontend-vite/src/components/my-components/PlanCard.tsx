@@ -18,9 +18,11 @@ import extractEdgesFromPrereqTree, { isPrereqMet } from "@/lib/Plan/ExtractEdges
   onNodesChange: (changes: NodeChange[]) => void;
   onEdgesChange: (changes: EdgeChange[]) => void;
   courseNodeTypes: { CourseNode: React.MemoExoticComponent<React.FC<TooltipNodeProps>>; LabeledGroupNode: React.MemoExoticComponent<React.FC<NodeProps>> };
+  setNodes: React.Dispatch<React.SetStateAction<Node[]>>; // Optional for setting nodes
+  setEdges: React.Dispatch<React.SetStateAction<Edge[]>>; // Optional for setting edges
   }
 
-export default function PlanCard({ nodes, edges, onNodesChange, onEdgesChange, courseNodeTypes }: PlanCardProps) {
+export default function PlanCard({ nodes, edges, onNodesChange, onEdgesChange, courseNodeTypes, setNodes, setEdges }: PlanCardProps) {
 
   const { screenToFlowPosition } = useReactFlow();
 
@@ -63,37 +65,53 @@ export default function PlanCard({ nodes, edges, onNodesChange, onEdgesChange, c
       const newNode = {
         id: parsed.label, // Use the label as the node ID, aka module code
         position,
-        data: { label: parsed.label, title: parsed.title, metPrereq: isPrereqValid },
+        data: { label: parsed.label, title: parsed.title, metPrereq: isPrereqValid, prereqTree: prereqTree },
         type: "BookmarkNode",
         draggble: true,
         width: 200,
         height: 50,
       };
  
-       onNodesChange([{ type: 'add', item: newNode }]);
+      setNodes((prev) => [...prev, newNode]);
 
-       
+      const newEdges: Edge[] = [];
       if (prereqTree) {
-        //const filtered = extractEdgesFromPrereqTree(prereqTree, parsed.label)
-        //  .filter((e) => courses.some((code) => code === e.source));
+    const prereqEdges = extractEdgesFromPrereqTree(prereqTree, parsed.label)
+      .filter((e) => currentCourses.has(e.source));
 
-        console.log("Dropped module:", parsed.label);
-console.log("Prereq tree:", prereqTree);
-        console.log("Current courses:", currentCourses);
-        const filtered = extractEdgesFromPrereqTree(prereqTree, parsed.label)
-          .filter((e) => currentCourses.has(e.source)); // Only include edges where the source is a current course
-         console.log("Filtered edges:", filtered);
-        const newEdges = filtered.map((edge) => ({
-          id: `${edge.source}-${edge.target}`,
-          source: edge.source,
-          target: edge.target,
-          animated:true, //isPrereqValid, // Only animate if the prereq is met
-          //style: { stroke: edge.type === "and" ? "blue" : "green" },
-          //type: edge.type === "and" ? "smoothstep" : "straight",
-        }));
+    for (const e of prereqEdges) {
+      newEdges.push({
+        id: `${e.source}-${e.target}`,
+        source: e.source,
+        target: e.target,
+        animated: true,
+      });
+    }
+  }
 
-        onEdgesChange(newEdges.map((edge) => ({ type: 'add', item: edge })));
-      }
+  // 2. 旧课程依赖新课程
+  for (const existing of nodes) {
+    if (!(existing.type === "CourseNode" || existing.type === "BookmarkNode")) continue;
+    const existingTree = existing.data?.prereqTree;
+    if (!existingTree) continue;
+
+    const reverseEdges = extractEdgesFromPrereqTree(existingTree, existing.id)
+      .filter((e) => e.source === parsed.label); // 新加的是 prerequisite
+
+    for (const e of reverseEdges) {
+      newEdges.push({
+        id: `${e.source}-${e.target}`,
+        source: e.source,
+        target: e.target,
+        animated: true,
+      });
+    }
+  }
+
+  // 去重（防止重复加线）
+  const newEdgeIds = new Set(edges.map((e) => e.id));
+  const filtered = newEdges.filter((e) => !newEdgeIds.has(e.id));
+ setEdges((prev) => [...prev, ...filtered]);
     }
     
   const onDragStart = (event: React.DragEvent<HTMLDivElement>) => {

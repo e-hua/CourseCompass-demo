@@ -104,8 +104,8 @@ export default function AcademicPlanPage() {
         }
       })
     );
-  }, [courses]); //semesterGroupNodes]);
-  //semesterGroupNodes is a constant array, so it won't change and cause re-rendering, just to avoid warnings.
+  }, [courses]);
+  //semesterGroupNodes is a constant array.
 
   const { userProfile } = useUserProfile();
   if (!userProfile) {
@@ -151,6 +151,8 @@ export default function AcademicPlanPage() {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           courseNodeTypes={nodeTypes}
+          setNodes={setNodes}
+          setEdges={setEdges}
         />
         </ReactFlowProvider>
       </div>

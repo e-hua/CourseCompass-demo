@@ -8,6 +8,7 @@ type CourseNodeData = {
   label: string;
   title: string;
   metPrereq: boolean;
+  prereqTree?: string | { and?: CourseNodeData[]; or?: CourseNodeData[] };
 }
 export interface TooltipNodeProps extends NodeProps {
   data: CourseNodeData;
