@@ -3,12 +3,13 @@ import { type NodeProps, Position, Handle } from "@xyflow/react";
 import { TooltipNode, TooltipContent, TooltipTrigger } from "@/components/tooltip-node";
 import { Link } from "react-router-dom";
 import { NodeStatusIndicator } from "@/components/node-status-indicator";
+type PrereqTree = string | { and?: PrereqTree[]; or?: PrereqTree[] }; 
 
 type CourseNodeData = {
   label: string;
   title: string;
   metPrereq: boolean;
-  prereqTree?: string | { and?: CourseNodeData[]; or?: CourseNodeData[] };
+  prereqTree?: string | { and?: PrereqTree[]; or?: PrereqTree[] };
 }
 export interface TooltipNodeProps extends NodeProps {
   data: CourseNodeData;

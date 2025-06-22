@@ -2,6 +2,7 @@ import { useUserProfile } from '@/components/my-hooks/UserProfileContext';
 import { useEffect, useState } from 'react';
 import './plancourse-sidebar.css';
 
+type PrereqTree = string | { and?: PrereqTree[]; or?: PrereqTree[] };
 interface CourseInfo {
   moduleCode: string; 
   title: string;
@@ -9,7 +10,6 @@ interface CourseInfo {
   moduleCredit: string;
   prereqTree: PrereqTree;
 }
-type PrereqTree = string | { and?: PrereqTree[]; or?: PrereqTree[] };
 
 export default function PlanCourseSidebar() {
 
