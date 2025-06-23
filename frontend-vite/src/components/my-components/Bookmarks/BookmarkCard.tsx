@@ -3,7 +3,11 @@ import { type CourseInfo } from "@/pages/BookMarkPage";
 import { Button } from "@/components/ui/button";
 import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
 
-export default function BookmarkCard(courseInfo: CourseInfo) {
+interface BookmarkCardProps {
+  courseInfo: CourseInfo;
+}
+
+export default function BookmarkCard({ courseInfo }: BookmarkCardProps) {
   const { userProfile, toggleBookmark } = useUserProfile();
 
   const isBookmarked = userProfile?.bookmarkedCourseIds.includes(
