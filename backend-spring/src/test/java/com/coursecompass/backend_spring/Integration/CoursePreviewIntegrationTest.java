@@ -1,4 +1,4 @@
-package com.coursecompass.backend_spring;
+package com.coursecompass.backend_spring.Integration;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
