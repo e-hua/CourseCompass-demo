@@ -1,4 +1,4 @@
-import Ratings from "@/components/my-components/Ratings";
+import Ratings from "@/components/my-components/Ratings/Ratings";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";

@@ -1,5 +1,5 @@
 import Layout from "@/components/Sidebar/layout";
-import RatingCard from "@/components/my-components/RatingCard";
+import RatingCard from "@/components/my-components/Ratings/RatingCard";
 import { useTakenCourses } from "@/components/my-hooks/UseTakenCourses";
 import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,7 +10,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel"
+} from "@/components/ui/carousel";
 
 function SearchPage() {
   const { data: courses, isLoading, error } = useTakenCourses();
@@ -65,19 +65,23 @@ function SearchPage() {
 
   return (
     <Layout>
-      <Carousel className="max-w-3xl mx-auto my-auto relative" opts={{
-    align: "start",
-    loop: true,
-  }}>
-        <CarouselContent >
-    
-        {courses?.map((course) => (
-          <CarouselItem><RatingCard key={course.id} courseName={course.courseCode} /></CarouselItem>
-        ))}
-      </CarouselContent>
-      <CarouselPrevious className="absolute inset-y-65 left-4"/>
-  <CarouselNext className="absolute inset-y-65 right-4"/>
-  </Carousel>
+      <Carousel
+        className="max-w-3xl mx-auto my-auto relative"
+        opts={{
+          align: "start",
+          loop: true,
+        }}
+      >
+        <CarouselContent>
+          {courses?.map((course) => (
+            <CarouselItem>
+              <RatingCard key={course.id} courseName={course.courseCode} />
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious className="absolute inset-y-65 left-4" />
+        <CarouselNext className="absolute inset-y-65 right-4" />
+      </Carousel>
     </Layout>
   );
 }
