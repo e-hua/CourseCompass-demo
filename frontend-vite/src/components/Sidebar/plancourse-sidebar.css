@@ -1,0 +1,17 @@
+aside {
+  padding: 10px 5px;
+  font-size: 20px;
+  width: 200px;
+  max-height: 1000px;
+  overflow-y: auto;
+}
+ 
+.dndnode {
+  height: 20px;
+  padding: 4px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: grab;
+}
