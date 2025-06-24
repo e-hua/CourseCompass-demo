@@ -17,8 +17,11 @@ import extractEdgesFromPrereqTree, { isPrereqMet } from "@/lib/Plan/ExtractEdges
 import { isEqual } from "lodash";
 import { postPlan } from "@/apis/NodesandEdgesAPI";
 import { toast } from "sonner";
+import useRestoreBookmarks, { filterEdgesByExistingNodes } from "@/components/my-hooks/UseRestoreBookmarks";
 
 interface PlanCardProps {
+  savedNodes: Node[];
+  savedEdges: Edge[];
   nodes: Node[];     
   edges: Edge[];       
   onNodesChange: (changes: NodeChange[]) => void;
@@ -29,10 +32,17 @@ interface PlanCardProps {
   setEdges: React.Dispatch<React.SetStateAction<Edge[]>>; // Optional for setting edges
 }
 
-export default function PlanCard({ nodes, edges, onNodesChange, onEdgesChange, courseNodeTypes, setNodes, setEdges }: PlanCardProps) {
+export default function PlanCard({ savedNodes, savedEdges, nodes, edges, onNodesChange, onEdgesChange, courseNodeTypes, setNodes, setEdges }: PlanCardProps) {
 
   const { screenToFlowPosition } = useReactFlow();
   const [loading, setLoading] = useState(false);
+  useRestoreBookmarks({ savedNodes, nodes, setNodes });
+  
+  useEffect(() => {
+  if (!savedEdges) return;
+  setEdges(filterEdgesByExistingNodes(savedEdges, nodes));
+}, [savedEdges, nodes]);
+
 
   const nodeTypes = {
   BookmarkNode: BookmarkNode,
@@ -186,7 +196,14 @@ export default function PlanCard({ nodes, edges, onNodesChange, onEdgesChange, c
                 <ContextMenuContent>
                   <PlanCourseSidebar />
                   <ContextMenuSeparator />
-                  <ContextMenuItem onClick={handleSavePlan}>{loading ? "Loading..." : "Save Page..."}</ContextMenuItem>
+                  <ContextMenuItem onClick={handleSavePlan}>
+                    {loading ? "Loading..." : "Save Page..."}
+                  </ContextMenuItem>
+                  <ContextMenuItem onClick={() => {
+                    setNodes((prev) => prev.filter((n) => n.type !== "BookmarkNode"));
+                    setEdges([]);}}>
+                    Reset Plan
+                  </ContextMenuItem>
                 </ContextMenuContent>
               </ContextMenu>
             </Panel>

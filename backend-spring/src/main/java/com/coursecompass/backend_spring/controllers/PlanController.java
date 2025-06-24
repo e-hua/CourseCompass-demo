@@ -2,9 +2,7 @@ package com.coursecompass.backend_spring.controllers;
 
 import com.coursecompass.backend_spring.GoogleTokenVerifier;
 import com.coursecompass.backend_spring.dto.PlanDTO;
-import com.coursecompass.backend_spring.dto.TakenCourseDTO;
 import com.coursecompass.backend_spring.entities.Plan;
-import com.coursecompass.backend_spring.entities.TakenCourse;
 import com.coursecompass.backend_spring.entities.User;
 import com.coursecompass.backend_spring.repositories.PlanRepository;
 import com.coursecompass.backend_spring.repositories.UserRepository;
@@ -39,7 +37,9 @@ public class PlanController {
     }
 
     @GetMapping("/get-plan")
-    public ResponseEntity<?> getPlan(@RequestHeader("Authorization") String authorizationHeader) {
+    public ResponseEntity<?> getPlan(
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
 
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
@@ -64,7 +64,7 @@ public class PlanController {
         }
     }
 
-    @PostMapping("/set-plan")
+    @PutMapping("/set-plan")
     public ResponseEntity<?> addPlan(
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestBody PlanDTO planDTO
@@ -75,10 +75,12 @@ public class PlanController {
         }
 
         String idToken = authorizationHeader.substring(7);
+
         try {
             Map<String, Object> claims = googleTokenVerifier.verify(idToken);
             String email = (String) claims.get("email");
             Optional<User> optionalUser = userRepository.findByEmail(email);
+
             if (optionalUser.isEmpty()) {
                 return ResponseEntity.status(404).body(Map.of("error", "User not found"));
             }

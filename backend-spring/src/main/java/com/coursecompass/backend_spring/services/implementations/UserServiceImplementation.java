@@ -91,5 +91,4 @@ public class UserServiceImplementation implements UserService {
                 plan.getNodesJson(), plan.getEdgesJson()
         ));
     }
-
 }
