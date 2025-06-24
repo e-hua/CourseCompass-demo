@@ -96,6 +96,7 @@ public class CommentReplyController {
       return ResponseEntity.status(400).body(Map.of("error", e.getMessage()));
     }
   }
+
   @GetMapping("/{commentCode}")
   public ResponseEntity<?> getCommentRepliesByCommentCode(@PathVariable Long commentCode) {
     try {
