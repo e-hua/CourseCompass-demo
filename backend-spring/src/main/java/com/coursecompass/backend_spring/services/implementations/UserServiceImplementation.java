@@ -1,6 +1,8 @@
 package com.coursecompass.backend_spring.services.implementations;
 
+import com.coursecompass.backend_spring.dto.PlanDTO;
 import com.coursecompass.backend_spring.entities.*;
+import com.coursecompass.backend_spring.repositories.PlanRepository;
 import com.coursecompass.backend_spring.repositories.TakenCourseRepository;
 import com.coursecompass.backend_spring.repositories.UserRepository;
 import com.coursecompass.backend_spring.services.UserService;
@@ -15,11 +17,16 @@ import java.util.Optional;
 public class UserServiceImplementation implements UserService {
     private final UserRepository userRepository;
     private final TakenCourseRepository takenCourseRepository;
+    private final PlanRepository planRepository;
 
     @Autowired
-    public UserServiceImplementation(UserRepository userRepository, TakenCourseRepository takenCourseRepository) {
+    public UserServiceImplementation(
+            UserRepository userRepository,
+            TakenCourseRepository takenCourseRepository,
+            PlanRepository planRepository) {
         this.userRepository = userRepository;
         this.takenCourseRepository = takenCourseRepository;
+        this.planRepository = planRepository;
     }
 
     @Override
@@ -77,4 +84,12 @@ public class UserServiceImplementation implements UserService {
                 ))
                 .toList();
     }
+
+    @Override
+    public Optional<PlanDTO> getPlan(User user) {
+        return planRepository.findPlanByUser(user).map(plan -> new PlanDTO(
+                plan.getNodesJson(), plan.getEdgesJson()
+        ));
+    }
+
 }
