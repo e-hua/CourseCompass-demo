@@ -129,6 +129,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                         (tc) => tc.courseCode === selectedCourse.moduleCode
                       )[0]
                     }
+                    setRefreshTrigger={() => {}}
                   />
                 </div>
               ) : (
