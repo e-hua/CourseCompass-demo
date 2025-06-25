@@ -1,4 +1,5 @@
 package com.coursecompass.backend_spring.services;
+import com.coursecompass.backend_spring.dto.PlanDTO;
 import com.coursecompass.backend_spring.entities.User;
 import com.coursecompass.backend_spring.dto.TakenCourseDTO;
 import java.util.List;
@@ -11,4 +12,5 @@ public interface UserService {
     User updateUser(Long id, User updatedUser);
     void deleteUser(Long id);
     List<TakenCourseDTO> getTakenCourses(User user);
+    Optional<PlanDTO> getPlan(User user);
 }
