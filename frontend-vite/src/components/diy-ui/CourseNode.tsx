@@ -5,8 +5,7 @@ import { Link } from "react-router-dom";
 
 type CourseNodeData = {
   label: string;
-  units: number;
-  grade: string;
+  info: string;
 }
 export interface TooltipNodeProps extends NodeProps {
   data: CourseNodeData;
@@ -17,9 +16,9 @@ const CourseNode = memo(({ selected, data }: TooltipNodeProps) => {
     <TooltipNode selected={selected}>
       <TooltipContent position={Position.Top} style={{width: "150px", height: "50px"}}>
         <div className="text-sm" style={{color: "var(--vite-purple)"}}>
-        <p>{"Credits: " + data.units}</p>
-        <p>{"Grade: " + data.grade}</p>
-        </div>
+          <p>{"Credits: " + data.info.charAt(0)}</p>
+          <p>{"Grade: " + data.info.substring(1)}</p>
+          </div>
       </TooltipContent>
 
       <Handle type="target" position={Position.Top} />
