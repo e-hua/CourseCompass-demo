@@ -89,6 +89,33 @@ export default function GoogleLogin() {
   }, []);
 
   function handleLogin() {
+    const testKey = import.meta.env.VITE_TEST_KEY;
+    if (testKey) {
+      const userInfo = {
+        name: "",
+        email: "",
+        avatar:
+          "https://purepng.com/public/uploads/large/purepng.com-compass-iconsymbolsiconsapple-iosiosios-8-iconsios-8-721522596030gfa30.png",
+      };
+
+      localStorage.setItem("id_token", testKey);
+      loginWithIdToken(testKey)
+        .then((data) => {
+          console.log("Authenticated user:", data);
+          toast.success("User Authenticated !");
+          setUserProfile(data);
+        })
+        .catch((err) => {
+          toast.error("Login failed", {
+            description: err.message || "Could not authenticate user",
+          });
+        });
+
+      setUserAuthInfo(userInfo);
+      storeUserAuthInfo(userInfo);
+      return;
+    }
+
     const nonce = Math.random().toString(36).substring(2, 7);
     localStorage.setItem("google_nonce", nonce);
 
