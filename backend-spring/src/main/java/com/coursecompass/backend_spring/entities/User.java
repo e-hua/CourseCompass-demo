@@ -33,7 +33,8 @@ public class User {
 
     private String major;
 
-    //For future personalization, e.g:double degree, college, previous major, second major, minor
+    //For future user personalization, e.g:double degree, college, previous major, second major, minor.
+    //exchange sem, noc, intern, summer school etc
     private String academicTag;
 
     @Column(nullable = false, unique = true)
@@ -50,4 +51,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CourseRating> courseRatings;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Plan plan;
 }
