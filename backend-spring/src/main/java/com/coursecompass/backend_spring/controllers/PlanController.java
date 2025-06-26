@@ -8,7 +8,6 @@ import com.coursecompass.backend_spring.repositories.PlanRepository;
 import com.coursecompass.backend_spring.repositories.UserRepository;
 import com.coursecompass.backend_spring.services.UserService;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -63,14 +62,7 @@ public class PlanController {
             if (plan.isEmpty()) {
                 return ResponseEntity.ok(Map.of("nodesJson", List.of(), "edgesJson", List.of()));
             }
-
-            ObjectMapper mapper = new ObjectMapper();
-            Map<String, Object> result = Map.of(
-                    "nodes", mapper.readValue(plan.get().getNodesJson(), List.class),
-                    "edges", mapper.readValue(plan.get().getEdgesJson(), List.class)
-            );
-            return ResponseEntity.ok(result);
-
+            return ResponseEntity.ok(plan.get());
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", "Failed to verify token"));
