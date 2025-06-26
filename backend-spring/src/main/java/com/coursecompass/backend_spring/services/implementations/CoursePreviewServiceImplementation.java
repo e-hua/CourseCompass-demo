@@ -118,7 +118,7 @@ public class CoursePreviewServiceImplementation implements CoursePreviewService 
 
   @Override
   public PageDTO<CoursePreviewDTO> getPaginatedRatedCoursePreviews(int page, int size, CoursePreviewFilter filter) {
-    List<Course> ratedCourses = courseService.readAllCourses();
+    List<Course> ratedCourses = courseService.readAllCourses().stream().filter(course -> Optional.ofNullable(course.getRatingCount()).orElse(0) > 0).collect(Collectors.toList());
 
     // Using enhanced Switch statement
     Comparator<Course> comparator = switch (filter.getSortBy()) {
