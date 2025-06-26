@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -59,11 +58,7 @@ public class PlanController {
 
             User user = optionalUser.get();
             Optional<PlanDTO> plan = userService.getPlan(user);
-            if (plan.isEmpty()) {
-                return ResponseEntity.ok(Map.of("nodesJson", List.of(), "edgesJson", List.of()));
-            }
-            return ResponseEntity.ok(plan.get());
-
+            return ResponseEntity.ok(plan);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", "Failed to verify token"));
         }
