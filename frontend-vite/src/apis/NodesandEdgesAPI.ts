@@ -25,12 +25,12 @@ export async function putPlan(nodes: Node[], edges: Edge[]): Promise<void> {
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
-      nodesJson: nodes.map((node) => ({
+      nodes: nodes.map((node) => ({
         id: node.id,
         position: node.position,
         type: node.type,
       })),
-      edgesJson: edges.map((edge) => ({
+      edges: edges.map((edge) => ({
         source: edge.source,
         target: edge.target,
         id: edge.id,
