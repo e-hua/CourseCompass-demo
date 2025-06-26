@@ -13,24 +13,24 @@ export interface EdgeProps {
   id: string;
 }
 
-export async function postPlan(nodes: Node[], edges: Edge[]): Promise<void> {
+export async function putPlan(nodes: Node[], edges: Edge[]): Promise<void> {
   
   const token = localStorage.getItem("id_token");
   if (!token) throw new Error("Missing ID token");
 
-  const res = await fetch(API_URL + "plan/save-plan", {
+  const res = await fetch(API_URL + "plan/set-plan", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
-      nodes: nodes.map((node) => ({
+      nodesJson: nodes.map((node) => ({
         id: node.id,
         position: node.position,
         type: node.type,
       })),
-      edges: edges.map((edge) => ({
+      edgesJson: edges.map((edge) => ({
         source: edge.source,
         target: edge.target,
         id: edge.id,

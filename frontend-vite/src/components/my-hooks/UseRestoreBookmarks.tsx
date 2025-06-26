@@ -63,5 +63,9 @@ export function filterEdgesByExistingNodes(
   nodes: Node[]
 ): Edge[] {
   const nodeIds = new Set(nodes.map((n) => n.id));
-  return edges.filter((e) => nodeIds.has(e.source) && nodeIds.has(e.target));
+  return edges.filter((e) => nodeIds.has(e.source) && nodeIds.has(e.target))
+          .map((e) => ({
+            ...e,
+            animated: true,
+          }));
 }
