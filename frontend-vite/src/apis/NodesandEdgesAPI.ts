@@ -55,6 +55,5 @@ export async function fetchPlan(): Promise<{ nodes: Node[]; edges: Edge[] }> {
 
   if (!res.ok) throw new Error("Failed to fetch nodes and edges");
 
-  const resJson = await res.json();
-  return { nodes: resJson.nodes ?? [], edges: resJson.edges ?? []};
+  return res.json();
 }
