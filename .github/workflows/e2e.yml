@@ -34,8 +34,8 @@ jobs:
       - name: Build and Start Spring Boot Backend
         run: |
           cd backend-spring
-          chmod +x ./mvnw
-          ./mvnw spring-boot:run &
+          ./mvnw clean package -DskipTests
+          java -jar target/*.jar &
         env:
           SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
           SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
