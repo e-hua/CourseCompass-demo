@@ -20,6 +20,7 @@ jobs:
           POSTGRES_USER: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
           POSTGRES_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
           POSTGRES_DB: CourseCompass
+        options: --health-cmd="pg_isready"
 
     steps:
       - name: Checkout code
