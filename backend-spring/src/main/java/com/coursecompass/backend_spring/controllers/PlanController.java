@@ -63,7 +63,7 @@ public class PlanController {
             if (plan.isEmpty()) {
                 return ResponseEntity.ok(Map.of("nodesJson", List.of(), "edgesJson", List.of()));
             }
-
+            
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> result = Map.of(
                     "nodes", mapper.readValue(plan.get().getNodesJson(), List.class),
