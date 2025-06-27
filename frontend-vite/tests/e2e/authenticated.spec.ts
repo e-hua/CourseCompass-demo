@@ -30,7 +30,7 @@ test.describe("Authenticated test", () => {
   }) => {
     await page.getByPlaceholder("Search...").click();
     await page.getByPlaceholder("Search...").fill("CS1101S");
-    await page.getByPlaceholder("Search...").press("Enter");
+    await page.getByRole("option", { name: "CS1101S Programming" }).click();
     await page.getByRole("button", { name: "Add" }).click();
     await page
       .getByRole("combobox")
