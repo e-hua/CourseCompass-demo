@@ -10,7 +10,7 @@ export interface CourseRating {
 }
 
 export interface PostCourseRatingProps {
-  courseCode: string; 
+  courseCode: string; //not consistent, remember to change
   difficulty: number;
   workload: number;
   enjoyability: number;
