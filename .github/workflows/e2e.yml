@@ -38,11 +38,11 @@ jobs:
           ./mvnw clean package -DskipTests
           java -jar target/*.jar &
         env:
-          SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
-          SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
-          SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-          TEST_KEY: ${{ secrets.TEST_KEY }}
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/CourseCompass
+          SPRING_DATASOURCE_USERNAME: postgres
+          SPRING_DATASOURCE_PASSWORD: password
+          GOOGLE_CLIENT_ID: dummy_id
+          TEST_KEY: key
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -60,10 +60,10 @@ jobs:
           npm run dev &
         env:
           VITE_REDIRECT_URI: http://localhost:5173
-          VITE_CLIENT_ID:  ${{ secrets.VITE_CLIENT_ID }}
+          VITE_CLIENT_ID:  dummy_id
           VITE_LOCAL_HOST: http://localhost:8080
           VITE_RENDER_BACKEND: https://coursecompass-demo.onrender.com/api/auth/login
-          VITE_TEST_KEY: ${{ secrets.VITE_TEST_KEY }}
+          VITE_TEST_KEY: key
 
       - name: Wait for servers
         run: npx wait-on http://localhost:5173 http://localhost:8080
