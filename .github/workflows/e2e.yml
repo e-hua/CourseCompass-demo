@@ -79,7 +79,7 @@ jobs:
       - name: Run E2E tests
         run: |
           cd frontend-vite
-          npm run test:e2e
+          npx playwright test --workers=1
 
       - name: Upload Playwright test artifacts
         if: always()
