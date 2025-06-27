@@ -22,7 +22,7 @@ jobs:
         options: >-
           --health-cmd="pg_isready"
           --health-interval=1s
-          --health-retries=10
+          --health-retries=20
 
     steps:
       - name: Checkout code
@@ -66,6 +66,12 @@ jobs:
           VITE_LOCAL_HOST: http://localhost:8080
           VITE_RENDER_BACKEND: https://coursecompass-demo.onrender.com/api/auth/login
           VITE_TEST_KEY: key
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright
 
       - name: Install Playwright
         run: npx playwright install
