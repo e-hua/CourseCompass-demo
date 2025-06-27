@@ -65,9 +65,6 @@ jobs:
           VITE_RENDER_BACKEND: https://coursecompass-demo.onrender.com/api/auth/login
           VITE_TEST_KEY: key
 
-      - name: Wait for servers
-        run: npx wait-on http://localhost:5173 http://localhost:8080
-
       - name: Install Playwright
         run: npx playwright install
 
