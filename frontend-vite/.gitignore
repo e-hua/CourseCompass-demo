@@ -26,3 +26,4 @@ dist-ssr
 # /frontend-vite/.gitignore
 .env
 test-results
+playwright-report

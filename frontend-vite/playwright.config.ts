@@ -5,4 +5,5 @@ export default defineConfig({
   use: {
     video: "on",
   },
+  reporter: process.env.CI ? "list" : "html",
 });
