@@ -10,7 +10,6 @@ on:
 jobs:
   e2e:
     runs-on: ubuntu-latest
-    environment: .env
 
     services:
       postgres:
@@ -20,7 +19,10 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
           POSTGRES_DB: CourseCompass
-        options: --health-cmd="pg_isready"
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=1s
+          --health-retries=10
 
     steps:
       - name: Checkout code
