@@ -54,10 +54,15 @@ export default function AcademicPlanPage() {
   useEffect(() => {
     const loadFromBackend = async () => {
         setLoading(true);
-        const { nodes: savedNodes, edges: savedEdges } = await fetchPlan();
-        setSavedNodes(savedNodes);
-        setSavedEdges(savedEdges);
-        setLoading(false);
+        try {
+          const { nodes: savedNodes, edges: savedEdges } = await fetchPlan();
+          setSavedNodes(savedNodes);
+          setSavedEdges(savedEdges);
+        } catch (err) {
+          console.error("Failed to fetch saved plan:", err);
+        } finally {
+          setLoading(false); 
+        }
     };
 
     loadFromBackend();
