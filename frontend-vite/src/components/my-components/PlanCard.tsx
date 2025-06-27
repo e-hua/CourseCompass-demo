@@ -15,7 +15,7 @@ import {
 import PlanCourseSidebar from "@/components/Sidebar/plancourse-sidebar";
 import extractEdgesFromPrereqTree, { isPrereqMet } from "@/lib/Plan/ExtractEdgesFromPrereqTree";
 import { isEqual } from "lodash";
-import { postPlan } from "@/apis/NodesandEdgesAPI";
+import { putPlan } from "@/apis/NodesandEdgesAPI";
 import { toast } from "sonner";
 import useRestoreBookmarks, { filterEdgesByExistingNodes } from "@/components/my-hooks/UseRestoreBookmarks";
 
@@ -40,8 +40,8 @@ export default function PlanCard({ savedNodes, savedEdges, nodes, edges, onNodes
   
   useEffect(() => {
   if (!savedEdges) return;
-  setEdges(filterEdgesByExistingNodes(savedEdges, nodes));
-}, [savedEdges, nodes]);
+  setEdges((prev) => [...prev, ...filterEdgesByExistingNodes(savedEdges, nodes)]);
+}, [savedEdges]);
 
 
   const nodeTypes = {
@@ -52,7 +52,7 @@ export default function PlanCard({ savedNodes, savedEdges, nodes, edges, onNodes
   const handleSavePlan = async () => {
     setLoading(true);
     try {
-      await postPlan(nodes, edges);
+      await putPlan(nodes, edges);
       toast.success("Plan saved successfully!");
     } catch (e) {
       const message = e instanceof Error ? e.message : typeof e === "string" ? e : "Unknown error";
@@ -201,7 +201,7 @@ export default function PlanCard({ savedNodes, savedEdges, nodes, edges, onNodes
                   </ContextMenuItem>
                   <ContextMenuItem onClick={() => {
                     setNodes((prev) => prev.filter((n) => n.type !== "BookmarkNode"));
-                    setEdges([]);}}>
+                    }}>
                     Reset Plan
                   </ContextMenuItem>
                 </ContextMenuContent>
