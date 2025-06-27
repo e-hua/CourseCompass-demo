@@ -100,6 +100,11 @@ test.describe("Unauthenticated test", () => {
         .getByRole("region", { name: "Notifications alt+T" })
         .getByRole("listitem")
     ).toBeVisible();
+    await expect(
+      page
+        .getByRole("region", { name: "Notifications alt+T" })
+        .getByRole("listitem")
+    ).toHaveCount(0);
     await page.getByRole("button", { name: "Reply" }).nth(1).click();
     await page.getByRole("button", { name: "Submit" }).nth(1).click();
     await expect(
