@@ -17,8 +17,8 @@ jobs:
         image: postgres:15
         ports: [5432:5432]
         env:
-          POSTGRES_USER: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
-          POSTGRES_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
           POSTGRES_DB: CourseCompass
         options: --health-cmd="pg_isready"
 
