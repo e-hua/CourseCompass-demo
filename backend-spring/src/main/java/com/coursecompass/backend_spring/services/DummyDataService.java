@@ -7,6 +7,7 @@ import com.coursecompass.backend_spring.entities.Course;
 import com.coursecompass.backend_spring.entities.CourseRating;
 import com.coursecompass.backend_spring.entities.TakenCourse;
 import com.coursecompass.backend_spring.entities.User;
+import com.coursecompass.backend_spring.repositories.CourseRatingRepository;
 import com.coursecompass.backend_spring.services.comments.CommentReplyService;
 import com.coursecompass.backend_spring.services.comments.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class DummyDataService {
   private final CourseRatingService courseRatingService;
   private final CommentService commentService;
   private final CommentReplyService commentReplyService;
+  private final CourseRatingRepository courseRatingRepository;
 
   @Transactional
   public void insertDummyComment() {
@@ -84,6 +86,12 @@ public class DummyDataService {
               newCourseRating.setDifficulty(5);
               return courseRatingService.createCourseRating(newCourseRating);
             });
+
+    List<CourseRating> allRatings = courseRatingRepository.findByCourseCode(courseRating.getCourseCode());
+    course.setAverageWorkload(5.0);
+    course.setAverageDifficulty(5.0);
+    course.setAverageEnjoyability(5.0);
+    course.setRatingCount(allRatings.size());
 
     List<CommentReadDTO> existingComments = commentService.readCommentsByCourseCode(targetCourseCode);
     boolean alreadyCommented = existingComments.stream()

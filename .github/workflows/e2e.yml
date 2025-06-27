@@ -1,0 +1,89 @@
+name: e2e-testing CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+  workflow_dispatch:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17
+        ports: [5432:5432]
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: CourseCompass
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=1s
+          --health-retries=20
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Build and Start Spring Boot Backend
+        run: |
+          cd backend-spring
+          ./mvnw clean package -DskipTests
+          java -jar target/*.jar &
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/CourseCompass
+          SPRING_DATASOURCE_USERNAME: postgres
+          SPRING_DATASOURCE_PASSWORD: password
+          GOOGLE_CLIENT_ID: dummy_id
+          TEST_KEY: key
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.0.1
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend-vite
+          npm ci
+
+      - name: Start Vite frontend
+        run: |
+          cd frontend-vite
+          npm run dev &
+        env:
+          VITE_REDIRECT_URI: http://localhost:5173
+          VITE_CLIENT_ID:  dummy_id
+          VITE_LOCAL_HOST: http://localhost:8080
+          VITE_RENDER_BACKEND: https://coursecompass-demo.onrender.com/api/auth/login
+          VITE_TEST_KEY: key
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright
+
+      - name: Install Playwright
+        run: npx playwright install
+
+      - name: Run E2E tests
+        run: |
+          cd frontend-vite
+          npm run test:e2e
+
+      - name: Upload Playwright test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: frontend-vite/test-results/

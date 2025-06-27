@@ -30,7 +30,7 @@ export default function AcademicPlanPage() {
 
   const nodeTypes = {
     CourseNode: CourseNode,
-  }
+  };
 
   useEffect(() => {
     if (!courses) return;
@@ -44,9 +44,10 @@ export default function AcademicPlanPage() {
 
       return {
         id: course.courseCode,
-        position: {// position is relative to the parent node
+        position: {
+          // position is relative to the parent node
           x: 100 + count * 400,
-          y: 100, 
+          y: 100,
         },
         data: {
           label: course.courseCode,

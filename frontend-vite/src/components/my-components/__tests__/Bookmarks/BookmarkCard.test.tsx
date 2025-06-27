@@ -1,6 +1,7 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, test, vi } from "vitest";
 import BookmarkCard from "../../Bookmarks/BookmarkCard";
+import { MemoryRouter } from "react-router-dom";
 
 const dummyUser = {
   id: 0,
@@ -30,7 +31,11 @@ describe("BookmarkCard", () => {
       moduleCredit: "4",
     };
 
-    render(<BookmarkCard courseInfo={course} />);
+    render(
+      <MemoryRouter>
+        <BookmarkCard courseInfo={course} />
+      </MemoryRouter>
+    );
 
     expect(screen.getByText("CS2040S")).not.toBeNull();
     expect(screen.getByText("Data Structures and Algorithms")).not.toBeNull();
@@ -48,7 +53,11 @@ describe("BookmarkCard", () => {
       moduleCredit: "4",
     };
 
-    render(<BookmarkCard courseInfo={course} />);
+    render(
+      <MemoryRouter>
+        <BookmarkCard courseInfo={course} />
+      </MemoryRouter>
+    );
 
     expect(screen.getByText("CS2030S")).not.toBeNull();
     expect(screen.getByText("Programming Methodology II")).not.toBeNull();
