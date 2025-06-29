@@ -90,8 +90,8 @@ export default function GPAChartPage() {
                 <YAxis
                   tickLine={false}
                   axisLine={false}
-                  tickFormatter={(value) => value.toFixed(2)} // Show 2 decimal places
-                  domain={[2.0, 5.0]} // Adjust the range as per your data
+                  tickFormatter={(value) => value.toFixed(2)}
+                  domain={[2.0, 5.0]}
                 />
                 <ChartTooltip
                   cursor={false}

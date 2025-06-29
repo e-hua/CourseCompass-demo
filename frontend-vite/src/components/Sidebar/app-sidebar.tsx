@@ -1,26 +1,24 @@
 import {
-  Home,
+  QueryStats,
   Person,
   AutoStories,
   School,
   Bookmark,
-  Lightbulb,
   Star,
-  Settings,
 } from "@mui/icons-material";
 
 import { useLocation } from "react-router-dom";
 
 const items = [
   {
-    title: "Profile",
-    url: "/profile",
-    icon: <Person fontSize="medium" />,
+    title: "Analysis",
+    url: "/analysis",
+    icon: <QueryStats fontSize="medium" />,
   },
   {
-    title: "Dashboard",
+    title: "Profile",
     url: "/",
-    icon: <Home fontSize="medium" />,
+    icon: <Person fontSize="medium" />,
   },
   {
     title: "Courses",
@@ -38,19 +36,9 @@ const items = [
     icon: <Bookmark fontSize="medium" />,
   },
   {
-    title: "Recommendations",
-    url: "#",
-    icon: <Lightbulb fontSize="medium" />,
-  },
-  {
     title: "Rate My Course",
     url: "/ratings",
     icon: <Star fontSize="medium" />,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: <Settings fontSize="medium" />,
   },
 ];
 

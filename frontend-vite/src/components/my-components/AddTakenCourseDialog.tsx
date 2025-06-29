@@ -55,11 +55,11 @@ export function AddTakenCourseDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Add</Button>
+        <Button>Add to taken courses</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add {courseCode}</DialogTitle>
+          <DialogTitle>Add {courseCode} to taken courses</DialogTitle>
         </DialogHeader>
 
         <Select onValueChange={setSemesterIndex} value={semesterIndex}>
