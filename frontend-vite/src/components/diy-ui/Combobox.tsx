@@ -1,4 +1,3 @@
-//import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
@@ -17,7 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-const majors = [
+export const majors = [
 { value: "CS", label: "👩‍💻 Computer Science" },
 { value: "BAIS", label: "💻 Business Artificial Intelligence Systems" },
 { value: "CEG", label: "🔧 Computer Engineering" },

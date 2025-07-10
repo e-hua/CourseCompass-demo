@@ -13,7 +13,7 @@ import {
 import { toast } from "sonner";
 import { z } from "zod";
 import { updateUserProfile } from "@/apis/UserAPI";
-import MajorSelectForm, { majorSchema } from "@/components/diy-ui/Combobox";
+import MajorSelectForm, { majorSchema, majors } from "@/components/diy-ui/Combobox";
 
 const nameSchema = z
   .string()
@@ -170,7 +170,7 @@ export default function UserProfileCard() {
               {new Date(userProfile.updatedAt).toLocaleDateString()}
             </div>
             <div className="text-sm">
-              <strong>Major: </strong> {userProfile.major ?? "Not set"}
+              <strong>Major: </strong> {majors.find((m) => m.value === userProfile.major)?.label ?? "Not set"}
             </div>
             <Button
               variant="outline"
