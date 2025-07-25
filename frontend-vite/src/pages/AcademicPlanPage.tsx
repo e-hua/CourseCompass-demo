@@ -60,7 +60,7 @@ export default function AcademicPlanPage() {
       return {
         id: course.courseCode,
         position: {// position is relative to the parent node
-          x: 100 + (count * 300), 
+          x: count < 8 ? 100 + (count * 300) : 100, // prevent overflow
           y: 100, 
         },
         data: {
@@ -139,7 +139,21 @@ export default function AcademicPlanPage() {
     );
   }
 
-  if (error) return <p>Error message: {error.message}</p>;
+  if (error) 
+    return (
+      <Layout>
+        <div className="flex items-center justify-center h-screen">
+          <Card className="p-6">
+            <CardHeader>
+              <CardTitle className="text-xl">Your profile is broken</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm">
+              Please try login again to view your Academic Plan.
+            </CardContent>
+          </Card>
+        </div>
+      </Layout>
+    );
 
   return (
     <Layout>

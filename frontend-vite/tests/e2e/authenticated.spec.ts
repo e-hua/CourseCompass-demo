@@ -80,9 +80,22 @@ test.describe("Authenticated test", () => {
     ).toBeVisible();
   });
 
-  /*
   test("Users should be able to leave comment on specific courses", async ({
     page,
-  }) => {});
-*/
+  }) => {
+    await page.getByRole("link", { name: "Courses" }).click();
+    await page.getByRole("textbox").click();
+    await page.getByRole("textbox").fill("CS1101S");
+    await page.getByText("CS1101SProgramming").click();
+    await expect(page.getByText("Programming Methodology")).toBeVisible();
+    await page.getByPlaceholder("Type your comment here...").click();
+    await page.getByPlaceholder("Type your comment here...").fill(
+      "This is a test comment"
+    );
+    await page.getByRole("button", { name: "Post Comment" }).click();
+    await expect(
+      page.getByText("This is a test comment")
+    ).toBeVisible();
+  });
+
 });
