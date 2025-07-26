@@ -20,7 +20,8 @@ export default function ModuleSearchBar({ onSelectCourse }: SearchBarProps) {
   const [query, setQuery] = useState("");
 
   const filteredOptions = options.filter((option) =>
-    option.moduleCode.toLowerCase().includes(query.toLowerCase())
+    option.moduleCode.toLowerCase().includes(query.toLowerCase()) ||
+    option.title.toLowerCase().includes(query.toLowerCase())
   );
 
   const clearSearch = () => {
