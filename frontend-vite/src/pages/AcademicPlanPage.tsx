@@ -11,7 +11,6 @@ import { useUserProfile } from "@/components/my-hooks/UserProfileContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import CourseNode from "@/components/diy-ui/CourseNode";
 import LabeledGroupNode from "@/components/diy-ui/LabelGroupNode";
-import { fetchPlan } from "@/apis/NodesandEdgesAPI";
 
 export default function AcademicPlanPage() {
   const { data: courses, isLoading, error } = useTakenCourses();
@@ -19,9 +18,6 @@ export default function AcademicPlanPage() {
 
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [savedNodes, setSavedNodes] = useState<Node[]>([]);
-  const [savedEdges, setSavedEdges] = useState<Edge[]>([]);
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) =>
@@ -52,23 +48,6 @@ export default function AcademicPlanPage() {
     ]
 
   useEffect(() => {
-    const loadFromBackend = async () => {
-        setLoading(true);
-        try {
-          const { nodes: savedNodes, edges: savedEdges } = await fetchPlan();
-          setSavedNodes(savedNodes);
-          setSavedEdges(savedEdges);
-        } catch (err) {
-          console.error("Failed to fetch saved plan:", err);
-        } finally {
-          setLoading(false); 
-        }
-    };
-
-    loadFromBackend();
-  }, []);  
-
-  useEffect(() => {
     if (!courses) return;
 
     const semCourseCount = new Map<number, number>();
@@ -77,14 +56,12 @@ export default function AcademicPlanPage() {
       const index = course.semesterIndex;
       const count = semCourseCount.get(index) || 0;
       semCourseCount.set(index, count + 1);
-
-      const existingNode = savedNodes.find((n) => n.id === course.courseCode);
-      
+  
       return {
         id: course.courseCode,
         position: {// position is relative to the parent node
-          x: existingNode ? existingNode.position.x : 100 + (count * 300), 
-          y: existingNode ? existingNode.position.y : 100, 
+          x: 100 + (count * 300), 
+          y: 100, 
         },
         data: {
           label: course.courseCode,
@@ -148,7 +125,7 @@ export default function AcademicPlanPage() {
     );
   }
 
-  if (isLoading || loading) {
+  if (isLoading) {
     return (
       <Layout>
         <div className="items-center justify-center p-8">
@@ -169,8 +146,6 @@ export default function AcademicPlanPage() {
       <div className="flex-1 overflow-hidden p-4">
         <ReactFlowProvider>
         <PlanCard
-          savedNodes={savedNodes}
-          savedEdges={savedEdges}
           nodes={nodes}
           edges={edges}
           onNodesChange={onNodesChange}
