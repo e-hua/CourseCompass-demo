@@ -47,21 +47,6 @@ export default function RatingCard({ courseName }: { courseName: string }) {
     }
   };
 
-  /*
-  if (ratingSubmitted) {
-    return (
-      <Card className="m-10 p-6 mx-auto space-y-5 w-200 h-100">
-        <CardHeader>
-          <CardTitle className="text-xl font-bold">{courseName}</CardTitle>
-        </CardHeader>
-        <CardContent className="text-center">
-          <p>Thank you for your ratings!</p>
-        </CardContent>
-      </Card>
-    );
-  }
-*/
-
   if (existingRating.length > 0) {
     return (
       <Card className="m-10 p-6 mx-auto space-y-5 w-150 h-100">
@@ -74,6 +59,7 @@ export default function RatingCard({ courseName }: { courseName: string }) {
           <Ratings
             onChange={(v) => setDifficulty(v)}
             existingIndex={existingRating[0].difficulty}
+            prefix="Difficulty"
           />
         </CardContent>
 
@@ -82,6 +68,7 @@ export default function RatingCard({ courseName }: { courseName: string }) {
           <Ratings
             onChange={(v) => setWorkload(v)}
             existingIndex={existingRating[0].averageWorkload}
+            prefix="Workload"
           />
         </CardContent>
 
@@ -90,6 +77,7 @@ export default function RatingCard({ courseName }: { courseName: string }) {
           <Ratings
             onChange={(v) => setEnjoyability(v)}
             existingIndex={existingRating[0].enjoyability}
+            prefix="Enjoyability"
           />
         </CardContent>
 
@@ -116,17 +104,17 @@ export default function RatingCard({ courseName }: { courseName: string }) {
 
         <CardContent className="flex items-center space-x-2">
           <CardTitle>Rate its Difficulty !</CardTitle>
-          <Ratings onChange={(v) => setDifficulty(v)} existingIndex={0} />
+          <Ratings onChange={(v) => setDifficulty(v)} existingIndex={0} prefix="Difficulty" />
         </CardContent>
 
         <CardContent className="flex items-center space-x-2">
           <CardTitle>Rate its Workloads !</CardTitle>
-          <Ratings onChange={(v) => setWorkload(v)} existingIndex={0} />
+          <Ratings onChange={(v) => setWorkload(v)} existingIndex={0} prefix="Workload" />
         </CardContent>
 
         <CardContent className="flex items-center space-x-2">
           <CardTitle>Rate its Enjoyability !</CardTitle>
-          <Ratings onChange={(v) => setEnjoyability(v)} existingIndex={0} />
+          <Ratings onChange={(v) => setEnjoyability(v)} existingIndex={0} prefix="Enjoyability" />
         </CardContent>
 
         <CardContent className="flex items-center-safe space-x-2">

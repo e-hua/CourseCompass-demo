@@ -80,9 +80,51 @@ test.describe("Authenticated test", () => {
     ).toBeVisible();
   });
 
-  /*
   test("Users should be able to leave comment on specific courses", async ({
     page,
-  }) => {});
-*/
+  }) => {
+    await page.getByRole("link", { name: "Courses" }).click();
+    await page.getByRole("textbox").click();
+    await page.getByRole("textbox").fill("CS1101S");
+    await page.getByText("CS1101SProgramming").click();
+    await expect(page.getByText("Programming Methodology")).toBeVisible();
+    await page.getByRole("button", { name: "Add to taken courses" }).click();
+    await page
+      .getByRole("combobox")
+      .filter({ hasText: "Select semester" })
+      .click();
+    await page.getByRole("option", { name: "Y1S1" }).click();
+    await page
+      .getByRole("combobox")
+      .filter({ hasText: "Select letter grade" })
+      .click();
+    await page.getByRole("option", { name: "A", exact: true }).click();
+    await page.getByRole("button", { name: "Submit" }).click();
+    await expect(page.getByText("Successfully added CS1101S!")).toBeVisible();
+    await page.getByPlaceholder("Type your comment here...").click();
+    await page.getByPlaceholder("Type your comment here...").fill(
+      "This is a test comment"
+    );
+    await page.getByRole("button", { name: "Post Comment" }).click();
+    await expect(
+      page.getByText("This is a test comment")
+    ).toBeVisible();
+    await page.getByRole("button", { name: "Delete" }).click();
+    await expect(page.getByText("This is a test comment")).toHaveCount(0);
+  });
+
+  test("Users should be able to rate taken courses", async ({ 
+    page 
+  }) => {
+    await page.getByRole("link", { name: "Rate My Course" }).click();
+    await expect(page.getByText("CS1101S")).toBeVisible();
+    await page.getByTestId("Difficulty-star-1").click();
+    await page.getByTestId("Workload-star-2").click();
+    await page.getByTestId("Enjoyability-star-3").click();
+    await page.getByRole("button", { name: "Upload Rating" }).click();
+    await expect(page.getByText("Rating submitted!")).toBeVisible();
+    await page.getByTestId("Difficulty-star-4").click();
+    await page.getByRole("button", { name: "Update Rating" }).click();
+    await expect(page.getByText("Rating submitted!")).toBeVisible();
+  });
 });
