@@ -6,9 +6,11 @@ import StarOutlineIcon from "@mui/icons-material/StarOutline";
 export default function Ratings({
   onChange,
   existingIndex,
+  prefix="Rating",
 }: {
   onChange: (value: number) => void;
   existingIndex: number;
+  prefix: string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [filledIndex, setFilledIndex] = useState(existingIndex);
@@ -65,6 +67,7 @@ export default function Ratings({
             stiffness: 300,
             damping: 15,
           }}
+          data-testid={`${prefix}-star-${x}`}
         >
           {x <= hoverIndex || (hoverIndex == 0 && x <= filledIndex) ? (
             <StarIcon style={{}} className="filled" />
