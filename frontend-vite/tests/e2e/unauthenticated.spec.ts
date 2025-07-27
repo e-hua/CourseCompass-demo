@@ -11,7 +11,7 @@ test.describe("Unauthenticated test", () => {
     page,
   }) => {
     await expect(page.getByText("You're not logged inPlease")).toBeVisible();
-    await page.getByRole("link", { name: "Profile" }).click();
+    await page.getByRole("link", { name: "Analysis" }).click();
     await expect(page.getByText("You're not logged inPlease")).toBeVisible();
     await page.getByRole("link", { name: "My Academic Plan" }).click();
     await expect(page.getByText("You're not logged inPlease")).toBeVisible();

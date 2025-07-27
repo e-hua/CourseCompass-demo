@@ -24,7 +24,7 @@ createRoot(document.getElementById("root")!).render(
           <Router>
             <Routes>
               <Route path="/" element={<App />} />
-              <Route path="/profile" element={<GPAChartPage />} />
+              <Route path="/analysis" element={<GPAChartPage />} />
               <Route path="/courses" element={<CoursesPage />} />
               <Route path="/plan" element={<AcademicPlanPage />} />
               <Route path="/bookmark" element={<BookmarkPage />} />
